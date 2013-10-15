@@ -9,5 +9,7 @@ package smei.modelos;
  * @author Ernesto
  */
 public class Espacio {
-    
+
+    private int idEspacio;
+    private int capacidadDePersonas;
 }
