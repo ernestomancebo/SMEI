@@ -26,7 +26,7 @@ public class Principal extends javax.swing.JFrame {
         Toolkit tk = Toolkit.getDefaultToolkit();
         Dimension dimension = tk.getScreenSize();
         setSize(dimension.width * 9 / 10, dimension.height * 9 / 10);
-        setLocation(dimension.width * 1 / 20, dimension.height * 1 / 20);
+        setLocation(dimension.width * 1 / 20, dimension.height * 2 / 20);
     }
 
     /**
