@@ -116,29 +116,32 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jLinkButton1" max="32767" attributes="0"/>
-                  <Component id="jLinkButton2" pref="217" max="32767" attributes="0"/>
+                  <Component id="jLinkBtnRegReserva" max="32767" attributes="0"/>
+                  <Component id="jLinkBtnBuscarReserva" pref="217" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jLinkButton1" min="-2" max="-2" attributes="0"/>
+                      <Component id="jLinkBtnRegReserva" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jLinkButton2" min="-2" pref="22" max="-2" attributes="0"/>
+                      <Component id="jLinkBtnBuscarReserva" min="-2" pref="22" max="-2" attributes="0"/>
                       <EmptySpace max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
           </Layout>
           <SubComponents>
-            <Component class="com.l2fprod.common.swing.JLinkButton" name="jLinkButton1">
+            <Component class="com.l2fprod.common.swing.JLinkButton" name="jLinkBtnRegReserva">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Crear Reserva"/>
+                <Property name="text" type="java.lang.String" value="Registro Reserva"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jLinkBtnRegReservaActionPerformed"/>
+              </Events>
             </Component>
-            <Component class="com.l2fprod.common.swing.JLinkButton" name="jLinkButton2">
+            <Component class="com.l2fprod.common.swing.JLinkButton" name="jLinkBtnBuscarReserva">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Buscar Reservas"/>
               </Properties>
@@ -153,23 +156,23 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jLinkButton3" max="32767" attributes="0"/>
-                  <Component id="jLinkButton4" max="32767" attributes="0"/>
+                  <Component id="jLinkBtnBuscarEspacio" max="32767" attributes="0"/>
+                  <Component id="jLinkBtnRegEspacio" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="1" attributes="0">
-                      <Component id="jLinkButton4" min="-2" max="-2" attributes="0"/>
+                      <Component id="jLinkBtnRegEspacio" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="jLinkButton3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jLinkBtnBuscarEspacio" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
           </Layout>
           <SubComponents>
-            <Component class="com.l2fprod.common.swing.JLinkButton" name="jLinkButton3">
+            <Component class="com.l2fprod.common.swing.JLinkButton" name="jLinkBtnBuscarEspacio">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Buscar Espacios"/>
                 <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
@@ -180,7 +183,7 @@
                 </Property>
               </Properties>
             </Component>
-            <Component class="com.l2fprod.common.swing.JLinkButton" name="jLinkButton4">
+            <Component class="com.l2fprod.common.swing.JLinkButton" name="jLinkBtnRegEspacio">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Registrar Espacio"/>
                 <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
@@ -201,24 +204,24 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jLinkButton5" max="32767" attributes="0"/>
-                  <Component id="jLinkButton6" max="32767" attributes="0"/>
+                  <Component id="jLinkBtnTendReser" max="32767" attributes="0"/>
+                  <Component id="jLinkBtnConsHisto" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="1" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jLinkButton6" min="-2" max="-2" attributes="0"/>
+                      <Component id="jLinkBtnConsHisto" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="32767" attributes="0"/>
-                      <Component id="jLinkButton5" min="-2" max="-2" attributes="0"/>
+                      <Component id="jLinkBtnTendReser" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
           </Layout>
           <SubComponents>
-            <Component class="com.l2fprod.common.swing.JLinkButton" name="jLinkButton5">
+            <Component class="com.l2fprod.common.swing.JLinkButton" name="jLinkBtnTendReser">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Tendencias Reservaciones"/>
                 <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
@@ -229,7 +232,7 @@
                 </Property>
               </Properties>
             </Component>
-            <Component class="com.l2fprod.common.swing.JLinkButton" name="jLinkButton6">
+            <Component class="com.l2fprod.common.swing.JLinkButton" name="jLinkBtnConsHisto">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Consultar Historico Resvaciones"/>
                 <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
@@ -250,26 +253,26 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jLinkButton7" alignment="0" max="32767" attributes="0"/>
-                  <Component id="jLinkButton8" alignment="0" max="32767" attributes="0"/>
-                  <Component id="jLinkButton9" alignment="0" max="32767" attributes="0"/>
+                  <Component id="jLinkBtnBuscarUsu" alignment="0" max="32767" attributes="0"/>
+                  <Component id="jLinkBtnRegUsu" alignment="0" max="32767" attributes="0"/>
+                  <Component id="jLinkBtnModContr" alignment="0" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="1" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jLinkButton8" min="-2" max="-2" attributes="0"/>
+                      <Component id="jLinkBtnRegUsu" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="32767" attributes="0"/>
-                      <Component id="jLinkButton7" min="-2" max="-2" attributes="0"/>
+                      <Component id="jLinkBtnBuscarUsu" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jLinkButton9" min="-2" max="-2" attributes="0"/>
+                      <Component id="jLinkBtnModContr" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
           </Layout>
           <SubComponents>
-            <Component class="com.l2fprod.common.swing.JLinkButton" name="jLinkButton7">
+            <Component class="com.l2fprod.common.swing.JLinkButton" name="jLinkBtnBuscarUsu">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Buscar Usuarios"/>
                 <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
@@ -280,7 +283,7 @@
                 </Property>
               </Properties>
             </Component>
-            <Component class="com.l2fprod.common.swing.JLinkButton" name="jLinkButton8">
+            <Component class="com.l2fprod.common.swing.JLinkButton" name="jLinkBtnRegUsu">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Registrar Usuario"/>
                 <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
@@ -291,7 +294,7 @@
                 </Property>
               </Properties>
             </Component>
-            <Component class="com.l2fprod.common.swing.JLinkButton" name="jLinkButton9">
+            <Component class="com.l2fprod.common.swing.JLinkButton" name="jLinkBtnModContr">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Modificar Contrase&#xf1;a"/>
                 <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
@@ -312,21 +315,21 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jLinkButton10" alignment="0" max="32767" attributes="0"/>
+                  <Component id="jLinkBtnModNotif" alignment="0" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="1" attributes="0">
                       <EmptySpace max="32767" attributes="0"/>
-                      <Component id="jLinkButton10" min="-2" max="-2" attributes="0"/>
+                      <Component id="jLinkBtnModNotif" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
           </Layout>
           <SubComponents>
-            <Component class="com.l2fprod.common.swing.JLinkButton" name="jLinkButton10">
+            <Component class="com.l2fprod.common.swing.JLinkButton" name="jLinkBtnModNotif">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Modificar Notificaciones"/>
                 <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
@@ -337,7 +340,7 @@
                 </Property>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jLinkButton10ActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jLinkBtnModNotifActionPerformed"/>
               </Events>
             </Component>
           </SubComponents>
