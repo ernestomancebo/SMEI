@@ -6,16 +6,18 @@ package smei;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javax.swing.JInternalFrame;
 import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
+import smei.gui.reservas.MaestroReservas;
+import smei.util.Util;
 
 /**
  *
  * @author Ernesto
  */
 public class Principal extends javax.swing.JFrame {
+
+    private JInternalFrame activeFrame = null;
 
     /**
      * Creates new form Principal
@@ -26,7 +28,7 @@ public class Principal extends javax.swing.JFrame {
         Toolkit tk = Toolkit.getDefaultToolkit();
         Dimension dimension = tk.getScreenSize();
         setSize(dimension.width * 9 / 10, dimension.height * 9 / 10);
-        setLocation(dimension.width * 1 / 20, dimension.height * 2 / 20);
+        setLocation(dimension.width * 1 / 20, dimension.height * 1 / 20);
     }
 
     /**
@@ -54,7 +56,7 @@ public class Principal extends javax.swing.JFrame {
         jLinkBtnModContr = new com.l2fprod.common.swing.JLinkButton();
         jTaskPaneGroup5 = new com.l2fprod.common.swing.JTaskPaneGroup();
         jLinkBtnModNotif = new com.l2fprod.common.swing.JLinkButton();
-        jPanel1 = new javax.swing.JPanel();
+        PrincipalDesktopPane = new javax.swing.JDesktopPane();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
@@ -77,6 +79,11 @@ public class Principal extends javax.swing.JFrame {
         });
 
         jLinkBtnBuscarReserva.setText("Buscar Reservas");
+        jLinkBtnBuscarReserva.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jLinkBtnBuscarReservaActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jTaskPaneGroup1Layout = new javax.swing.GroupLayout(jTaskPaneGroup1.getContentPane());
         jTaskPaneGroup1.getContentPane().setLayout(jTaskPaneGroup1Layout);
@@ -104,6 +111,11 @@ public class Principal extends javax.swing.JFrame {
         jLinkBtnRegEspacio.setText("Registrar Espacio");
         jLinkBtnRegEspacio.setMaximumSize(new java.awt.Dimension(112, 22));
         jLinkBtnRegEspacio.setMinimumSize(new java.awt.Dimension(112, 22));
+        jLinkBtnRegEspacio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jLinkBtnRegEspacioActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jTaskPaneGroup2Layout = new javax.swing.GroupLayout(jTaskPaneGroup2.getContentPane());
         jTaskPaneGroup2.getContentPane().setLayout(jTaskPaneGroup2Layout);
@@ -233,16 +245,7 @@ public class Principal extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 610, Short.MAX_VALUE)
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
+        PrincipalDesktopPane.setBackground(getBackground());
 
         jMenu1.setText("Archivo");
         jMenuBar1.add(jMenu1);
@@ -259,42 +262,57 @@ public class Principal extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jTaskPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(PrincipalDesktopPane, javax.swing.GroupLayout.DEFAULT_SIZE, 600, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jTaskPane1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(PrincipalDesktopPane)
+                    .addComponent(jTaskPane1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void jLinkBtnModNotifActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jLinkBtnModNotifActionPerformed
-        // TODO add your handling code here:
     }//GEN-LAST:event_jLinkBtnModNotifActionPerformed
 
     private void jLinkBtnRegReservaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jLinkBtnRegReservaActionPerformed
-        // TODO add your handling code here:
+        activeFrame = MaestroReservas.getInstance();
+
+        Util.addFrameToDesktopPanel(PrincipalDesktopPane, activeFrame);
+        Util.asignarTitulo(activeFrame, "Registrar Reservacion");
+        Util.habilitarEdicion(activeFrame);
+
+        Util.deshabilitarBtnModificar(activeFrame);
     }//GEN-LAST:event_jLinkBtnRegReservaActionPerformed
+
+    private void jLinkBtnRegEspacioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jLinkBtnRegEspacioActionPerformed
+    }//GEN-LAST:event_jLinkBtnRegEspacioActionPerformed
+
+    private void jLinkBtnBuscarReservaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jLinkBtnBuscarReservaActionPerformed
+        activeFrame = MaestroReservas.getInstance();
+
+        Util.addFrameToDesktopPanel(PrincipalDesktopPane, activeFrame);
+        Util.asignarTitulo(activeFrame, "Modificar Reservacion 'x'");
+        Util.deshabilitarEdicion(activeFrame);
+
+        Util.habilitarBtnModificar(activeFrame);
+    }//GEN-LAST:event_jLinkBtnBuscarReservaActionPerformed
 
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-
         try {
-            System.setProperty(
-                    "Quaqua.tabLayoutPolicy", "wrap");
-
             UIManager.setLookAndFeel(
-                    ch.randelshofer.quaqua.QuaquaManager.getLookAndFeel());
-        } catch (UnsupportedLookAndFeelException ex) {
-            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+                    UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception e) {
+            System.out.println(e.toString());
         }
-
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -305,6 +323,7 @@ public class Principal extends javax.swing.JFrame {
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JDesktopPane PrincipalDesktopPane;
     private com.l2fprod.common.swing.JLinkButton jLinkBtnBuscarEspacio;
     private com.l2fprod.common.swing.JLinkButton jLinkBtnBuscarReserva;
     private com.l2fprod.common.swing.JLinkButton jLinkBtnBuscarUsu;
@@ -318,7 +337,6 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JPanel jPanel1;
     private com.l2fprod.common.swing.JTaskPane jTaskPane1;
     private com.l2fprod.common.swing.JTaskPaneGroup jTaskPaneGroup1;
     private com.l2fprod.common.swing.JTaskPaneGroup jTaskPaneGroup2;
