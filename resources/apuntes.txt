@@ -1,0 +1,22 @@
+Validar que se ingrese solo numeros
+Validar la hora de la reservacion
+Validar que la fecha sea igual o mayor a la actual
+
+
+Buscar reservaciones
+
+Contenido de la tabla:
+
+Check
+idReservacion
+Fecha
+descripcion
+hora inicio - hora fin
+Lugar
+Estado
+
+Al doble click abir para visualizar y modificar
+Al un click habilitar boton para cancelar reservacion
+
+Texto de busqueda (inteligente)
+Buscar por id, fecha, lugar, estado

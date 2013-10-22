@@ -7,13 +7,14 @@ package smei.util;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
-import javax.swing.ComboBoxModel;
-import javax.swing.DefaultComboBoxModel;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDesktopPane;
 import javax.swing.JInternalFrame;
 import javax.swing.JSpinner;
+import javax.swing.JTable;
 import javax.swing.SpinnerListModel;
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
@@ -77,7 +78,7 @@ public class Util {
                     ((JButton) c).setEnabled(!esModificar);
                 }
             } else if (c instanceof Container) {
-                modificarEdicion((Container) c, esModificar);
+                modificarBtnMod((Container) c, esModificar);
             }
         }
     }
@@ -94,6 +95,16 @@ public class Util {
         if (container instanceof JInternalFrame) {
             ((JInternalFrame) container).setTitle(titulo);
         }
+    }
+
+    public static MouseAdapter getDoubleClickedRow() {
+        return new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    JTable target = (JTable) e.getSource();
+                }
+            }
+        };
     }
 
     public static void addFrameToDesktopPanel(JDesktopPane desktopPane, JInternalFrame frameToAdd) {
