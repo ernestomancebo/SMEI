@@ -10,6 +10,7 @@ import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JDesktopPane;
 import javax.swing.JInternalFrame;
@@ -18,6 +19,8 @@ import javax.swing.JTable;
 import javax.swing.SpinnerListModel;
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.text.JTextComponent;
 
 /**
@@ -105,6 +108,10 @@ public class Util {
                 }
             }
         };
+    }
+
+    public static DefaultTableModel addCheckBoxesToTable(Object[][] values, final String[] columns) {
+        return new javax.swing.table.DefaultTableModel(values, columns);
     }
 
     public static void addFrameToDesktopPanel(JDesktopPane desktopPane, JInternalFrame frameToAdd) {

@@ -3,8 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package smei.gui.reservas;
+
+import java.awt.event.MouseAdapter;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import oracle.toplink.internal.helper.Helper;
+import smei.util.Util;
 
 /**
  *
@@ -15,8 +20,50 @@ public class VisualizadorDeReservas extends javax.swing.JInternalFrame {
     /**
      * Creates new form VisualizadorDeReservas
      */
-    public VisualizadorDeReservas() {
+    private static VisualizadorDeReservas instancia = new VisualizadorDeReservas();
+    
+    private VisualizadorDeReservas() {
         initComponents();
+        initializeValues();
+    }
+    
+    public static VisualizadorDeReservas getInstance() {
+        return instancia;
+    }
+    
+    public void initializeValues() {
+
+        //
+        tblVisualizarReserva.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    JTable target = (JTable) e.getSource();
+                    int row = target.getSelectedRow();
+                    int column = target.getSelectedColumn();
+                    // do some action
+                }
+            }
+        });
+        //Add table Model
+        tblVisualizarReserva.setModel(new javax.swing.table.DefaultTableModel(
+                new Object[][]{
+                    {null, 4, null, null, null, null, null, null},
+                    {null, 56, null, null, null, null, null, null},
+                    {null, 3, null, null, null, null, null, null},
+                    {null, 1, null, null, null, null, null, null}
+                },
+                new String[]{
+                    " ", "ID Reservacion", "Descripcion", "Fecha", "Hora Inicio - Fin", "Lugar", "Estado"
+                }
+        ) {
+            Class[] types = new Class[]{
+                java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
+            };
+            
+            public Class getColumnClass(int columnIndex) {
+                return types[columnIndex];
+            }
+        });
     }
 
     /**
@@ -39,10 +86,10 @@ public class VisualizadorDeReservas extends javax.swing.JInternalFrame {
 
         tblVisualizarReserva.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {"true", "a", "a", "a"},
+                {"false", "b", "b", "b"},
+                {"true", "c", "c", "c"},
+                {"true", "c", "c", null}
             },
             new String [] {
                 "Title 1", "Title 2", "Title 3", "Title 4"
@@ -53,6 +100,11 @@ public class VisualizadorDeReservas extends javax.swing.JInternalFrame {
         btnCancelarReserva.setText("Cancelar Reservación");
 
         btnAceptar.setText("Aceptar");
+        btnAceptar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAceptarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -92,6 +144,10 @@ public class VisualizadorDeReservas extends javax.swing.JInternalFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
+        this.setVisible(false);
+    }//GEN-LAST:event_btnAceptarActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

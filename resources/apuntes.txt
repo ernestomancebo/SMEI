@@ -20,3 +20,9 @@ Al un click habilitar boton para cancelar reservacion
 
 Texto de busqueda (inteligente)
 Buscar por id, fecha, lugar, estado
+
+
+Check:
+Si se selecciona -> Habilitar el boton de cancelar reserva
+Si se desselecciona -> evaluar si existe un check disponible, si no, deshabilita el boton cancelar reserva;
+(si si, rompe el bucle)

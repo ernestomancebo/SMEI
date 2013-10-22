@@ -9,6 +9,7 @@ import java.awt.Toolkit;
 import javax.swing.JInternalFrame;
 import javax.swing.UIManager;
 import smei.gui.reservas.MaestroReservas;
+import smei.gui.reservas.VisualizadorDeReservas;
 import smei.util.Util;
 
 /**
@@ -294,13 +295,10 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_jLinkBtnRegEspacioActionPerformed
 
     private void jLinkBtnBuscarReservaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jLinkBtnBuscarReservaActionPerformed
-        activeFrame = MaestroReservas.getInstance();
+        activeFrame = VisualizadorDeReservas.getInstance();
 
         Util.addFrameToDesktopPanel(PrincipalDesktopPane, activeFrame);
-        Util.asignarTitulo(activeFrame, "Modificar Reservacion 'x'");
-        Util.deshabilitarEdicion(activeFrame);
-
-        Util.habilitarBtnModificar(activeFrame);
+        Util.asignarTitulo(activeFrame, "Buscar Reserva");
     }//GEN-LAST:event_jLinkBtnBuscarReservaActionPerformed
 
     /**
