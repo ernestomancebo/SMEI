@@ -47,6 +47,10 @@ public final class MaestroReservas extends javax.swing.JInternalFrame {
         
         this.setSize(380, 400);
     }
+    
+    public void cargarDataFromID(String reservaID) {
+        Util.asignarTitulo(getInstance(), "Reserva " + reservaID);
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -157,12 +161,12 @@ public final class MaestroReservas extends javax.swing.JInternalFrame {
         Util.deshabilitarBtnModificar(getInstance());
         Util.habilitarEdicion(getInstance());
     }//GEN-LAST:event_btnModificarActionPerformed
-
+    
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         Util.limpiarContenido(getInstance());
         this.setVisible(false);
     }//GEN-LAST:event_btnCancelarActionPerformed
-
+    
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
         Util.limpiarContenido(getInstance());
     }//GEN-LAST:event_btnLimpiarActionPerformed

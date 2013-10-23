@@ -6,6 +6,7 @@ package smei;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import javax.swing.JDesktopPane;
 import javax.swing.JInternalFrame;
 import javax.swing.UIManager;
 import smei.gui.reservas.MaestroReservas;
@@ -19,11 +20,15 @@ import smei.util.Util;
 public class Principal extends javax.swing.JFrame {
 
     private JInternalFrame activeFrame = null;
-
+    private static Principal instance = new Principal();
+    
+    public static Principal getInstance() {
+        return instance;
+    }
     /**
      * Creates new form Principal
      */
-    public Principal() {
+    private Principal() {
         initComponents();
 
         Toolkit tk = Toolkit.getDefaultToolkit();
@@ -278,6 +283,9 @@ public class Principal extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    public JDesktopPane getPrincipalDesktopPane() {
+        return PrincipalDesktopPane;
+    }
     private void jLinkBtnModNotifActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jLinkBtnModNotifActionPerformed
     }//GEN-LAST:event_jLinkBtnModNotifActionPerformed
 

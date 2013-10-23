@@ -6,9 +6,12 @@
 package smei.gui.reservas;
 
 import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
-import oracle.toplink.internal.helper.Helper;
+import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
 import smei.util.Util;
 
 /**
@@ -21,49 +24,55 @@ public class VisualizadorDeReservas extends javax.swing.JInternalFrame {
      * Creates new form VisualizadorDeReservas
      */
     private static VisualizadorDeReservas instancia = new VisualizadorDeReservas();
-    
+    private final String[] columnHeaders = {" ", "ID Reservacion", "Descripcion", "Fecha", "Hora Inicio - Fin", "Lugar", "Estado"};
+    private final Class[] columnsTypes = {java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class};
+
     private VisualizadorDeReservas() {
         initComponents();
         initializeValues();
     }
-    
+
     public static VisualizadorDeReservas getInstance() {
         return instancia;
     }
-    
+
     public void initializeValues() {
 
-        //
+        tblVisualizarReserva.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         tblVisualizarReserva.addMouseListener(new MouseAdapter() {
+            @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
                     JTable target = (JTable) e.getSource();
-                    int row = target.getSelectedRow();
-                    int column = target.getSelectedColumn();
-                    // do some action
+                    if (target.getSelectedColumn() != 0) {
+                        MaestroReservas activeFrame = MaestroReservas.getInstance();
+
+                        activeFrame.cargarDataFromID(String.valueOf(target.getValueAt(target.getSelectedRow(), 1)));
+                        Util.addFrameToDesktopPanel(getInstance().getDesktopPane(), activeFrame);
+                        Util.deshabilitarEdicion(activeFrame);
+                        Util.habilitarBtnModificar(activeFrame);
+                    }
                 }
             }
         });
+
         //Add table Model
-        tblVisualizarReserva.setModel(new javax.swing.table.DefaultTableModel(
-                new Object[][]{
-                    {null, 4, null, null, null, null, null, null},
-                    {null, 56, null, null, null, null, null, null},
-                    {null, 3, null, null, null, null, null, null},
-                    {null, 1, null, null, null, null, null, null}
-                },
-                new String[]{
-                    " ", "ID Reservacion", "Descripcion", "Fecha", "Hora Inicio - Fin", "Lugar", "Estado"
-                }
-        ) {
-            Class[] types = new Class[]{
-                java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
-            };
-            
-            public Class getColumnClass(int columnIndex) {
-                return types[columnIndex];
+        Util.setMultiPuporseModelToTable(tblVisualizarReserva, new Object[][]{
+            {false, 4, null, null, null, null, null, null},
+            {false, 56, null, null, null, null, null, null},
+            {false, 3, null, null, null, null, null, null},
+            {false, 1, null, null, null, null, null, null}
+        }, columnHeaders, columnsTypes);
+    }
+
+    public ArrayList<String> getIDsFromSelectedRows() {
+        ArrayList<String> rv = new ArrayList<String>();
+        for (byte i = 0; i < tblVisualizarReserva.getRowCount(); i++) {
+            if ((Boolean) tblVisualizarReserva.getValueAt(i, 0)) {
+                rv.add(String.valueOf(tblVisualizarReserva.getValueAt(i, 1)));
             }
-        });
+        }
+        return rv;
     }
 
     /**
@@ -98,6 +107,11 @@ public class VisualizadorDeReservas extends javax.swing.JInternalFrame {
         jScrollPane1.setViewportView(tblVisualizarReserva);
 
         btnCancelarReserva.setText("Cancelar Reservación");
+        btnCancelarReserva.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarReservaActionPerformed(evt);
+            }
+        });
 
         btnAceptar.setText("Aceptar");
         btnAceptar.addActionListener(new java.awt.event.ActionListener() {
@@ -139,7 +153,7 @@ public class VisualizadorDeReservas extends javax.swing.JInternalFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnCancelarReserva)
                     .addComponent(btnAceptar))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(19, Short.MAX_VALUE))
         );
 
         pack();
@@ -149,7 +163,16 @@ public class VisualizadorDeReservas extends javax.swing.JInternalFrame {
         this.setVisible(false);
     }//GEN-LAST:event_btnAceptarActionPerformed
 
-
+    private void btnCancelarReservaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarReservaActionPerformed
+        ArrayList<String> values = this.getIDsFromSelectedRows();
+        if (!values.isEmpty()) {
+            for (String s : values) {
+                JOptionPane.showMessageDialog(rootPane, s);
+            }
+        } else {
+            JOptionPane.showMessageDialog(rootPane, "Favor seleccione al menos una reservacion para cancelar", "Informacion", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }//GEN-LAST:event_btnCancelarReservaActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAceptar;
     private javax.swing.JButton btnCancelarReserva;
