@@ -89,6 +89,12 @@ public final class MaestroReservas extends javax.swing.JInternalFrame {
 
         getContentPane().add(cbbLugar, new org.netbeans.lib.awtextra.AbsoluteConstraints(143, 183, 186, -1));
         getContentPane().add(dChooserFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(143, 38, 186, -1));
+
+        txtCantPersonas.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCantPersonasKeyTyped(evt);
+            }
+        });
         getContentPane().add(txtCantPersonas, new org.netbeans.lib.awtextra.AbsoluteConstraints(143, 145, 64, -1));
         getContentPane().add(spnHoraF, new org.netbeans.lib.awtextra.AbsoluteConstraints(143, 114, 37, -1));
         getContentPane().add(spnMinutoF, new org.netbeans.lib.awtextra.AbsoluteConstraints(186, 114, 37, -1));
@@ -115,6 +121,7 @@ public final class MaestroReservas extends javax.swing.JInternalFrame {
 
         txtDesc.setColumns(20);
         txtDesc.setRows(5);
+        txtDesc.setWrapStyleWord(true);
         jScrollPane1.setViewportView(txtDesc);
 
         getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(143, 221, 186, -1));
@@ -170,6 +177,11 @@ public final class MaestroReservas extends javax.swing.JInternalFrame {
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
         Util.limpiarContenido(getInstance());
     }//GEN-LAST:event_btnLimpiarActionPerformed
+
+    private void txtCantPersonasKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCantPersonasKeyTyped
+        Util.aceptaSoloNumeros(evt, evt.getKeyChar());
+    }//GEN-LAST:event_txtCantPersonasKeyTyped
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAceptar;
     private javax.swing.JButton btnCancelar;

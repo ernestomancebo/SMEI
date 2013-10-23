@@ -7,8 +7,8 @@ package smei.util;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDesktopPane;
@@ -133,5 +133,21 @@ public class Util {
 
         desktopPane.add(frameToAdd);
         frameToAdd.setVisible(true);
+    }
+
+    public static void aceptaSoloNumeros(KeyEvent evt, char c) {
+        if (!Character.isDigit(c) && c != KeyEvent.VK_BACK_SPACE) {
+            evt.consume();
+        }
+    }
+
+    public static ArrayList<String> getIDsFromSelectedRows(JTable tabla, int booleanIndex, int idIndex) {
+        ArrayList<String> rv = new ArrayList<String>();
+        for (byte i = 0; i < tabla.getRowCount(); i++) {
+            if ((Boolean) tabla.getValueAt(i, booleanIndex)) {
+                rv.add(String.valueOf(tabla.getValueAt(i, idIndex)));
+            }
+        }
+        return rv;
     }
 }

@@ -9,6 +9,8 @@ import java.awt.Toolkit;
 import javax.swing.JDesktopPane;
 import javax.swing.JInternalFrame;
 import javax.swing.UIManager;
+import smei.gui.espacios.MaestroEspacios;
+import smei.gui.espacios.VisualizadorDeEspacios;
 import smei.gui.reservas.MaestroReservas;
 import smei.gui.reservas.VisualizadorDeReservas;
 import smei.util.Util;
@@ -18,19 +20,20 @@ import smei.util.Util;
  * @author Ernesto
  */
 public class Principal extends javax.swing.JFrame {
-
+    
     private JInternalFrame activeFrame = null;
     private static Principal instance = new Principal();
     
     public static Principal getInstance() {
         return instance;
     }
+
     /**
      * Creates new form Principal
      */
     private Principal() {
         initComponents();
-
+        
         Toolkit tk = Toolkit.getDefaultToolkit();
         Dimension dimension = tk.getScreenSize();
         setSize(dimension.width * 9 / 10, dimension.height * 9 / 10);
@@ -113,6 +116,11 @@ public class Principal extends javax.swing.JFrame {
         jLinkBtnBuscarEspacio.setText("Buscar Espacios");
         jLinkBtnBuscarEspacio.setMaximumSize(new java.awt.Dimension(112, 22));
         jLinkBtnBuscarEspacio.setMinimumSize(new java.awt.Dimension(112, 22));
+        jLinkBtnBuscarEspacio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jLinkBtnBuscarEspacioActionPerformed(evt);
+            }
+        });
 
         jLinkBtnRegEspacio.setText("Registrar Espacio");
         jLinkBtnRegEspacio.setMaximumSize(new java.awt.Dimension(112, 22));
@@ -291,23 +299,36 @@ public class Principal extends javax.swing.JFrame {
 
     private void jLinkBtnRegReservaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jLinkBtnRegReservaActionPerformed
         activeFrame = MaestroReservas.getInstance();
-
-        Util.addFrameToDesktopPanel(PrincipalDesktopPane, activeFrame);
-        Util.asignarTitulo(activeFrame, "Registrar Reservacion");
-        Util.habilitarEdicion(activeFrame);
-
-        Util.deshabilitarBtnModificar(activeFrame);
+        agregarMaestroInternalFrame("Registrar Reservacion");
     }//GEN-LAST:event_jLinkBtnRegReservaActionPerformed
 
     private void jLinkBtnRegEspacioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jLinkBtnRegEspacioActionPerformed
+        activeFrame = MaestroEspacios.getInstance();
+        agregarMaestroInternalFrame("Registrar Espacio");
     }//GEN-LAST:event_jLinkBtnRegEspacioActionPerformed
 
     private void jLinkBtnBuscarReservaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jLinkBtnBuscarReservaActionPerformed
         activeFrame = VisualizadorDeReservas.getInstance();
-
-        Util.addFrameToDesktopPanel(PrincipalDesktopPane, activeFrame);
-        Util.asignarTitulo(activeFrame, "Buscar Reserva");
+        agregarVisualizadorInternalFrame("Buscar Reserva");
+        
     }//GEN-LAST:event_jLinkBtnBuscarReservaActionPerformed
+
+    private void jLinkBtnBuscarEspacioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jLinkBtnBuscarEspacioActionPerformed
+        activeFrame = VisualizadorDeEspacios.getInstance();
+        agregarVisualizadorInternalFrame("Buscar Espacio");
+    }//GEN-LAST:event_jLinkBtnBuscarEspacioActionPerformed
+    
+    private void agregarMaestroInternalFrame(String titulo) {
+        Util.addFrameToDesktopPanel(PrincipalDesktopPane, activeFrame);
+        Util.asignarTitulo(activeFrame, "Registrar Reservacion");
+        Util.habilitarEdicion(activeFrame);
+        Util.deshabilitarBtnModificar(activeFrame);
+    }
+    
+    private void agregarVisualizadorInternalFrame(String titulo) {
+        Util.addFrameToDesktopPanel(PrincipalDesktopPane, activeFrame);
+        Util.asignarTitulo(activeFrame, titulo);
+    }
 
     /**
      * @param args the command line arguments

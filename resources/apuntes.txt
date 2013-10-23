@@ -1,4 +1,4 @@
-Validar que se ingrese solo numeros
+* Validar que se ingrese solo numeros
 Validar la hora de la reservacion
 Validar que la fecha sea igual o mayor a la actual
 

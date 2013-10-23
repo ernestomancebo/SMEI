@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package smei.gui.reservas;
+package smei.gui.espacios;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -17,34 +17,33 @@ import smei.util.Util;
  *
  * @author Ernesto Mancebo T
  */
-public class VisualizadorDeReservas extends javax.swing.JInternalFrame {
+public class VisualizadorDeEspacios extends javax.swing.JInternalFrame {
 
     /**
-     * Creates new form VisualizadorDeReservas
+     * Creates new form VisualizadorDeEspacios
      */
-    private static VisualizadorDeReservas instancia = new VisualizadorDeReservas();
-    private final String[] columnHeaders = {" ", "ID Reservacion", "Descripcion", "Fecha", "Hora Inicio - Fin", "Lugar", "Estado"};
-    private final Class[] columnsTypes = {java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class};
+    private static VisualizadorDeEspacios instancia = new VisualizadorDeEspacios();
+    private final String[] columnHeaders = {" ", "ID Espacio", "Nombre", "Límite de personas", "Descripción"};
+    private final Class[] columnsTypes = {java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class};
 
-    private VisualizadorDeReservas() {
+    private VisualizadorDeEspacios() {
         initComponents();
-        initializeValues();
     }
 
-    public static VisualizadorDeReservas getInstance() {
+    public static VisualizadorDeEspacios getInstance() {
         return instancia;
     }
 
     public void initializeValues() {
 
-        tblVisualizarReserva.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        tblVisualizarReserva.addMouseListener(new MouseAdapter() {
+        tblVisualizarEspacios.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        tblVisualizarEspacios.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
                     JTable target = (JTable) e.getSource();
                     if (target.getSelectedColumn() != 0) {
-                        MaestroReservas activeFrame = MaestroReservas.getInstance();
+                        MaestroEspacios activeFrame = MaestroEspacios.getInstance();
 
                         activeFrame.cargarDataFromID(String.valueOf(target.getValueAt(target.getSelectedRow(), 1)));
                         Util.addFrameToDesktopPanel(getInstance().getDesktopPane(), activeFrame);
@@ -56,11 +55,11 @@ public class VisualizadorDeReservas extends javax.swing.JInternalFrame {
         });
 
         //Add table Model
-        Util.setMultiPuporseModelToTable(tblVisualizarReserva, new Object[][]{
-            {false, 4, null, null, null, null, null, null},
-            {false, 56, null, null, null, null, null, null},
-            {false, 3, null, null, null, null, null, null},
-            {false, 1, null, null, null, null, null, null}
+        Util.setMultiPuporseModelToTable(tblVisualizarEspacios, new Object[][]{
+            {false, 4, null, null, null},
+            {false, 56, null, null, null},
+            {false, 3, null, null, null},
+            {false, 1, null, null, null}
         }, columnHeaders, columnsTypes);
     }
 
@@ -73,16 +72,16 @@ public class VisualizadorDeReservas extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
-        txtBuscarReserva = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tblVisualizarReserva = new javax.swing.JTable();
-        btnCancelarReserva = new javax.swing.JButton();
+        tblVisualizarEspacios = new javax.swing.JTable();
+        txtBuscarEspacio = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
+        btnEliminarEspacios = new javax.swing.JButton();
         btnAceptar = new javax.swing.JButton();
 
-        jLabel1.setText("Buscar:");
+        setPreferredSize(new java.awt.Dimension(726, 374));
 
-        tblVisualizarReserva.setModel(new javax.swing.table.DefaultTableModel(
+        tblVisualizarEspacios.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -93,13 +92,15 @@ public class VisualizadorDeReservas extends javax.swing.JInternalFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        tblVisualizarReserva.setToolTipText("");
-        jScrollPane1.setViewportView(tblVisualizarReserva);
+        tblVisualizarEspacios.setToolTipText("");
+        jScrollPane1.setViewportView(tblVisualizarEspacios);
 
-        btnCancelarReserva.setText("Cancelar Reservación");
-        btnCancelarReserva.addActionListener(new java.awt.event.ActionListener() {
+        jLabel1.setText("Buscar:");
+
+        btnEliminarEspacios.setText("Eliminar Espacio");
+        btnEliminarEspacios.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCancelarReservaActionPerformed(evt);
+                btnEliminarEspaciosActionPerformed(evt);
             }
         });
 
@@ -121,11 +122,11 @@ public class VisualizadorDeReservas extends javax.swing.JInternalFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addGap(18, 18, 18)
-                        .addComponent(txtBuscarReserva, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtBuscarEspacio, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(btnCancelarReserva)
+                        .addComponent(btnEliminarEspacios)
                         .addGap(18, 18, 18)
                         .addComponent(btnAceptar)))
                 .addContainerGap())
@@ -136,39 +137,41 @@ public class VisualizadorDeReservas extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(txtBuscarReserva, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtBuscarEspacio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 238, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnCancelarReserva)
+                    .addComponent(btnEliminarEspacios)
                     .addComponent(btnAceptar))
-                .addContainerGap(19, Short.MAX_VALUE))
+                .addContainerGap(23, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
-        this.setVisible(false);
-    }//GEN-LAST:event_btnAceptarActionPerformed
-
-    private void btnCancelarReservaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarReservaActionPerformed
-        ArrayList<String> values = Util.getIDsFromSelectedRows(tblVisualizarReserva, 0, 1);
+    private void btnEliminarEspaciosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarEspaciosActionPerformed
+        ArrayList<String> values = Util.getIDsFromSelectedRows(tblVisualizarEspacios, 0, 1);
         if (!values.isEmpty()) {
             for (String s : values) {
                 JOptionPane.showMessageDialog(rootPane, s);
             }
         } else {
-            JOptionPane.showMessageDialog(rootPane, "Favor seleccione al menos una reservacion para cancelar", "Informacion", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(rootPane, "Favor seleccione al menos un espacio para eliminar", "Informacion", JOptionPane.INFORMATION_MESSAGE);
         }
-    }//GEN-LAST:event_btnCancelarReservaActionPerformed
+    }//GEN-LAST:event_btnEliminarEspaciosActionPerformed
+
+    private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
+        this.setVisible(false);
+    }//GEN-LAST:event_btnAceptarActionPerformed
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAceptar;
-    private javax.swing.JButton btnCancelarReserva;
+    private javax.swing.JButton btnEliminarEspacios;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable tblVisualizarReserva;
-    private javax.swing.JTextField txtBuscarReserva;
+    private javax.swing.JTable tblVisualizarEspacios;
+    private javax.swing.JTextField txtBuscarEspacio;
     // End of variables declaration//GEN-END:variables
 }
