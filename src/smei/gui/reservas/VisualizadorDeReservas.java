@@ -25,6 +25,7 @@ public class VisualizadorDeReservas extends javax.swing.JInternalFrame {
     private static VisualizadorDeReservas instancia = new VisualizadorDeReservas();
     private final String[] columnHeaders = {" ", "ID Reservacion", "Descripcion", "Fecha", "Hora Inicio - Fin", "Lugar", "Estado"};
     private final Class[] columnsTypes = {java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class};
+    private boolean esConsulta;
 
     private VisualizadorDeReservas() {
         initComponents();
@@ -49,7 +50,11 @@ public class VisualizadorDeReservas extends javax.swing.JInternalFrame {
                         activeFrame.cargarDataFromID(String.valueOf(target.getValueAt(target.getSelectedRow(), 1)));
                         Util.addFrameToDesktopPanel(getInstance().getDesktopPane(), activeFrame);
                         Util.deshabilitarEdicion(activeFrame);
-                        Util.habilitarBtnModificar(activeFrame);
+                        if (esConsulta) {
+                            Util.habilitarBtnSalir(activeFrame);
+                        } else {
+                            Util.habilitarBtnModificar(activeFrame);
+                        }
                     }
                 }
             }
@@ -62,6 +67,14 @@ public class VisualizadorDeReservas extends javax.swing.JInternalFrame {
             {false, 3, null, null, null, null, null, null},
             {false, 1, null, null, null, null, null, null}
         }, columnHeaders, columnsTypes);
+    }
+
+    public boolean setConsulta(boolean esConsulta) {
+        return esConsulta = esConsulta;
+    }
+
+    public boolean esConsulta() {
+        return esConsulta;
     }
 
     /**
@@ -79,6 +92,7 @@ public class VisualizadorDeReservas extends javax.swing.JInternalFrame {
         tblVisualizarReserva = new javax.swing.JTable();
         btnCancelarReserva = new javax.swing.JButton();
         btnAceptar = new javax.swing.JButton();
+        btnExportarReserva = new javax.swing.JButton();
 
         jLabel1.setText("Buscar:");
 
@@ -110,6 +124,13 @@ public class VisualizadorDeReservas extends javax.swing.JInternalFrame {
             }
         });
 
+        btnExportarReserva.setText("Exportar Reservación");
+        btnExportarReserva.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExportarReservaActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -125,7 +146,9 @@ public class VisualizadorDeReservas extends javax.swing.JInternalFrame {
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(btnCancelarReserva)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(btnCancelarReserva)
+                            .addComponent(btnExportarReserva))
                         .addGap(18, 18, 18)
                         .addComponent(btnAceptar)))
                 .addContainerGap())
@@ -141,9 +164,10 @@ public class VisualizadorDeReservas extends javax.swing.JInternalFrame {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 238, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnCancelarReserva)
-                    .addComponent(btnAceptar))
-                .addContainerGap(19, Short.MAX_VALUE))
+                    .addComponent(btnAceptar)
+                    .addComponent(btnExportarReserva)
+                    .addComponent(btnCancelarReserva))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -163,9 +187,22 @@ public class VisualizadorDeReservas extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(rootPane, "Favor seleccione al menos una reservacion para cancelar", "Informacion", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_btnCancelarReservaActionPerformed
+
+    private void btnExportarReservaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportarReservaActionPerformed
+        ArrayList<String> values = Util.getIDsFromSelectedRows(tblVisualizarReserva, 0, 1);
+        if (!values.isEmpty()) {
+            for (String s : values) {
+                JOptionPane.showMessageDialog(rootPane, s);
+            }
+        } else {
+            JOptionPane.showMessageDialog(rootPane, "Favor seleccione al menos una reservacion para exportar", "Informacion", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }//GEN-LAST:event_btnExportarReservaActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAceptar;
     private javax.swing.JButton btnCancelarReserva;
+    private javax.swing.JButton btnExportarReserva;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tblVisualizarReserva;

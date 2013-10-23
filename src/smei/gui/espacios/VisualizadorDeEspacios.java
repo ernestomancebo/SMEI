@@ -25,17 +25,18 @@ public class VisualizadorDeEspacios extends javax.swing.JInternalFrame {
     private static VisualizadorDeEspacios instancia = new VisualizadorDeEspacios();
     private final String[] columnHeaders = {" ", "ID Espacio", "Nombre", "Límite de personas", "Descripción"};
     private final Class[] columnsTypes = {java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class};
-
+    
     private VisualizadorDeEspacios() {
         initComponents();
+        initializeValues();
     }
-
+    
     public static VisualizadorDeEspacios getInstance() {
         return instancia;
     }
-
+    
     public void initializeValues() {
-
+        
         tblVisualizarEspacios.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         tblVisualizarEspacios.addMouseListener(new MouseAdapter() {
             @Override
@@ -44,11 +45,12 @@ public class VisualizadorDeEspacios extends javax.swing.JInternalFrame {
                     JTable target = (JTable) e.getSource();
                     if (target.getSelectedColumn() != 0) {
                         MaestroEspacios activeFrame = MaestroEspacios.getInstance();
-
+                        
                         activeFrame.cargarDataFromID(String.valueOf(target.getValueAt(target.getSelectedRow(), 1)));
                         Util.addFrameToDesktopPanel(getInstance().getDesktopPane(), activeFrame);
                         Util.deshabilitarEdicion(activeFrame);
                         Util.habilitarBtnModificar(activeFrame);
+                        Util.habilitarBtnSalir(activeFrame);
                     }
                 }
             }

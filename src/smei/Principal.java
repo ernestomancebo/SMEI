@@ -6,6 +6,7 @@ package smei;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import javax.swing.ImageIcon;
 import javax.swing.JDesktopPane;
 import javax.swing.JInternalFrame;
 import javax.swing.UIManager;
@@ -20,10 +21,10 @@ import smei.util.Util;
  * @author Ernesto
  */
 public class Principal extends javax.swing.JFrame {
-    
+
     private JInternalFrame activeFrame = null;
     private static Principal instance = new Principal();
-    
+
     public static Principal getInstance() {
         return instance;
     }
@@ -33,11 +34,7 @@ public class Principal extends javax.swing.JFrame {
      */
     private Principal() {
         initComponents();
-        
-        Toolkit tk = Toolkit.getDefaultToolkit();
-        Dimension dimension = tk.getScreenSize();
-        setSize(dimension.width * 9 / 10, dimension.height * 9 / 10);
-        setLocation(dimension.width * 1 / 20, dimension.height * 1 / 20);
+        initializeValues();
     }
 
     /**
@@ -294,6 +291,13 @@ public class Principal extends javax.swing.JFrame {
     public JDesktopPane getPrincipalDesktopPane() {
         return PrincipalDesktopPane;
     }
+
+    private void initializeValues() {
+        Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
+        setSize(dimension.width * 9 / 10, dimension.height * 9 / 10);
+        setLocation(dimension.width * 1 / 20, dimension.height * 1 / 20);
+//        getInstance().setIconImage(new ImageIcon(getClass().getResource("/resources/icons/schedule-48.png")));
+    }
     private void jLinkBtnModNotifActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jLinkBtnModNotifActionPerformed
     }//GEN-LAST:event_jLinkBtnModNotifActionPerformed
 
@@ -310,21 +314,21 @@ public class Principal extends javax.swing.JFrame {
     private void jLinkBtnBuscarReservaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jLinkBtnBuscarReservaActionPerformed
         activeFrame = VisualizadorDeReservas.getInstance();
         agregarVisualizadorInternalFrame("Buscar Reserva");
-        
+
     }//GEN-LAST:event_jLinkBtnBuscarReservaActionPerformed
 
     private void jLinkBtnBuscarEspacioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jLinkBtnBuscarEspacioActionPerformed
         activeFrame = VisualizadorDeEspacios.getInstance();
         agregarVisualizadorInternalFrame("Buscar Espacio");
     }//GEN-LAST:event_jLinkBtnBuscarEspacioActionPerformed
-    
+
     private void agregarMaestroInternalFrame(String titulo) {
         Util.addFrameToDesktopPanel(PrincipalDesktopPane, activeFrame);
         Util.asignarTitulo(activeFrame, "Registrar Reservacion");
         Util.habilitarEdicion(activeFrame);
         Util.deshabilitarBtnModificar(activeFrame);
     }
-    
+
     private void agregarVisualizadorInternalFrame(String titulo) {
         Util.addFrameToDesktopPanel(PrincipalDesktopPane, activeFrame);
         Util.asignarTitulo(activeFrame, titulo);

@@ -8,7 +8,9 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;
+import java.net.URL;
 import java.util.ArrayList;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDesktopPane;
@@ -70,7 +72,7 @@ public class Util {
     public static void modificarBtnMod(Container container, boolean esModificar) {
         for (Component c : container.getComponents()) {
             if (c instanceof JButton) {
-                if (((JButton) c).getText().equals("Modificar")) {
+                if (((JButton) c).getText().equals("Modificar") || ((JButton) c).getText().equals("Salir")) {
                     ((JButton) c).setVisible(esModificar);
                     ((JButton) c).setEnabled(esModificar);
                 } else {
@@ -83,12 +85,33 @@ public class Util {
         }
     }
 
+    public static void habilitarSoloBtnSalir(Container container, boolean esModificar) {
+        for (Component c : container.getComponents()) {
+            if (c instanceof JButton) {
+                if (((JButton) c).getText().equals("Salir")) {
+                    ((JButton) c).setVisible(esModificar);
+                    ((JButton) c).setEnabled(esModificar);
+                }
+//                else {
+//                    ((JButton) c).setVisible(!esModificar);
+//                    ((JButton) c).setEnabled(!esModificar);
+//                }
+            } else if (c instanceof Container) {
+                modificarBtnMod((Container) c, esModificar);
+            }
+        }
+    }
+
     public static void habilitarBtnModificar(Container container) {
         modificarBtnMod(container, true);
     }
 
     public static void deshabilitarBtnModificar(Container container) {
         modificarBtnMod(container, false);
+    }
+
+    public static void habilitarBtnSalir(Container container) {
+        modificarBtnMod(container, true);
     }
 
     public static void asignarTitulo(Container container, String titulo) {
@@ -149,5 +172,9 @@ public class Util {
             }
         }
         return rv;
+    }
+
+    public static ImageIcon loadIcon(String strPath) {
+        return new ImageIcon();
     }
 }
