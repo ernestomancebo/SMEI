@@ -8,8 +8,10 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;
-import java.net.URL;
+import java.beans.PropertyVetoException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -69,49 +71,47 @@ public class Util {
         modificarEdicion(container, false);
     }
 
-    public static void modificarBtnMod(Container container, boolean esModificar) {
+    public static void modificarBtnMod(Container container, boolean esVisible) {
         for (Component c : container.getComponents()) {
             if (c instanceof JButton) {
-                if (((JButton) c).getText().equals("Modificar") || ((JButton) c).getText().equals("Salir")) {
-                    ((JButton) c).setVisible(esModificar);
-                    ((JButton) c).setEnabled(esModificar);
+                if (((JButton) c).getText().equals("Modificar")) {
+                    ((JButton) c).setVisible(esVisible);
+                    ((JButton) c).setEnabled(esVisible);
                 } else {
-                    ((JButton) c).setVisible(!esModificar);
-                    ((JButton) c).setEnabled(!esModificar);
+                    ((JButton) c).setVisible(!esVisible);
+                    ((JButton) c).setEnabled(!esVisible);
                 }
             } else if (c instanceof Container) {
-                modificarBtnMod((Container) c, esModificar);
+                modificarBtnMod((Container) c, esVisible);
             }
         }
     }
 
-    public static void habilitarSoloBtnSalir(Container container, boolean esModificar) {
+    public static void modificarBtnSalir(Container container, boolean esVisible) {
         for (Component c : container.getComponents()) {
             if (c instanceof JButton) {
                 if (((JButton) c).getText().equals("Salir")) {
-                    ((JButton) c).setVisible(esModificar);
-                    ((JButton) c).setEnabled(esModificar);
+                    ((JButton) c).setVisible(esVisible);
+                    ((JButton) c).setEnabled(esVisible);
                 }
-//                else {
-//                    ((JButton) c).setVisible(!esModificar);
-//                    ((JButton) c).setEnabled(!esModificar);
-//                }
             } else if (c instanceof Container) {
-                modificarBtnMod((Container) c, esModificar);
+                modificarBtnSalir((Container) c, esVisible);
             }
         }
     }
 
     public static void habilitarBtnModificar(Container container) {
         modificarBtnMod(container, true);
+        habilitarBtnSalir(container);
     }
 
     public static void deshabilitarBtnModificar(Container container) {
         modificarBtnMod(container, false);
+        habilitarBtnSalir(container);
     }
 
     public static void habilitarBtnSalir(Container container) {
-        modificarBtnMod(container, true);
+        modificarBtnSalir(container, true);
     }
 
     public static void asignarTitulo(Container container, String titulo) {
@@ -140,22 +140,32 @@ public class Util {
     }
 
     public static void addFrameToDesktopPanel(JDesktopPane desktopPane, JInternalFrame frameToAdd) {
-
-        for (JInternalFrame frame : desktopPane.getAllFrames()) {
-            if (frame.equals(frameToAdd)) {
-                frameToAdd.setVisible(true);
-                return;
+        try {
+            for (JInternalFrame frame : desktopPane.getAllFrames()) {
+                if (frame.equals(frameToAdd)) {
+                    frameToAdd.setVisible(true);
+                    frameToAdd.toFront();
+                    frameToAdd.repaint();
+                    frameToAdd.setSelected(true);
+                    return;
+                }
             }
+
+            Dimension desktopSize = desktopPane.getSize();
+            Dimension jInternalFrameSize = frameToAdd.getSize();
+            int width = (desktopSize.width - jInternalFrameSize.width) / 2;
+            int height = (desktopSize.height - jInternalFrameSize.height) / 2;
+            frameToAdd.setLocation(width, height);
+
+            desktopPane.add(frameToAdd);
+            frameToAdd.setVisible(true);
+            frameToAdd.toFront();
+            frameToAdd.repaint();
+            frameToAdd.setSelected(true);
+        } catch (PropertyVetoException ex) {
+            Logger.getLogger(Util.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        Dimension desktopSize = desktopPane.getSize();
-        Dimension jInternalFrameSize = frameToAdd.getSize();
-        int width = (desktopSize.width - jInternalFrameSize.width) / 2;
-        int height = (desktopSize.height - jInternalFrameSize.height) / 2;
-        frameToAdd.setLocation(width, height);
-
-        desktopPane.add(frameToAdd);
-        frameToAdd.setVisible(true);
     }
 
     public static void aceptaSoloNumeros(KeyEvent evt, char c) {

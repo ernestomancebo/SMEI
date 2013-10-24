@@ -120,6 +120,7 @@ public final class MaestroReservas extends javax.swing.JInternalFrame {
         getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 38, 115, -1));
 
         txtDesc.setColumns(20);
+        txtDesc.setLineWrap(true);
         txtDesc.setRows(5);
         txtDesc.setWrapStyleWord(true);
         jScrollPane1.setViewportView(txtDesc);
@@ -166,7 +167,7 @@ public final class MaestroReservas extends javax.swing.JInternalFrame {
 
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
         Util.deshabilitarBtnModificar(getInstance());
-        Util.habilitarBtnSalir(getInstance());
+//        Util.habilitarBtnSalir(getInstance());
         Util.habilitarEdicion(getInstance());
     }//GEN-LAST:event_btnModificarActionPerformed
     
