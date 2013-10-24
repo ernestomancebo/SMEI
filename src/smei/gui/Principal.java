@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package smei;
+package smei.gui;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -14,6 +14,7 @@ import smei.gui.espacios.MaestroEspacios;
 import smei.gui.espacios.VisualizadorDeEspacios;
 import smei.gui.reservas.MaestroReservas;
 import smei.gui.reservas.VisualizadorDeReservas;
+import smei.gui.usuarios.MaestroUsuarios;
 import smei.util.Util;
 
 /**
@@ -68,7 +69,6 @@ public class Principal extends javax.swing.JFrame {
         jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(855, 581));
 
         jTaskPane1.setBackground(new java.awt.Color(240, 240, 240));
         jTaskPane1.setMinimumSize(new java.awt.Dimension(201, 380));
@@ -176,10 +176,20 @@ public class Principal extends javax.swing.JFrame {
         jLinkBtnBuscarUsu.setText("Buscar Usuarios");
         jLinkBtnBuscarUsu.setMaximumSize(new java.awt.Dimension(112, 22));
         jLinkBtnBuscarUsu.setMinimumSize(new java.awt.Dimension(112, 22));
+        jLinkBtnBuscarUsu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jLinkBtnBuscarUsuActionPerformed(evt);
+            }
+        });
 
         jLinkBtnRegUsu.setText("Registrar Usuario");
         jLinkBtnRegUsu.setMaximumSize(new java.awt.Dimension(112, 22));
         jLinkBtnRegUsu.setMinimumSize(new java.awt.Dimension(112, 22));
+        jLinkBtnRegUsu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jLinkBtnRegUsuActionPerformed(evt);
+            }
+        });
 
         jLinkBtnModContr.setText("Modificar Contraseña");
         jLinkBtnModContr.setMaximumSize(new java.awt.Dimension(112, 22));
@@ -322,9 +332,19 @@ public class Principal extends javax.swing.JFrame {
         agregarVisualizadorInternalFrame("Buscar Espacio");
     }//GEN-LAST:event_jLinkBtnBuscarEspacioActionPerformed
 
+    private void jLinkBtnRegUsuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jLinkBtnRegUsuActionPerformed
+        activeFrame = MaestroUsuarios.getInstance();
+        agregarVisualizadorInternalFrame("Registrar Usuario");
+    }//GEN-LAST:event_jLinkBtnRegUsuActionPerformed
+
+    private void jLinkBtnBuscarUsuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jLinkBtnBuscarUsuActionPerformed
+        activeFrame = VisualizadorDeEspacios.getInstance();
+        agregarMaestroInternalFrame("Buscar Usuario");
+    }//GEN-LAST:event_jLinkBtnBuscarUsuActionPerformed
+
     private void agregarMaestroInternalFrame(String titulo) {
         Util.addFrameToDesktopPanel(PrincipalDesktopPane, activeFrame);
-        Util.asignarTitulo(activeFrame, "Registrar Reservacion");
+        Util.asignarTitulo(activeFrame, titulo);
         Util.habilitarEdicion(activeFrame);
         Util.deshabilitarBtnModificar(activeFrame);
     }

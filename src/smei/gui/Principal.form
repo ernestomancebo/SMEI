@@ -19,9 +19,6 @@
   </NonVisualComponents>
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="3"/>
-    <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-      <Dimension value="[855, 581]"/>
-    </Property>
   </Properties>
   <SyntheticProperties>
     <SyntheticProperty name="menuBar" type="java.lang.String" value="jMenuBar1"/>
@@ -294,6 +291,9 @@
                   <Dimension value="[112, 22]"/>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jLinkBtnBuscarUsuActionPerformed"/>
+              </Events>
             </Component>
             <Component class="com.l2fprod.common.swing.JLinkButton" name="jLinkBtnRegUsu">
               <Properties>
@@ -305,6 +305,9 @@
                   <Dimension value="[112, 22]"/>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jLinkBtnRegUsuActionPerformed"/>
+              </Events>
             </Component>
             <Component class="com.l2fprod.common.swing.JLinkButton" name="jLinkBtnModContr">
               <Properties>

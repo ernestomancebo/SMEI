@@ -3,66 +3,33 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package smei.gui.espacios;
+package smei.gui.usuarios;
 
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
-import javax.swing.JTable;
-import javax.swing.ListSelectionModel;
 import smei.util.Util;
 
 /**
  *
  * @author Ernesto Mancebo T
  */
-public class VisualizadorDeEspacios extends javax.swing.JInternalFrame {
+public class VisualizadorDeUsuarios extends javax.swing.JInternalFrame {
 
     /**
-     * Creates new form VisualizadorDeEspacios
+     * Creates new form VisualizadorDeUsuarios
      */
-    private static VisualizadorDeEspacios instancia = new VisualizadorDeEspacios();
-    private final String[] columnHeaders = {" ", "Nombre", "Rol", "Identificación", "Descripción"};
-    private final Class[] columnsTypes = {java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class};
-    
-    private VisualizadorDeEspacios() {
+    private static VisualizadorDeUsuarios instancia = new VisualizadorDeUsuarios();
+
+    private VisualizadorDeUsuarios() {
         initComponents();
-        initializeValues();
     }
-    
-    public static VisualizadorDeEspacios getInstance() {
+
+    public static VisualizadorDeUsuarios getInstance() {
         return instancia;
     }
-    
-    public void initializeValues() {
-        
-        tblVisualizarEspacios.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        tblVisualizarEspacios.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() == 2) {
-                    JTable target = (JTable) e.getSource();
-                    if (target.getSelectedColumn() != 0) {
-                        MaestroEspacios activeFrame = MaestroEspacios.getInstance();
-                        
-                        activeFrame.cargarDataFromID(String.valueOf(target.getValueAt(target.getSelectedRow(), 1)));
-                        Util.addFrameToDesktopPanel(getInstance().getDesktopPane(), activeFrame);
-                        Util.deshabilitarEdicion(activeFrame);
-                        Util.habilitarBtnModificar(activeFrame);
-                        Util.habilitarBtnSalir(activeFrame);
-                    }
-                }
-            }
-        });
 
-        //Add table Model
-        Util.setMultiPuporseModelToTable(tblVisualizarEspacios, new Object[][]{
-            {false, 4, null, null, null},
-            {false, 56, null, null, null},
-            {false, 3, null, null, null},
-            {false, 1, null, null, null}
-        }, columnHeaders, columnsTypes);
+    public void initializeValues() {
+        this.setSize(726, 374);
     }
 
     /**
@@ -74,14 +41,28 @@ public class VisualizadorDeEspacios extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        btnEliminarEspacios = new javax.swing.JButton();
+        btnAceptar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblVisualizarEspacios = new javax.swing.JTable();
         txtBuscarEspacio = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
-        btnEliminarEspacios = new javax.swing.JButton();
-        btnAceptar = new javax.swing.JButton();
 
         setPreferredSize(new java.awt.Dimension(726, 374));
+
+        btnEliminarEspacios.setText("Eliminar Espacio");
+        btnEliminarEspacios.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarEspaciosActionPerformed(evt);
+            }
+        });
+
+        btnAceptar.setText("Aceptar");
+        btnAceptar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAceptarActionPerformed(evt);
+            }
+        });
 
         tblVisualizarEspacios.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -98,20 +79,6 @@ public class VisualizadorDeEspacios extends javax.swing.JInternalFrame {
         jScrollPane1.setViewportView(tblVisualizarEspacios);
 
         jLabel1.setText("Buscar:");
-
-        btnEliminarEspacios.setText("Eliminar Espacio");
-        btnEliminarEspacios.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnEliminarEspaciosActionPerformed(evt);
-            }
-        });
-
-        btnAceptar.setText("Aceptar");
-        btnAceptar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAceptarActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);

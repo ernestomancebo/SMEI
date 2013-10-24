@@ -31,4 +31,10 @@ Futuro:
 
         Entrega de reservacion:
         Buscar por No. de reserva y cambiar a 'en curso'
-    
+
+Usuario:
+Nombre
+Apellido
+Identificacion (cedula/pasaporte)
+Rol
+Esta habilitado   
