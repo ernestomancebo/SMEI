@@ -319,6 +319,9 @@
                   <Dimension value="[112, 22]"/>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jLinkBtnModContrActionPerformed"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>
@@ -369,9 +372,7 @@
         </Property>
       </Properties>
 
-      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout">
-        <Property name="useNullLayout" type="boolean" value="true"/>
-      </Layout>
+      <Layout class="org.netbeans.modules.form.compat2.layouts.support.JLayeredPaneSupportLayout"/>
     </Container>
   </SubComponents>
 </Form>

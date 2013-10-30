@@ -5,8 +5,14 @@
  */
 package smei.gui.usuarios;
 
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
+import smei.gui.reservas.MaestroReservas;
+import static smei.gui.reservas.VisualizadorDeReservas.getInstance;
 import smei.util.Util;
 
 /**
@@ -19,9 +25,13 @@ public class VisualizadorDeUsuarios extends javax.swing.JInternalFrame {
      * Creates new form VisualizadorDeUsuarios
      */
     private static VisualizadorDeUsuarios instancia = new VisualizadorDeUsuarios();
+    private final Object[] columnHeaders = {"", "ID Usuario", "Identificación", "Correo", "Rol", "Esta Habilitado"};
+    private final Class[] columnsTypes = {java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class};
+    private boolean esConsulta;
 
     private VisualizadorDeUsuarios() {
         initComponents();
+        initializeValues();
     }
 
     public static VisualizadorDeUsuarios getInstance() {
@@ -30,6 +40,35 @@ public class VisualizadorDeUsuarios extends javax.swing.JInternalFrame {
 
     public void initializeValues() {
         this.setSize(726, 374);
+        tblVisualizarUsuario.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        tblVisualizarUsuario.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    JTable target = (JTable) e.getSource();
+                    if (target.getSelectedColumn() != 0) {
+                        MaestroUsuarios activeFrame = MaestroUsuarios.getInstance();
+
+                        activeFrame.cargarDataFromID(String.valueOf(target.getValueAt(target.getSelectedRow(), 1)));
+                        Util.addFrameToDesktopPanel(getInstance().getDesktopPane(), activeFrame);
+                        Util.deshabilitarEdicion(activeFrame);
+                        if (esConsulta) {
+                            Util.habilitarBtnSalir(activeFrame);
+                        } else {
+                            Util.habilitarBtnModificar(activeFrame);
+                        }
+                    }
+                }
+            }
+        });
+
+        //Add table Model
+        Util.setMultiPuporseModelToTable(tblVisualizarUsuario, new Object[][]{
+            {false, 4, null, null, null, null, null, null},
+            {false, 56, null, null, null, null, null, null},
+            {false, 3, null, null, null, null, null, null},
+            {false, 1, null, null, null, null, null, null}
+        }, columnHeaders, columnsTypes);
     }
 
     /**
@@ -41,19 +80,19 @@ public class VisualizadorDeUsuarios extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        btnEliminarEspacios = new javax.swing.JButton();
+        btnEliminar = new javax.swing.JButton();
         btnAceptar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tblVisualizarEspacios = new javax.swing.JTable();
-        txtBuscarEspacio = new javax.swing.JTextField();
+        tblVisualizarUsuario = new javax.swing.JTable();
+        txtBuscar = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
 
         setPreferredSize(new java.awt.Dimension(726, 374));
 
-        btnEliminarEspacios.setText("Eliminar Espacio");
-        btnEliminarEspacios.addActionListener(new java.awt.event.ActionListener() {
+        btnEliminar.setText("Eliminar Espacio");
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnEliminarEspaciosActionPerformed(evt);
+                btnEliminarActionPerformed(evt);
             }
         });
 
@@ -64,7 +103,7 @@ public class VisualizadorDeUsuarios extends javax.swing.JInternalFrame {
             }
         });
 
-        tblVisualizarEspacios.setModel(new javax.swing.table.DefaultTableModel(
+        tblVisualizarUsuario.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -75,8 +114,8 @@ public class VisualizadorDeUsuarios extends javax.swing.JInternalFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        tblVisualizarEspacios.setToolTipText("");
-        jScrollPane1.setViewportView(tblVisualizarEspacios);
+        tblVisualizarUsuario.setToolTipText("");
+        jScrollPane1.setViewportView(tblVisualizarUsuario);
 
         jLabel1.setText("Buscar:");
 
@@ -91,11 +130,11 @@ public class VisualizadorDeUsuarios extends javax.swing.JInternalFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addGap(18, 18, 18)
-                        .addComponent(txtBuscarEspacio, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(btnEliminarEspacios)
+                        .addComponent(btnEliminar)
                         .addGap(18, 18, 18)
                         .addComponent(btnAceptar)))
                 .addContainerGap())
@@ -106,41 +145,39 @@ public class VisualizadorDeUsuarios extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(txtBuscarEspacio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 238, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnEliminarEspacios)
+                    .addComponent(btnEliminar)
                     .addComponent(btnAceptar))
-                .addContainerGap(23, Short.MAX_VALUE))
+                .addContainerGap(24, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnEliminarEspaciosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarEspaciosActionPerformed
-        ArrayList<String> values = Util.getIDsFromSelectedRows(tblVisualizarEspacios, 0, 1);
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+        ArrayList<String> values = Util.getIDsFromSelectedRows(tblVisualizarUsuario, 0, 1);
         if (!values.isEmpty()) {
             for (String s : values) {
                 JOptionPane.showMessageDialog(rootPane, s);
             }
         } else {
-            JOptionPane.showMessageDialog(rootPane, "Favor seleccione al menos un espacio para eliminar", "Informacion", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(rootPane, "Favor seleccione al menos un usuario para eliminar", "Informacion", JOptionPane.INFORMATION_MESSAGE);
         }
-    }//GEN-LAST:event_btnEliminarEspaciosActionPerformed
+    }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
         this.setVisible(false);
     }//GEN-LAST:event_btnAceptarActionPerformed
-
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAceptar;
-    private javax.swing.JButton btnEliminarEspacios;
+    private javax.swing.JButton btnEliminar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable tblVisualizarEspacios;
-    private javax.swing.JTextField txtBuscarEspacio;
+    private javax.swing.JTable tblVisualizarUsuario;
+    private javax.swing.JTextField txtBuscar;
     // End of variables declaration//GEN-END:variables
 }

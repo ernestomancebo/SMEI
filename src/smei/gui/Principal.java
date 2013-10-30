@@ -4,6 +4,7 @@
  */
 package smei.gui;
 
+import com.sun.jmx.mbeanserver.ModifiableClassLoaderRepository;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import javax.swing.ImageIcon;
@@ -15,6 +16,8 @@ import smei.gui.espacios.VisualizadorDeEspacios;
 import smei.gui.reservas.MaestroReservas;
 import smei.gui.reservas.VisualizadorDeReservas;
 import smei.gui.usuarios.MaestroUsuarios;
+import smei.gui.usuarios.ModificarContrasena;
+import smei.gui.usuarios.VisualizadorDeUsuarios;
 import smei.util.Util;
 
 /**
@@ -194,6 +197,11 @@ public class Principal extends javax.swing.JFrame {
         jLinkBtnModContr.setText("Modificar Contraseña");
         jLinkBtnModContr.setMaximumSize(new java.awt.Dimension(112, 22));
         jLinkBtnModContr.setMinimumSize(new java.awt.Dimension(112, 22));
+        jLinkBtnModContr.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jLinkBtnModContrActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jTaskPaneGroup4Layout = new javax.swing.GroupLayout(jTaskPaneGroup4.getContentPane());
         jTaskPaneGroup4.getContentPane().setLayout(jTaskPaneGroup4Layout);
@@ -338,9 +346,14 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_jLinkBtnRegUsuActionPerformed
 
     private void jLinkBtnBuscarUsuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jLinkBtnBuscarUsuActionPerformed
-        activeFrame = VisualizadorDeEspacios.getInstance();
+        activeFrame = VisualizadorDeUsuarios.getInstance();
         agregarMaestroInternalFrame("Buscar Usuario");
     }//GEN-LAST:event_jLinkBtnBuscarUsuActionPerformed
+
+    private void jLinkBtnModContrActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jLinkBtnModContrActionPerformed
+        activeFrame = ModificarContrasena.getInstance();
+        agregarMaestroInternalFrame("Modificar Contraseña");
+    }//GEN-LAST:event_jLinkBtnModContrActionPerformed
 
     private void agregarMaestroInternalFrame(String titulo) {
         Util.addFrameToDesktopPanel(PrincipalDesktopPane, activeFrame);

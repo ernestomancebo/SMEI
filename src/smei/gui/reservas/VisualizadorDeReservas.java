@@ -23,7 +23,7 @@ public class VisualizadorDeReservas extends javax.swing.JInternalFrame {
      * Creates new form VisualizadorDeReservas
      */
     private static VisualizadorDeReservas instancia = new VisualizadorDeReservas();
-    private final String[] columnHeaders = {" ", "ID Reservacion", "Descripcion", "Fecha", "Hora Inicio - Fin", "Lugar", "Estado"};
+    private final Object[] columnHeaders = {"", "ID Reservacion", "Descripcion", "Fecha", "Hora Inicio - Fin", "Lugar", "Estado"};
     private final Class[] columnsTypes = {java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class};
     private boolean esConsulta;
 

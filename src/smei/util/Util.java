@@ -7,17 +7,15 @@ package smei.util;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.Graphics2D;
-import java.awt.GraphicsConfiguration;
-import java.awt.Transparency;
 import java.awt.event.KeyEvent;
-import java.awt.image.BufferedImage;
 import java.beans.PropertyVetoException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JDesktopPane;
 import javax.swing.JInternalFrame;
@@ -33,6 +31,13 @@ import javax.swing.text.JTextComponent;
  * @author Ernesto
  */
 public class Util {
+
+    public enum patrones {
+    }
+    private static final Pattern emailPattern = Pattern.compile("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
+            + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$");
+    private static final Pattern cedulaPattern = Pattern.compile("^[0-9]{3}-[0-9]{7}-[0-9]{1}$");
+    private static final Pattern matriculaPattern = Pattern.compile("^[0-9]{4}-[0-9]{4}$");
 
     public static void limpiarContenido(Container container) {
         for (Component c : container.getComponents()) {
@@ -58,6 +63,8 @@ public class Util {
             if (c instanceof JSpinner) {
                 c.setEnabled(editar);
             } else if (c instanceof JComboBox) {
+                c.setEnabled(editar);
+            } else if (c instanceof JCheckBox) {
                 c.setEnabled(editar);
             } else if (c instanceof JTextComponent) {
                 c.setEnabled(editar);
@@ -124,7 +131,7 @@ public class Util {
         }
     }
 
-    public static void setMultiPuporseModelToTable(JTable tabla, final Object[][] values, final String[] columnHeaders, final Class[] columnsTypes) {
+    public static void setMultiPuporseModelToTable(JTable tabla, final Object[][] values, final Object[] columnHeaders, final Class[] columnsTypes) {
         tabla.setModel(new javax.swing.table.DefaultTableModel(values, columnHeaders) {
             Class[] types = columnsTypes;
 
@@ -190,6 +197,25 @@ public class Util {
 
     public static ImageIcon loadIcon(String strPath) {
         return new ImageIcon();
+    }
+
+    public boolean validateStringWithPattern(String strToValidate, Pattern pattern) {
+        if (strToValidate.split(pattern.toString()).length == 0) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean validateEmail(String email) {
+        return validateStringWithPattern(email, emailPattern);
+    }
+
+    public boolean validateCedula(String cedula) {
+        return validateStringWithPattern(cedula, cedulaPattern);
+    }
+
+    public boolean validateMatricula(String matricula) {
+        return validateStringWithPattern(matricula, matriculaPattern);
     }
     /*
      public static BufferedImage rotate(BufferedImage image, double angle) {

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<Form version="1.3" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JInternalFrameFormInfo">
+<Form version="1.3" maxVersion="1.8" type="org.netbeans.modules.form.forminfo.JInternalFrameFormInfo">
   <Properties>
     <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
       <Dimension value="[726, 374]"/>
@@ -31,12 +31,12 @@
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="txtBuscarEspacio" min="-2" pref="189" max="-2" attributes="0"/>
+                      <Component id="txtBuscar" min="-2" pref="189" max="-2" attributes="0"/>
                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="1" attributes="0">
                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                      <Component id="btnEliminarEspacios" min="-2" max="-2" attributes="0"/>
+                      <Component id="btnEliminar" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="btnAceptar" min="-2" max="-2" attributes="0"/>
                   </Group>
@@ -51,27 +51,27 @@
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="txtBuscarEspacio" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="txtBuscar" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Component id="jScrollPane1" min="-2" pref="238" max="-2" attributes="0"/>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="btnEliminarEspacios" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="btnEliminar" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="btnAceptar" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="23" max="32767" attributes="0"/>
+              <EmptySpace pref="24" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
   </Layout>
   <SubComponents>
-    <Component class="javax.swing.JButton" name="btnEliminarEspacios">
+    <Component class="javax.swing.JButton" name="btnEliminar">
       <Properties>
         <Property name="text" type="java.lang.String" value="Eliminar Espacio"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnEliminarEspaciosActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnEliminarActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JButton" name="btnAceptar">
@@ -89,7 +89,7 @@
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
       <SubComponents>
-        <Component class="javax.swing.JTable" name="tblVisualizarEspacios">
+        <Component class="javax.swing.JTable" name="tblVisualizarUsuario">
           <Properties>
             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
               <Table columnCount="4" rowCount="4">
@@ -104,7 +104,7 @@
         </Component>
       </SubComponents>
     </Container>
-    <Component class="javax.swing.JTextField" name="txtBuscarEspacio">
+    <Component class="javax.swing.JTextField" name="txtBuscar">
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel1">
       <Properties>
