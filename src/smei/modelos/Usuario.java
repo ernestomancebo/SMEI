@@ -15,7 +15,6 @@ public class Usuario {
     private int idUsuario;
     private Rol rol;
     private String nombre;
-    private String apellido;
     private String password;
     private String identificacionP;
     private ArrayList<Email> emails;
@@ -44,14 +43,6 @@ public class Usuario {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
-    }
-
-    public String getApellido() {
-        return apellido;
-    }
-
-    public void setApellido(String apellido) {
-        this.apellido = apellido;
     }
 
     public String getPassword() {

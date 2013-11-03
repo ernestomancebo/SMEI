@@ -11,8 +11,6 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
-import smei.gui.reservas.MaestroReservas;
-import static smei.gui.reservas.VisualizadorDeReservas.getInstance;
 import smei.util.Util;
 
 /**
@@ -89,7 +87,7 @@ public class VisualizadorDeUsuarios extends javax.swing.JInternalFrame {
 
         setPreferredSize(new java.awt.Dimension(726, 374));
 
-        btnEliminar.setText("Eliminar Espacio");
+        btnEliminar.setText("Eliminar Usuario");
         btnEliminar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnEliminarActionPerformed(evt);

@@ -38,3 +38,13 @@ Apellido
 Identificacion (cedula/pasaporte)
 Rol
 Esta habilitado   
+
+
+Historico:
+
+Debe mostrar las reservaciones que ya pasaron
+
+
+Tendencias:
+
+Mostrar los espacios mas y menos reservados en x periodo

@@ -14,6 +14,13 @@ public class Telefono {
     private int idUsuario;
     private String telefono;
 
+    public Telefono() {
+    }
+
+    public Telefono(String telefono) {
+        this.telefono = telefono;
+    }
+
     public int getIdTelefono() {
         return idTelefono;
     }

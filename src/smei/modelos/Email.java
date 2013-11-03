@@ -14,6 +14,13 @@ public class Email {
     private int idUsuario;
     private String email;
 
+    public Email() {
+    }
+
+    public Email(String email) {
+        this.email = email;
+    }
+
     public int getIdEmail() {
         return idEmail;
     }
