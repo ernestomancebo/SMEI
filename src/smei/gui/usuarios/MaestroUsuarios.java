@@ -7,6 +7,8 @@ package smei.gui.usuarios;
 
 import com.sun.org.apache.xerces.internal.dom.CoreDOMImplementationImpl;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
+import smei.dao.DAOUsuario;
 import smei.modelos.Email;
 import smei.modelos.Telefono;
 import smei.modelos.Usuario;
@@ -17,9 +19,10 @@ import smei.util.Util;
  * @author Ernesto Mancebo T
  */
 public class MaestroUsuarios extends javax.swing.JInternalFrame {
-    
+
     private static MaestroUsuarios instancia = new MaestroUsuarios();
     private Usuario usuario;
+    private DAOUsuario daoUsuario = new DAOUsuario();
 
     /**
      * Creates new form MaestroUsuarios
@@ -28,36 +31,43 @@ public class MaestroUsuarios extends javax.swing.JInternalFrame {
         initComponents();
         initializeComponets();
     }
-    
+
     public static MaestroUsuarios getInstance() {
         return instancia;
     }
-    
+
     public void initializeComponets() {
 //        jCheckBox1.setHorizontalTextPosition(SwingConstants.LEFT);
         this.setSize(287, 266);
         btnModificar.setLocation(btnAceptar.getLocation());
     }
-    
+
     public boolean llenarUsuario() {
+
+        String validar = Util.validarCampos(getInstance());
+        if (!validar.isEmpty()) {
+            JOptionPane.showMessageDialog(rootPane, "Verificar " + validar);
+            return false;
+        }
+
+
+
+        ArrayList<Email> correos = new ArrayList<Email>();
+        correos.add(new Email(txtCorreo.getText()));
+
+        ArrayList<Telefono> telefono = new ArrayList<Telefono>();
+        telefono.add(new Telefono(txtTelefono.getText()));
+
         //Es nuevo
         if (usuario == null) {
-            ArrayList<Email> correos = new ArrayList<Email>();
-            correos.add(new Email(txtCorreo.getText()));
-            
-            ArrayList<Telefono> telefono = new ArrayList<Telefono>();
-            telefono.add(new Telefono(txtTelefono.getText()));
-            
             usuario = new Usuario();
-            usuario.setNombre(txtNombre.getText());
-            usuario.setIdentificacionP(txtIdentificacion.getText());
-            usuario.setEmails(correos);
-            usuario.setTelefonos(telefono);
-            usuario.setEstaHabilitado(chkHabilitado.isSelected());
-            
-        } else {
         }
-        
+        usuario.setNombre(txtNombre.getText());
+        usuario.setIdentificacionP(txtIdentificacion.getText());
+        usuario.setEmails(correos);
+        usuario.setTelefonos(telefono);
+        usuario.setEstaHabilitado(chkHabilitado.isSelected());
+
         return true;
     }
 
@@ -100,7 +110,11 @@ public class MaestroUsuarios extends javax.swing.JInternalFrame {
 
         jLabel5.setText("Habilitado:");
         getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 170, -1, -1));
+
+        txtNombre.setName("Nombre"); // NOI18N
         getContentPane().add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 20, 130, -1));
+
+        txtIdentificacion.setName("Identificacion"); // NOI18N
         getContentPane().add(txtIdentificacion, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 50, 130, -1));
 
         getContentPane().add(cmbRol, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 140, 130, -1));
@@ -144,6 +158,8 @@ public class MaestroUsuarios extends javax.swing.JInternalFrame {
             }
         });
         getContentPane().add(btnLimpiar, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 200, 75, -1));
+
+        txtCorreo.setName("Correo"); // NOI18N
         getContentPane().add(txtCorreo, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 80, 130, -1));
 
         jLabel7.setText("Correo:");
@@ -151,35 +167,47 @@ public class MaestroUsuarios extends javax.swing.JInternalFrame {
 
         jLabel8.setText("Teléfono:");
         getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 110, -1, -1));
+
+        txtTelefono.setName("Telefono"); // NOI18N
         getContentPane().add(txtTelefono, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 110, 130, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    public void cargarDataFromID(String reservaID) {
-        Util.asignarTitulo(getInstance(), "Usuario " + reservaID);
+    public void cargarDataFromID(Usuario usuario) {
+        Util.limpiarContenido(getInstance());
+        Util.asignarTitulo(getInstance(), "Usuario " + usuario.getIdUsuario());
+        this.usuario = usuario;
     }
-    
+
     private void chkHabilitadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkHabilitadoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_chkHabilitadoActionPerformed
-    
+
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
         Util.deshabilitarBtnModificar(getInstance());
         //        Util.habilitarBtnSalir(getInstance());
         Util.habilitarEdicion(getInstance());
     }//GEN-LAST:event_btnModificarActionPerformed
-    
+
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
         Util.limpiarContenido(getInstance());
         this.setVisible(false);
     }//GEN-LAST:event_btnSalirActionPerformed
-    
+
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
         Util.limpiarContenido(getInstance());
     }//GEN-LAST:event_btnLimpiarActionPerformed
-    
+
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
+        if (llenarUsuario()) {
+            if (usuario.getIdUsuario() != null) {
+                daoUsuario.actualizarUsuario(usuario);
+            } else {
+                usuario.setPassword(Util.generarClaveDeUsuario(usuario));
+                daoUsuario.insertarUsuario(usuario);
+            }
+        }
     }//GEN-LAST:event_btnAceptarActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAceptar;

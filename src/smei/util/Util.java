@@ -25,6 +25,7 @@ import javax.swing.SpinnerListModel;
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.text.JTextComponent;
+import smei.modelos.Usuario;
 
 /**
  *
@@ -34,10 +35,11 @@ public class Util {
 
     public enum patrones {
     }
-    private static final Pattern emailPattern = Pattern.compile("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
+    private static final Pattern EMAIL_PATTERN = Pattern.compile("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
             + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$");
-    private static final Pattern cedulaPattern = Pattern.compile("^[0-9]{3}-[0-9]{7}-[0-9]{1}$");
-    private static final Pattern matriculaPattern = Pattern.compile("^[0-9]{4}-[0-9]{4}$");
+    private static final Pattern CEDULA_PATTERN = Pattern.compile("^[0-9]{3}-[0-9]{7}-[0-9]{1}$");
+    private static final Pattern MATRICULA_PATTERN = Pattern.compile("^[0-9]{4}-[0-9]{4}$");
+    private static final Pattern TELEFONO_PATTERN = Pattern.compile("^[0-9]{3}-[0-9]{3}-[0-9]{4}$");
 
     public static void limpiarContenido(Container container) {
         for (Component c : container.getComponents()) {
@@ -199,23 +201,79 @@ public class Util {
         return new ImageIcon();
     }
 
-    public boolean validateStringWithPattern(String strToValidate, Pattern pattern) {
+    public static boolean validateStringWithPattern(String strToValidate, Pattern pattern) {
         if (strToValidate.split(pattern.toString()).length == 0) {
             return true;
         }
         return false;
     }
 
-    public boolean validateEmail(String email) {
-        return validateStringWithPattern(email, emailPattern);
+    public static String validarCampos(Container container) {
+        String rv = new String();
+        String value;
+        String txtName;
+
+        for (Component c : container.getComponents()) {
+            if (c instanceof JTextComponent) {
+                value = ((JTextComponent) c).getText();
+                txtName = ((JTextComponent) c).getName();
+
+                if (!value.trim().isEmpty()) {
+                    if (txtName.equals("Correo")) {
+                        if (!validarEmail(value)) {
+                            rv = txtName;
+                        }
+                    } else if (txtName.equals("Telefono")) {
+                        if (!validarTelefono(value)) {
+                            rv = txtName;
+                        }
+                    } else if (txtName.equals("Identificacion")) {
+                        if (!validarMatricula(value)) {
+                            rv = txtName;
+                        }
+                    }
+
+                    if (!rv.isEmpty()) {
+                        ((JTextComponent) c).selectAll();
+                        ((JTextComponent) c).requestFocus();
+                        return rv;
+                    }
+                } else {
+                    ((JTextComponent) c).selectAll();
+                    ((JTextComponent) c).requestFocus();
+                    return txtName;
+                }
+            } else if (c instanceof Container) {
+                if (!(rv = validarCampos((Container) c)).isEmpty()) {
+                    return rv;
+                }
+            }
+        }
+        return rv;
     }
 
-    public boolean validateCedula(String cedula) {
-        return validateStringWithPattern(cedula, cedulaPattern);
+    public static String generarClaveDeUsuario(Usuario usuario) {
+        final String nombre = usuario.getNombre();
+        final String identificacion = usuario.getIdentificacionP();
+        return (nombre.substring(0, 1).toUpperCase()
+                + identificacion.substring(identificacion.length() - 4, identificacion.length())
+                + nombre.substring(0, 1).toLowerCase());
     }
 
-    public boolean validateMatricula(String matricula) {
-        return validateStringWithPattern(matricula, matriculaPattern);
+    public static boolean validarEmail(String email) {
+        return validateStringWithPattern(email, EMAIL_PATTERN);
+    }
+
+    public static boolean validarCedula(String cedula) {
+        return validateStringWithPattern(cedula, CEDULA_PATTERN);
+    }
+
+    public static boolean validarMatricula(String matricula) {
+        return validateStringWithPattern(matricula, MATRICULA_PATTERN);
+    }
+
+    public static boolean validarTelefono(String telefono) {
+        return validateStringWithPattern(telefono, TELEFONO_PATTERN);
     }
     /*
      public static BufferedImage rotate(BufferedImage image, double angle) {

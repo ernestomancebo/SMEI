@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
+import smei.dao.DAOUsuario;
 import smei.util.Util;
 
 /**
@@ -26,16 +27,17 @@ public class VisualizadorDeUsuarios extends javax.swing.JInternalFrame {
     private final Object[] columnHeaders = {"", "ID Usuario", "Identificación", "Correo", "Rol", "Esta Habilitado"};
     private final Class[] columnsTypes = {java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class};
     private boolean esConsulta;
-
+    private DAOUsuario daoUsuario = new DAOUsuario();
+    
     private VisualizadorDeUsuarios() {
         initComponents();
         initializeValues();
     }
-
+    
     public static VisualizadorDeUsuarios getInstance() {
         return instancia;
     }
-
+    
     public void initializeValues() {
         this.setSize(726, 374);
         tblVisualizarUsuario.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -46,8 +48,10 @@ public class VisualizadorDeUsuarios extends javax.swing.JInternalFrame {
                     JTable target = (JTable) e.getSource();
                     if (target.getSelectedColumn() != 0) {
                         MaestroUsuarios activeFrame = MaestroUsuarios.getInstance();
-
-                        activeFrame.cargarDataFromID(String.valueOf(target.getValueAt(target.getSelectedRow(), 1)));
+                        
+                        activeFrame.cargarDataFromID(daoUsuario.getUsuario(
+                                Integer.valueOf(String.valueOf(target.getValueAt(target.getSelectedRow(), 1)))));
+                        
                         Util.addFrameToDesktopPanel(getInstance().getDesktopPane(), activeFrame);
                         Util.deshabilitarEdicion(activeFrame);
                         if (esConsulta) {
@@ -87,7 +91,7 @@ public class VisualizadorDeUsuarios extends javax.swing.JInternalFrame {
 
         setPreferredSize(new java.awt.Dimension(726, 374));
 
-        btnEliminar.setText("Eliminar Usuario");
+        btnEliminar.setText("Deshabilitar Usuario");
         btnEliminar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnEliminarActionPerformed(evt);
@@ -159,14 +163,12 @@ public class VisualizadorDeUsuarios extends javax.swing.JInternalFrame {
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         ArrayList<String> values = Util.getIDsFromSelectedRows(tblVisualizarUsuario, 0, 1);
         if (!values.isEmpty()) {
-            for (String s : values) {
-                JOptionPane.showMessageDialog(rootPane, s);
-            }
+            daoUsuario.deshabilitarUsuarios(values);
         } else {
-            JOptionPane.showMessageDialog(rootPane, "Favor seleccione al menos un usuario para eliminar", "Informacion", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(rootPane, "Favor seleccione al menos un usuario para deshabilitar", "Informacion", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_btnEliminarActionPerformed
-
+    
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
         this.setVisible(false);
     }//GEN-LAST:event_btnAceptarActionPerformed
