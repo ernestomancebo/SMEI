@@ -14,6 +14,13 @@ public class Rol {
     private String nombre;
     private String descripcion;
 
+    public Rol() {
+    }
+
+    public Rol(String nombre) {
+        this.nombre = nombre;
+    }
+
     public int getIdRol() {
         return idRol;
     }

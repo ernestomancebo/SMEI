@@ -11,6 +11,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JDesktopPane;
 import javax.swing.JInternalFrame;
 import javax.swing.UIManager;
+import smei.dao.DAOUsuario;
 import smei.gui.espacios.MaestroEspacios;
 import smei.gui.espacios.VisualizadorDeEspacios;
 import smei.gui.reservas.MaestroReservas;
@@ -18,6 +19,7 @@ import smei.gui.reservas.VisualizadorDeReservas;
 import smei.gui.usuarios.MaestroUsuarios;
 import smei.gui.usuarios.ModificarContrasena;
 import smei.gui.usuarios.VisualizadorDeUsuarios;
+import smei.modelos.Usuario;
 import smei.util.Util;
 
 /**
@@ -28,6 +30,7 @@ public class Principal extends javax.swing.JFrame {
 
     private JInternalFrame activeFrame = null;
     private static Principal instance = new Principal();
+    private Usuario usuario;
 
     public static Principal getInstance() {
         return instance;
@@ -316,6 +319,11 @@ public class Principal extends javax.swing.JFrame {
         setLocation(dimension.width * 1 / 20, dimension.height * 1 / 20);
 //        getInstance().setIconImage(new ImageIcon(getClass().getResource("/resources/icons/schedule-48.png")));
     }
+
+    public void setUsuario(Usuario u) {
+        this.usuario = u;
+    }
+
     private void jLinkBtnModNotifActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jLinkBtnModNotifActionPerformed
     }//GEN-LAST:event_jLinkBtnModNotifActionPerformed
 
@@ -351,7 +359,10 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_jLinkBtnBuscarUsuActionPerformed
 
     private void jLinkBtnModContrActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jLinkBtnModContrActionPerformed
+        setUsuario(new DAOUsuario().getUsuarioByID(1));
+
         activeFrame = ModificarContrasena.getInstance();
+        ModificarContrasena.getInstance().setUsuario(usuario);
         agregarMaestroInternalFrame("Modificar Contraseña");
     }//GEN-LAST:event_jLinkBtnModContrActionPerformed
 

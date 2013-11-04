@@ -255,9 +255,17 @@ public class Util {
     public static String generarClaveDeUsuario(Usuario usuario) {
         final String nombre = usuario.getNombre();
         final String identificacion = usuario.getIdentificacionP();
-        return (nombre.substring(0, 1).toUpperCase()
+        final String rv = (nombre.substring(0, 1).toUpperCase()
                 + identificacion.substring(identificacion.length() - 4, identificacion.length())
-                + nombre.substring(0, 1).toLowerCase());
+                + nombre.substring(nombre.length() - 1, nombre.length()).toLowerCase());
+        System.out.println(rv);
+        return rv;
+    }
+
+    public static Object[] crearFilaUsuario(Usuario usuario) {
+        return new Object[]{
+            false, usuario.getIdUsuario(), usuario.getNombre(),
+            usuario.getEmails().get(0).getEmail(), usuario.getRol().getNombre(), (usuario.isEstaHabilitado()) ? "Sí" : "No"};
     }
 
     public static boolean validarEmail(String email) {

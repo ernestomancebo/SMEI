@@ -5,11 +5,11 @@
  */
 package smei.gui.usuarios;
 
-import com.sun.org.apache.xerces.internal.dom.CoreDOMImplementationImpl;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import smei.dao.DAOUsuario;
 import smei.modelos.Email;
+import smei.modelos.Rol;
 import smei.modelos.Telefono;
 import smei.modelos.Usuario;
 import smei.util.Util;
@@ -58,6 +58,9 @@ public class MaestroUsuarios extends javax.swing.JInternalFrame {
         ArrayList<Telefono> telefono = new ArrayList<Telefono>();
         telefono.add(new Telefono(txtTelefono.getText()));
 
+        Rol rol = new Rol();
+        rol.setNombre(cmbRol.getSelectedItem().toString());
+
         //Es nuevo
         if (usuario == null) {
             usuario = new Usuario();
@@ -66,7 +69,9 @@ public class MaestroUsuarios extends javax.swing.JInternalFrame {
         usuario.setIdentificacionP(txtIdentificacion.getText());
         usuario.setEmails(correos);
         usuario.setTelefonos(telefono);
+        usuario.setRol(rol);
         usuario.setEstaHabilitado(chkHabilitado.isSelected());
+
 
         return true;
     }
@@ -175,11 +180,19 @@ public class MaestroUsuarios extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     public void cargarDataFromID(Usuario usuario) {
-        Util.limpiarContenido(getInstance());
-        Util.asignarTitulo(getInstance(), "Usuario " + usuario.getIdUsuario());
         this.usuario = usuario;
+        llenarCamposFromUsuario(usuario);
+        Util.asignarTitulo(getInstance(), "Usuario " + usuario.getIdUsuario());
     }
 
+    public void llenarCamposFromUsuario(Usuario u) {
+        txtNombre.setText(u.getNombre());
+        txtIdentificacion.setText(u.getIdentificacionP());
+        txtCorreo.setText(u.getEmails().get(0).getEmail());
+        txtTelefono.setText(u.getTelefonos().get(0).getTelefono());
+        cmbRol.setSelectedItem(u.getRol().getNombre());
+        chkHabilitado.setSelected(u.isEstaHabilitado());
+    }
     private void chkHabilitadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkHabilitadoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_chkHabilitadoActionPerformed
@@ -196,7 +209,11 @@ public class MaestroUsuarios extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnSalirActionPerformed
 
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
-        Util.limpiarContenido(getInstance());
+        if (usuario == null) {
+            Util.limpiarContenido(getInstance());
+        } else {
+            llenarCamposFromUsuario(usuario);
+        }
     }//GEN-LAST:event_btnLimpiarActionPerformed
 
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed

@@ -24,20 +24,20 @@ public class VisualizadorDeUsuarios extends javax.swing.JInternalFrame {
      * Creates new form VisualizadorDeUsuarios
      */
     private static VisualizadorDeUsuarios instancia = new VisualizadorDeUsuarios();
-    private final Object[] columnHeaders = {"", "ID Usuario", "Identificación", "Correo", "Rol", "Esta Habilitado"};
+    private final Object[] columnHeaders = {"", "ID Usuario", "Nombre", "Correo", "Rol", "Esta Habilitado"};
     private final Class[] columnsTypes = {java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class};
     private boolean esConsulta;
     private DAOUsuario daoUsuario = new DAOUsuario();
-    
+
     private VisualizadorDeUsuarios() {
         initComponents();
         initializeValues();
     }
-    
+
     public static VisualizadorDeUsuarios getInstance() {
         return instancia;
     }
-    
+
     public void initializeValues() {
         this.setSize(726, 374);
         tblVisualizarUsuario.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -48,10 +48,10 @@ public class VisualizadorDeUsuarios extends javax.swing.JInternalFrame {
                     JTable target = (JTable) e.getSource();
                     if (target.getSelectedColumn() != 0) {
                         MaestroUsuarios activeFrame = MaestroUsuarios.getInstance();
-                        
-                        activeFrame.cargarDataFromID(daoUsuario.getUsuario(
+
+                        activeFrame.cargarDataFromID(daoUsuario.getUsuarioByID(
                                 Integer.valueOf(String.valueOf(target.getValueAt(target.getSelectedRow(), 1)))));
-                        
+
                         Util.addFrameToDesktopPanel(getInstance().getDesktopPane(), activeFrame);
                         Util.deshabilitarEdicion(activeFrame);
                         if (esConsulta) {
@@ -65,12 +65,14 @@ public class VisualizadorDeUsuarios extends javax.swing.JInternalFrame {
         });
 
         //Add table Model
-        Util.setMultiPuporseModelToTable(tblVisualizarUsuario, new Object[][]{
-            {false, 4, null, null, null, null, null, null},
-            {false, 56, null, null, null, null, null, null},
-            {false, 3, null, null, null, null, null, null},
-            {false, 1, null, null, null, null, null, null}
-        }, columnHeaders, columnsTypes);
+        Util.setMultiPuporseModelToTable(tblVisualizarUsuario,
+                //        new Object[][]{
+                //            {false, 4, null, null, null, null},
+                //            {false, 56, null, null, null, null},
+                //            {false, 3, null, null, null, null},
+                //            {false, 1, null, null, null, null}
+                //        }
+                daoUsuario.getAllUsuarios(), columnHeaders, columnsTypes);
     }
 
     /**
@@ -168,7 +170,7 @@ public class VisualizadorDeUsuarios extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(rootPane, "Favor seleccione al menos un usuario para deshabilitar", "Informacion", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_btnEliminarActionPerformed
-    
+
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
         this.setVisible(false);
     }//GEN-LAST:event_btnAceptarActionPerformed

@@ -4,6 +4,10 @@
  */
 package smei.gui.usuarios;
 
+import javax.swing.JOptionPane;
+import javax.swing.text.JTextComponent;
+import smei.dao.DAOUsuario;
+import smei.modelos.Usuario;
 import smei.util.Util;
 
 /**
@@ -16,17 +20,45 @@ public class ModificarContrasena extends javax.swing.JInternalFrame {
      * Creates new form ModificarContrasena
      */
     private static ModificarContrasena instancia = new ModificarContrasena();
-    
+    private Usuario usuario = new Usuario();
+
     private ModificarContrasena() {
         initComponents();
     }
-    
+
     public static ModificarContrasena getInstance() {
         return instancia;
     }
-    
+
     public void initializeValues() {
         this.setSize(248, 214);
+    }
+
+    public void setUsuario(Usuario u) {
+        this.usuario = u;
+    }
+
+    public String validarCambio() {
+        if (!usuario.getIdentificacionP().equals(txtIdentificacion.getText())) {
+            txtIdentificacion.selectAll();
+            txtIdentificacion.requestFocus();
+            return "Identificacion inválida.";
+        }
+
+        if (!usuario.getPassword().equals(txtContrasena.getText())) {
+            txtContrasena.selectAll();
+            txtContrasena.requestFocus();
+            return "Antigua contraseña inválida.";
+        }
+
+        if (!txtNuevaContrasena.getText().isEmpty() && !txtNuevaContrasena.getText()
+                .equals(txtNuevaContrasenaConf.getText())) {
+            txtNuevaContrasenaConf.setText("");
+            txtNuevaContrasena.selectAll();
+            txtNuevaContrasena.requestFocus();
+            return "Nueva contraseña no coincide.";
+        }
+        return "";
     }
 
     /**
@@ -43,10 +75,10 @@ public class ModificarContrasena extends javax.swing.JInternalFrame {
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
-        jTextField4 = new javax.swing.JTextField();
+        txtIdentificacion = new javax.swing.JTextField();
+        txtContrasena = new javax.swing.JTextField();
+        txtNuevaContrasenaConf = new javax.swing.JTextField();
+        txtNuevaContrasena = new javax.swing.JTextField();
         btnSalir = new javax.swing.JButton();
         btnLimpiar = new javax.swing.JButton();
 
@@ -59,6 +91,11 @@ public class ModificarContrasena extends javax.swing.JInternalFrame {
         jLabel4.setText("Confirme nueva contraseña:");
 
         jButton1.setText("Aceptar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         btnSalir.setText("Salir");
         btnSalir.addActionListener(new java.awt.event.ActionListener() {
@@ -89,10 +126,10 @@ public class ModificarContrasena extends javax.swing.JInternalFrame {
                             .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING))
                         .addGap(10, 10, 10)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(txtNuevaContrasenaConf, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtNuevaContrasena, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtIdentificacion, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtContrasena, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(40, 40, 40)
                         .addComponent(jButton1)
@@ -107,26 +144,26 @@ public class ModificarContrasena extends javax.swing.JInternalFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(20, 20, 20)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtIdentificacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1))
                 .addGap(10, 10, 10)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel2)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtContrasena, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(10, 10, 10)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel3)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtNuevaContrasena, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(10, 10, 10)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel4)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtNuevaContrasenaConf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(20, 20, 20)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jButton1)
                     .addComponent(btnLimpiar)
                     .addComponent(btnSalir))
-                .addContainerGap(12, Short.MAX_VALUE))
+                .addContainerGap(16, Short.MAX_VALUE))
         );
 
         pack();
@@ -136,10 +173,19 @@ public class ModificarContrasena extends javax.swing.JInternalFrame {
         Util.limpiarContenido(getInstance());
         this.setVisible(false);
     }//GEN-LAST:event_btnSalirActionPerformed
-    
+
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
         Util.limpiarContenido(getInstance());
     }//GEN-LAST:event_btnLimpiarActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        String msg = validarCambio();
+        if (msg.isEmpty()) {
+            new DAOUsuario().cambiarContrasena(txtNuevaContrasena.getText());
+        } else {
+            JOptionPane.showMessageDialog(rootPane, msg);
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnLimpiar;
     private javax.swing.JButton btnSalir;
@@ -148,9 +194,9 @@ public class ModificarContrasena extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
+    private javax.swing.JTextField txtContrasena;
+    private javax.swing.JTextField txtIdentificacion;
+    private javax.swing.JTextField txtNuevaContrasena;
+    private javax.swing.JTextField txtNuevaContrasenaConf;
     // End of variables declaration//GEN-END:variables
 }
