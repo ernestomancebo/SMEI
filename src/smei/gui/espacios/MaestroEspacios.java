@@ -5,6 +5,14 @@
  */
 package smei.gui.espacios;
 
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
+import static smei.gui.usuarios.MaestroUsuarios.getInstance;
+import smei.modelos.Email;
+import smei.modelos.Espacio;
+import smei.modelos.Rol;
+import smei.modelos.Telefono;
+import smei.modelos.Usuario;
 import smei.util.Util;
 
 /**
@@ -14,6 +22,7 @@ import smei.util.Util;
 public class MaestroEspacios extends javax.swing.JInternalFrame {
 
     private static MaestroEspacios instancia = new MaestroEspacios();
+    private Espacio espacio;
 
     /**
      * Creates new form MaestroEspacios
@@ -36,6 +45,30 @@ public class MaestroEspacios extends javax.swing.JInternalFrame {
         btnModificar.setLocation(btnAceptar.getLocation());
     }
 
+    public boolean llenarEspacio() {
+
+        String validar = Util.validarCampos(getInstance());
+        if (!validar.isEmpty()) {
+            JOptionPane.showMessageDialog(rootPane, "Verificar " + validar);
+            return false;
+        }
+
+        Espacio e = new Espacio();
+
+
+
+        //Es nuevo
+        if (espacio == null) {
+            espacio = new Espacio();
+        }
+        espacio.setNombre(txtNombre.getText());
+        espacio.setCapacidadDePersonas(Integer.valueOf(txtLimiteP.getText()));
+        espacio.setDescripcion(txtDescripcion.getText());
+        espacio.setHabilitado(chkHabilitado.isSelected());
+
+        return true;
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -48,39 +81,46 @@ public class MaestroEspacios extends javax.swing.JInternalFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
+        txtLimiteP = new javax.swing.JTextField();
+        txtNombre = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        txtDescripcion = new javax.swing.JTextArea();
         btnModificar = new javax.swing.JButton();
         btnSalir = new javax.swing.JButton();
         btnLimpiar = new javax.swing.JButton();
         btnAceptar = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
+        chkHabilitado = new javax.swing.JCheckBox();
 
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setText("Límite de Personas:");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, -1));
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 40, -1, -1));
 
         jLabel2.setText("Nombre de Espacio:");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 40, -1, -1));
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, -1));
 
         jLabel3.setText("Descripción:");
         getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 70, -1, -1));
 
-        jTextField1.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                jTextField1KeyTyped(evt);
+        txtLimiteP.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtLimitePActionPerformed(evt);
             }
         });
-        getContentPane().add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 10, 76, -1));
-        getContentPane().add(jTextField2, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 40, 166, -1));
+        txtLimiteP.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtLimitePKeyTyped(evt);
+            }
+        });
+        getContentPane().add(txtLimiteP, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 40, 76, -1));
+        getContentPane().add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 10, 166, -1));
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setLineWrap(true);
-        jTextArea1.setRows(5);
-        jTextArea1.setWrapStyleWord(true);
-        jScrollPane1.setViewportView(jTextArea1);
+        txtDescripcion.setColumns(20);
+        txtDescripcion.setLineWrap(true);
+        txtDescripcion.setRows(5);
+        txtDescripcion.setWrapStyleWord(true);
+        jScrollPane1.setViewportView(txtDescripcion);
 
         getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 70, -1, -1));
 
@@ -90,7 +130,7 @@ public class MaestroEspacios extends javax.swing.JInternalFrame {
                 btnModificarActionPerformed(evt);
             }
         });
-        getContentPane().add(btnModificar, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 180, -1, -1));
+        getContentPane().add(btnModificar, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 210, -1, -1));
 
         btnSalir.setText("Salir");
         btnSalir.addActionListener(new java.awt.event.ActionListener() {
@@ -98,7 +138,7 @@ public class MaestroEspacios extends javax.swing.JInternalFrame {
                 btnSalirActionPerformed(evt);
             }
         });
-        getContentPane().add(btnSalir, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 180, 70, -1));
+        getContentPane().add(btnSalir, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 210, 70, -1));
 
         btnLimpiar.setText("Limpiar");
         btnLimpiar.addActionListener(new java.awt.event.ActionListener() {
@@ -106,7 +146,7 @@ public class MaestroEspacios extends javax.swing.JInternalFrame {
                 btnLimpiarActionPerformed(evt);
             }
         });
-        getContentPane().add(btnLimpiar, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 180, 75, -1));
+        getContentPane().add(btnLimpiar, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 210, 75, -1));
 
         btnAceptar.setText("Aceptar");
         btnAceptar.addActionListener(new java.awt.event.ActionListener() {
@@ -114,7 +154,11 @@ public class MaestroEspacios extends javax.swing.JInternalFrame {
                 btnAceptarActionPerformed(evt);
             }
         });
-        getContentPane().add(btnAceptar, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 180, 75, -1));
+        getContentPane().add(btnAceptar, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 210, 75, -1));
+
+        jLabel4.setText("Habilitado:");
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 180, -1, -1));
+        getContentPane().add(chkHabilitado, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 180, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -138,22 +182,26 @@ public class MaestroEspacios extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnAceptarActionPerformed
 
-    private void jTextField1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyTyped
+    private void txtLimitePKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtLimitePKeyTyped
         Util.aceptaSoloNumeros(evt, evt.getKeyChar());
-    }//GEN-LAST:event_jTextField1KeyTyped
+    }//GEN-LAST:event_txtLimitePKeyTyped
 
-
+    private void txtLimitePActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtLimitePActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtLimitePActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAceptar;
     private javax.swing.JButton btnLimpiar;
     private javax.swing.JButton btnModificar;
     private javax.swing.JButton btnSalir;
+    private javax.swing.JCheckBox chkHabilitado;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
+    private javax.swing.JTextArea txtDescripcion;
+    private javax.swing.JTextField txtLimiteP;
+    private javax.swing.JTextField txtNombre;
     // End of variables declaration//GEN-END:variables
 }

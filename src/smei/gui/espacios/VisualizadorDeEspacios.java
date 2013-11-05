@@ -23,8 +23,8 @@ public class VisualizadorDeEspacios extends javax.swing.JInternalFrame {
      * Creates new form VisualizadorDeEspacios
      */
     private static VisualizadorDeEspacios instancia = new VisualizadorDeEspacios();
-    private final String[] columnHeaders = {" ", "Nombre", "Rol", "Identificación", "Descripción"};
-    private final Class[] columnsTypes = {java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class};
+    private final String[] columnHeaders = {"", "Nombre", "Cant. Personas", "Descripcion", "Habilitado"};
+    private final Class[] columnsTypes = {java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class};
     
     private VisualizadorDeEspacios() {
         initComponents();
@@ -99,7 +99,7 @@ public class VisualizadorDeEspacios extends javax.swing.JInternalFrame {
 
         jLabel1.setText("Buscar:");
 
-        btnEliminarEspacios.setText("Eliminar Espacio");
+        btnEliminarEspacios.setText("Deshabilitar Espacio");
         btnEliminarEspacios.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnEliminarEspaciosActionPerformed(evt);
@@ -146,7 +146,7 @@ public class VisualizadorDeEspacios extends javax.swing.JInternalFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnEliminarEspacios)
                     .addComponent(btnAceptar))
-                .addContainerGap(23, Short.MAX_VALUE))
+                .addContainerGap(24, Short.MAX_VALUE))
         );
 
         pack();
@@ -159,7 +159,7 @@ public class VisualizadorDeEspacios extends javax.swing.JInternalFrame {
                 JOptionPane.showMessageDialog(rootPane, s);
             }
         } else {
-            JOptionPane.showMessageDialog(rootPane, "Favor seleccione al menos un espacio para eliminar", "Informacion", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(rootPane, "Favor seleccione al menos un espacio para deshabilitar", "Informacion", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_btnEliminarEspaciosActionPerformed
 
