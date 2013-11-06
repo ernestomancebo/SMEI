@@ -52,12 +52,12 @@ public class DAOEspacio {
 
         ArrayList<Espacio> espacios = new ArrayList<Espacio>();
 
-        for (byte i = 0; i < 5; i++) {
+        for (int i = 0; i < 5; i++) {
             Espacio e = new Espacio();
 
             e.setId(new Integer((int) i));
             e.setNombre("e" + i);
-            e.setCapacidadDePersonas(i);
+//            e.setCapacidadDePersonas(new Integer((int) i));
             e.setDescripcion("D" + i);
             e.setHabilitado((i % 2 == 0));
 
@@ -67,10 +67,10 @@ public class DAOEspacio {
         return espacios;
     }
 
-    public Object[][] crearTablaEspacio(List<Espacio> espacios) {
+    public static Object[][] crearTablaEspacio(List<Espacio> espacios) {
         Object[][] rv = new Object[espacios.size()][];
 
-        for (byte i = 0; i < espacios.size(); i++) {
+        for (int i = 0; i < espacios.size(); i++) {
             rv[i] = Util.crearFilaEspacio(espacios.get(i));
         }
 

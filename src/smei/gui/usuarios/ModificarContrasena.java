@@ -76,11 +76,11 @@ public class ModificarContrasena extends javax.swing.JInternalFrame {
         jLabel4 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         txtIdentificacion = new javax.swing.JTextField();
-        txtContrasena = new javax.swing.JTextField();
-        txtNuevaContrasenaConf = new javax.swing.JTextField();
-        txtNuevaContrasena = new javax.swing.JTextField();
         btnSalir = new javax.swing.JButton();
         btnLimpiar = new javax.swing.JButton();
+        txtNuevaContrasenaConf = new javax.swing.JPasswordField();
+        txtNuevaContrasena = new javax.swing.JPasswordField();
+        txtContrasena = new javax.swing.JPasswordField();
 
         jLabel1.setText("Identificación:");
 
@@ -111,6 +111,12 @@ public class ModificarContrasena extends javax.swing.JInternalFrame {
             }
         });
 
+        txtNuevaContrasenaConf.setEchoChar('*');
+
+        txtNuevaContrasena.setEchoChar('*');
+
+        txtContrasena.setEchoChar('*');
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -125,11 +131,11 @@ public class ModificarContrasena extends javax.swing.JInternalFrame {
                             .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING))
                         .addGap(10, 10, 10)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtNuevaContrasenaConf, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtNuevaContrasena, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtIdentificacion, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtContrasena, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtIdentificacion, javax.swing.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE)
+                            .addComponent(txtNuevaContrasenaConf)
+                            .addComponent(txtNuevaContrasena)
+                            .addComponent(txtContrasena)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(40, 40, 40)
                         .addComponent(jButton1)
@@ -146,24 +152,24 @@ public class ModificarContrasena extends javax.swing.JInternalFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtIdentificacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1))
-                .addGap(10, 10, 10)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(7, 7, 7)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(txtContrasena, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(10, 10, 10)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(txtNuevaContrasena, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(10, 10, 10)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
                     .addComponent(txtNuevaContrasenaConf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(20, 20, 20)
+                .addGap(23, 23, 23)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jButton1)
                     .addComponent(btnLimpiar)
                     .addComponent(btnSalir))
-                .addContainerGap(16, Short.MAX_VALUE))
+                .addContainerGap(20, Short.MAX_VALUE))
         );
 
         pack();
@@ -194,9 +200,9 @@ public class ModificarContrasena extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JTextField txtContrasena;
+    private javax.swing.JPasswordField txtContrasena;
     private javax.swing.JTextField txtIdentificacion;
-    private javax.swing.JTextField txtNuevaContrasena;
-    private javax.swing.JTextField txtNuevaContrasenaConf;
+    private javax.swing.JPasswordField txtNuevaContrasena;
+    private javax.swing.JPasswordField txtNuevaContrasenaConf;
     // End of variables declaration//GEN-END:variables
 }

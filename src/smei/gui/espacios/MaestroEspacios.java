@@ -32,10 +32,6 @@ public class MaestroEspacios extends javax.swing.JInternalFrame {
         return instancia;
     }
 
-    public void cargarDataFromID(String espacioID) {
-        Util.asignarTitulo(getInstance(), "Espacio " + espacioID);
-    }
-
     public void initializeValues() {
         this.setSize(323, 274);
         btnModificar.setLocation(btnAceptar.getLocation());
@@ -60,6 +56,19 @@ public class MaestroEspacios extends javax.swing.JInternalFrame {
         espacio.setHabilitado(chkHabilitado.isSelected());
 
         return true;
+    }
+
+    public void cargarDataFromID(Espacio espacio) {
+        this.espacio = espacio;
+        llenarCamposFromEspacio(espacio);
+        Util.asignarTitulo(getInstance(), "Espacio " + espacio.getId());
+    }
+
+    public void llenarCamposFromEspacio(Espacio e) {
+        txtNombre.setText(e.getNombre());
+        txtLimiteP.setText(String.valueOf(e.getCapacidadDePersonas()));
+        txtDescripcion.setText(e.getDescripcion());
+        chkHabilitado.setSelected(e.isHabilitado());
     }
 
     /**

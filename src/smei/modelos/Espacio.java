@@ -12,7 +12,7 @@ public class Espacio {
 
     private Integer id;
     private String nombre;
-    private int capacidadDePersonas;
+    private Integer capacidadDePersonas;
     private String descripcion;
     private boolean habilitado;
 
@@ -31,11 +31,11 @@ public class Espacio {
         this.id = id;
     }
 
-    public int getCapacidadDePersonas() {
+    public Integer getCapacidadDePersonas() {
         return capacidadDePersonas;
     }
 
-    public void setCapacidadDePersonas(int capacidadDePersonas) {
+    public void setCapacidadDePersonas(Integer capacidadDePersonas) {
         this.capacidadDePersonas = capacidadDePersonas;
     }
 

@@ -1,0 +1,1 @@
+find /metasolv/asaptst1/asap46/DATA/logs/* -mtime +5 -exec rm {} \;

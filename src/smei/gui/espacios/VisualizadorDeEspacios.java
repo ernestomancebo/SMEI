@@ -50,7 +50,7 @@ public class VisualizadorDeEspacios extends javax.swing.JInternalFrame {
                     if (target.getSelectedColumn() != 0) {
                         MaestroEspacios activeFrame = MaestroEspacios.getInstance();
 
-                        activeFrame.cargarDataFromID(String.valueOf(target.getValueAt(target.getSelectedRow(), 1)));
+                        activeFrame.cargarDataFromID(daoEspacio.getEspacioByID(modeloEspacio.get(target.getSelectedRow()).getId()));
                         Util.addFrameToDesktopPanel(getInstance().getDesktopPane(), activeFrame);
                         Util.deshabilitarEdicion(activeFrame);
                         Util.habilitarBtnModificar(activeFrame);
