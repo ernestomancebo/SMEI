@@ -5,14 +5,9 @@
  */
 package smei.gui.espacios;
 
-import java.util.ArrayList;
 import javax.swing.JOptionPane;
-import static smei.gui.usuarios.MaestroUsuarios.getInstance;
-import smei.modelos.Email;
+import smei.dao.DAOEspacio;
 import smei.modelos.Espacio;
-import smei.modelos.Rol;
-import smei.modelos.Telefono;
-import smei.modelos.Usuario;
 import smei.util.Util;
 
 /**
@@ -23,6 +18,7 @@ public class MaestroEspacios extends javax.swing.JInternalFrame {
 
     private static MaestroEspacios instancia = new MaestroEspacios();
     private Espacio espacio;
+    private DAOEspacio daoEspacio = new DAOEspacio();
 
     /**
      * Creates new form MaestroEspacios
@@ -41,26 +37,23 @@ public class MaestroEspacios extends javax.swing.JInternalFrame {
     }
 
     public void initializeValues() {
-        this.setSize(323, 244);
+        this.setSize(323, 274);
         btnModificar.setLocation(btnAceptar.getLocation());
     }
 
     public boolean llenarEspacio() {
-
         String validar = Util.validarCampos(getInstance());
+
         if (!validar.isEmpty()) {
             JOptionPane.showMessageDialog(rootPane, "Verificar " + validar);
             return false;
         }
 
-        Espacio e = new Espacio();
-
-
-
         //Es nuevo
         if (espacio == null) {
             espacio = new Espacio();
         }
+
         espacio.setNombre(txtNombre.getText());
         espacio.setCapacidadDePersonas(Integer.valueOf(txtLimiteP.getText()));
         espacio.setDescripcion(txtDescripcion.getText());
@@ -157,7 +150,7 @@ public class MaestroEspacios extends javax.swing.JInternalFrame {
         getContentPane().add(btnAceptar, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 210, 75, -1));
 
         jLabel4.setText("Habilitado:");
-        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 180, -1, -1));
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 180, -1, -1));
         getContentPane().add(chkHabilitado, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 180, -1, -1));
 
         pack();
@@ -179,7 +172,13 @@ public class MaestroEspacios extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnModificarActionPerformed
 
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
-        // TODO add your handling code here:
+        if (llenarEspacio()) {
+            if (espacio.getId() != null) {
+                daoEspacio.actualizarEspacio(espacio);
+            } else {
+                daoEspacio.insertarEspacio(espacio);
+            }
+        }
     }//GEN-LAST:event_btnAceptarActionPerformed
 
     private void txtLimitePKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtLimitePKeyTyped

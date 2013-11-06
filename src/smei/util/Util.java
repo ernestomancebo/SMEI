@@ -25,6 +25,7 @@ import javax.swing.SpinnerListModel;
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.text.JTextComponent;
+import smei.modelos.Espacio;
 import smei.modelos.Usuario;
 
 /**
@@ -144,10 +145,7 @@ public class Util {
 
             @Override
             public boolean isCellEditable(int row, int column) {
-                if (column != 0) {
-                    return false;
-                }
-                return true;
+                return column == 0;
             }
         });
     }
@@ -202,10 +200,7 @@ public class Util {
     }
 
     public static boolean validateStringWithPattern(String strToValidate, Pattern pattern) {
-        if (strToValidate.split(pattern.toString()).length == 0) {
-            return true;
-        }
-        return false;
+        return strToValidate.split(pattern.toString()).length == 0;
     }
 
     public static String validarCampos(Container container) {
@@ -266,6 +261,12 @@ public class Util {
         return new Object[]{
             false, usuario.getIdUsuario(), usuario.getNombre(),
             usuario.getEmails().get(0).getEmail(), usuario.getRol().getNombre(), (usuario.isEstaHabilitado()) ? "Sí" : "No"};
+    }
+
+    public static Object[] crearFilaEspacio(Espacio espacio) {
+        return new Object[]{
+            false, espacio.getNombre(), espacio.getCapacidadDePersonas(),
+            espacio.getDescripcion(), (espacio.isHabilitado()) ? "Sí" : "No"};
     }
 
     public static boolean validarEmail(String email) {

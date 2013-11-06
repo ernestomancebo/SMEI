@@ -56,7 +56,7 @@ public class DAOUsuario {
         u.setEmails(email);
         u.setTelefonos(telefono);
         u.setRol(new Rol("adm"));
-        u.setEstaHabilitado((id % 2 == 0) ? true : false);
+        u.setEstaHabilitado((id % 2 == 0));
 
         return u;
     }
@@ -82,7 +82,7 @@ public class DAOUsuario {
             u.setEmails(email);
             u.setTelefonos(telefono);
             u.setRol(new Rol("adm"));
-            u.setEstaHabilitado((i % 2 == 0) ? true : false);
+            u.setEstaHabilitado((i % 2 == 0));
 
             usuarios.add(u);
         }
@@ -92,14 +92,6 @@ public class DAOUsuario {
         for (byte i = 0; i < usuarios.size(); i++) {
             rv[i] = Util.crearFilaUsuario(usuarios.get(i));
         }
-
-//        rv = new Object[][]{
-//            {false, 4, null, null, null, null},
-//            {false, 56, null, null, null, null},
-//            {false, 3, null, null, null, null},
-//            {false, 1, null, null, null, null}
-//        };
-
         return rv;
     }
 

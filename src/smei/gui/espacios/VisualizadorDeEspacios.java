@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
+import smei.dao.DAOEspacio;
 import smei.util.Util;
 
 /**
@@ -24,19 +25,20 @@ public class VisualizadorDeEspacios extends javax.swing.JInternalFrame {
      */
     private static VisualizadorDeEspacios instancia = new VisualizadorDeEspacios();
     private final String[] columnHeaders = {"", "Nombre", "Cant. Personas", "Descripcion", "Habilitado"};
-    private final Class[] columnsTypes = {java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class};
-    
+    private final Class[] columnsTypes = {java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class};
+    private DAOEspacio daoEspacio = new DAOEspacio();
+
     private VisualizadorDeEspacios() {
         initComponents();
         initializeValues();
     }
-    
+
     public static VisualizadorDeEspacios getInstance() {
         return instancia;
     }
-    
+
     public void initializeValues() {
-        
+
         tblVisualizarEspacios.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         tblVisualizarEspacios.addMouseListener(new MouseAdapter() {
             @Override
@@ -45,7 +47,7 @@ public class VisualizadorDeEspacios extends javax.swing.JInternalFrame {
                     JTable target = (JTable) e.getSource();
                     if (target.getSelectedColumn() != 0) {
                         MaestroEspacios activeFrame = MaestroEspacios.getInstance();
-                        
+
                         activeFrame.cargarDataFromID(String.valueOf(target.getValueAt(target.getSelectedRow(), 1)));
                         Util.addFrameToDesktopPanel(getInstance().getDesktopPane(), activeFrame);
                         Util.deshabilitarEdicion(activeFrame);
@@ -57,12 +59,8 @@ public class VisualizadorDeEspacios extends javax.swing.JInternalFrame {
         });
 
         //Add table Model
-        Util.setMultiPuporseModelToTable(tblVisualizarEspacios, new Object[][]{
-            {false, 4, null, null, null},
-            {false, 56, null, null, null},
-            {false, 3, null, null, null},
-            {false, 1, null, null, null}
-        }, columnHeaders, columnsTypes);
+        Util.setMultiPuporseModelToTable(tblVisualizarEspacios,
+                daoEspacio.getAllEspacios(), columnHeaders, columnsTypes);
     }
 
     /**

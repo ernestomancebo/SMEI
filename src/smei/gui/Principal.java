@@ -4,10 +4,8 @@
  */
 package smei.gui;
 
-import com.sun.jmx.mbeanserver.ModifiableClassLoaderRepository;
 import java.awt.Dimension;
 import java.awt.Toolkit;
-import javax.swing.ImageIcon;
 import javax.swing.JDesktopPane;
 import javax.swing.JInternalFrame;
 import javax.swing.UIManager;
