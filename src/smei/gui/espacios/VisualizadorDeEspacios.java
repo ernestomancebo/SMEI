@@ -12,6 +12,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import smei.dao.DAOEspacio;
+import smei.modelos.Espacio;
 import smei.util.Util;
 
 /**
@@ -26,6 +27,7 @@ public class VisualizadorDeEspacios extends javax.swing.JInternalFrame {
     private static VisualizadorDeEspacios instancia = new VisualizadorDeEspacios();
     private final String[] columnHeaders = {"", "Nombre", "Cant. Personas", "Descripcion", "Habilitado"};
     private final Class[] columnsTypes = {java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class};
+    private ArrayList<Espacio> modeloEspacio;
     private DAOEspacio daoEspacio = new DAOEspacio();
 
     private VisualizadorDeEspacios() {
@@ -59,8 +61,13 @@ public class VisualizadorDeEspacios extends javax.swing.JInternalFrame {
         });
 
         //Add table Model
+        modeloEspacio = daoEspacio.getAllEspacios();
+        cargarTabla();
+    }
+
+    private void cargarTabla() {
         Util.setMultiPuporseModelToTable(tblVisualizarEspacios,
-                daoEspacio.getAllEspacios(), columnHeaders, columnsTypes);
+                daoEspacio.crearTablaEspacio(modeloEspacio), columnHeaders, columnsTypes);
     }
 
     /**
@@ -151,11 +158,14 @@ public class VisualizadorDeEspacios extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnEliminarEspaciosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarEspaciosActionPerformed
-        ArrayList<String> values = Util.getIDsFromSelectedRows(tblVisualizarEspacios, 0, 1);
+        ArrayList<Integer> values = new ArrayList<Integer>();
+
+        for (Integer i : Util.getIndexOfSelectedRows(tblVisualizarEspacios, 0)) {
+            values.add(modeloEspacio.get(i).getId());
+        }
+
         if (!values.isEmpty()) {
-            for (String s : values) {
-                JOptionPane.showMessageDialog(rootPane, s);
-            }
+            daoEspacio.deshabilitarEspacios(values);
         } else {
             JOptionPane.showMessageDialog(rootPane, "Favor seleccione al menos un espacio para deshabilitar", "Informacion", JOptionPane.INFORMATION_MESSAGE);
         }

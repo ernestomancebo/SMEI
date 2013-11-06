@@ -26,8 +26,8 @@ public class DAOUsuario {
         System.out.println("Usuario " + usuario.getIdUsuario() + " actualizado");
     }
 
-    public void deshabilitarUsuarios(List<String> idUsuarios) {
-        for (String s : idUsuarios) {
+    public void deshabilitarUsuarios(List<Integer> idUsuarios) {
+        for (Integer s : idUsuarios) {
             System.out.println(s + " deshabilitado");
         }
     }
@@ -61,10 +61,9 @@ public class DAOUsuario {
         return u;
     }
 
-    public Object[][] getAllUsuarios() {
-        Object[][] rv;
+    public ArrayList<Usuario> getAllUsuarios() {
 
-        List<Usuario> usuarios = new ArrayList<Usuario>();
+        ArrayList<Usuario> usuarios = new ArrayList<Usuario>();
 
         for (byte i = 0; i < 5; i++) {
             Usuario u = new Usuario();
@@ -87,7 +86,12 @@ public class DAOUsuario {
             usuarios.add(u);
         }
 
-        rv = new Object[usuarios.size()][];
+        return usuarios;
+
+    }
+
+    public static Object[][] crearTablaUsuario(List<Usuario> usuarios) {
+        Object[][] rv = new Object[usuarios.size()][];
 
         for (byte i = 0; i < usuarios.size(); i++) {
             rv[i] = Util.crearFilaUsuario(usuarios.get(i));

@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
+import smei.dao.DAOReservas;
+import smei.modelos.Reserva;
 import smei.util.Util;
 
 /**
@@ -24,7 +26,9 @@ public class VisualizadorDeReservas extends javax.swing.JInternalFrame {
      */
     private static VisualizadorDeReservas instancia = new VisualizadorDeReservas();
     private final Object[] columnHeaders = {"", "ID Reservacion", "Descripcion", "Fecha", "Hora Inicio - Fin", "Lugar", "Estado"};
-    private final Class[] columnsTypes = {java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class};
+    private final Class[] columnsTypes = {java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class};
+    DAOReservas daoReservas = new DAOReservas();
+    ArrayList<Reserva> modeloReserva;
     private boolean esConsulta;
 
     private VisualizadorDeReservas() {
@@ -61,12 +65,12 @@ public class VisualizadorDeReservas extends javax.swing.JInternalFrame {
         });
 
         //Add table Model
-        Util.setMultiPuporseModelToTable(tblVisualizarReserva, new Object[][]{
-            {false, 4, null, null, null, null, null, null},
-            {false, 56, null, null, null, null, null, null},
-            {false, 3, null, null, null, null, null, null},
-            {false, 1, null, null, null, null, null, null}
-        }, columnHeaders, columnsTypes);
+        modeloReserva = daoReservas.getAllReservas();
+        cargarTablaReservas();
+    }
+
+    private void cargarTablaReservas() {
+        Util.setMultiPuporseModelToTable(tblVisualizarReserva, daoReservas.crearTablaReserva(modeloReserva), columnHeaders, columnsTypes);
     }
 
     public boolean setConsulta(boolean esConsulta) {
@@ -178,26 +182,30 @@ public class VisualizadorDeReservas extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnAceptarActionPerformed
 
     private void btnCancelarReservaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarReservaActionPerformed
-        ArrayList<String> values = Util.getIDsFromSelectedRows(tblVisualizarReserva, 0, 1);
+        ArrayList<Integer> values = getIdReservasSeleccionadas();
         if (!values.isEmpty()) {
-            for (String s : values) {
-                JOptionPane.showMessageDialog(rootPane, s);
-            }
+            daoReservas.deshabilitarReservas(values);
         } else {
             JOptionPane.showMessageDialog(rootPane, "Favor seleccione al menos una reservacion para cancelar", "Informacion", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_btnCancelarReservaActionPerformed
 
     private void btnExportarReservaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportarReservaActionPerformed
-        ArrayList<String> values = Util.getIDsFromSelectedRows(tblVisualizarReserva, 0, 1);
+        ArrayList<Integer> values = getIdReservasSeleccionadas();
         if (!values.isEmpty()) {
-            for (String s : values) {
-                JOptionPane.showMessageDialog(rootPane, s);
-            }
+            System.out.println("Exportando " + values);
         } else {
             JOptionPane.showMessageDialog(rootPane, "Favor seleccione al menos una reservacion para exportar", "Informacion", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_btnExportarReservaActionPerformed
+
+    private ArrayList<Integer> getIdReservasSeleccionadas() {
+        ArrayList<Integer> values = new ArrayList<Integer>();
+        for (Integer i : Util.getIndexOfSelectedRows(tblVisualizarReserva, 0)) {
+            values.add(modeloReserva.get(i).getId());
+        }
+        return values;
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAceptar;

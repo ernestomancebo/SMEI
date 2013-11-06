@@ -12,6 +12,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import smei.dao.DAOUsuario;
+import smei.modelos.Usuario;
 import smei.util.Util;
 
 /**
@@ -27,6 +28,7 @@ public class VisualizadorDeUsuarios extends javax.swing.JInternalFrame {
     private final Object[] columnHeaders = {"", "ID Usuario", "Nombre", "Correo", "Rol", "Esta Habilitado"};
     private final Class[] columnsTypes = {java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class};
     private boolean esConsulta;
+    private ArrayList<Usuario> modeloUsuario;
     private DAOUsuario daoUsuario = new DAOUsuario();
 
     private VisualizadorDeUsuarios() {
@@ -40,6 +42,7 @@ public class VisualizadorDeUsuarios extends javax.swing.JInternalFrame {
 
     public void initializeValues() {
         this.setSize(726, 374);
+        
         tblVisualizarUsuario.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         tblVisualizarUsuario.addMouseListener(new MouseAdapter() {
             @Override
@@ -50,7 +53,7 @@ public class VisualizadorDeUsuarios extends javax.swing.JInternalFrame {
                         MaestroUsuarios activeFrame = MaestroUsuarios.getInstance();
 
                         activeFrame.cargarDataFromID(daoUsuario.getUsuarioByID(
-                                Integer.valueOf(String.valueOf(target.getValueAt(target.getSelectedRow(), 1)))));
+                                modeloUsuario.get(target.getSelectedRow()).getIdUsuario()));
 
                         Util.addFrameToDesktopPanel(getInstance().getDesktopPane(), activeFrame);
                         Util.deshabilitarEdicion(activeFrame);
@@ -65,14 +68,13 @@ public class VisualizadorDeUsuarios extends javax.swing.JInternalFrame {
         });
 
         //Add table Model
+        modeloUsuario = daoUsuario.getAllUsuarios();
+        cargarTabla();
+    }
+
+    private void cargarTabla() {
         Util.setMultiPuporseModelToTable(tblVisualizarUsuario,
-                //        new Object[][]{
-                //            {false, 4, null, null, null, null},
-                //            {false, 56, null, null, null, null},
-                //            {false, 3, null, null, null, null},
-                //            {false, 1, null, null, null, null}
-                //        }
-                daoUsuario.getAllUsuarios(), columnHeaders, columnsTypes);
+                daoUsuario.crearTablaUsuario(modeloUsuario), columnHeaders, columnsTypes);
     }
 
     /**
@@ -163,7 +165,12 @@ public class VisualizadorDeUsuarios extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        ArrayList<String> values = Util.getIDsFromSelectedRows(tblVisualizarUsuario, 0, 1);
+        ArrayList<Integer> values = new ArrayList<Integer>();
+
+        for (int i : Util.getIndexOfSelectedRows(tblVisualizarUsuario, 0)) {
+            values.add(modeloUsuario.get(i).getIdUsuario());
+        }
+
         if (!values.isEmpty()) {
             daoUsuario.deshabilitarUsuarios(values);
         } else {

@@ -24,8 +24,8 @@ public class DAOEspacio {
         System.out.println("Espacio " + espacio.getId() + " actualizado");
     }
 
-    public void deshabilitarEspacios(List<String> idEspacios) {
-        for (String s : idEspacios) {
+    public void deshabilitarEspacios(List<Integer> idEspacios) {
+        for (Integer s : idEspacios) {
             System.out.println(s + " deshabilitado");
         }
     }
@@ -48,10 +48,9 @@ public class DAOEspacio {
         return e;
     }
 
-    public Object[][] getAllEspacios() {
-        Object[][] rv;
+    public ArrayList<Espacio> getAllEspacios() {
 
-        List<Espacio> espacios = new ArrayList<Espacio>();
+        ArrayList<Espacio> espacios = new ArrayList<Espacio>();
 
         for (byte i = 0; i < 5; i++) {
             Espacio e = new Espacio();
@@ -65,7 +64,11 @@ public class DAOEspacio {
             espacios.add(e);
         }
 
-        rv = new Object[espacios.size()][];
+        return espacios;
+    }
+
+    public Object[][] crearTablaEspacio(List<Espacio> espacios) {
+        Object[][] rv = new Object[espacios.size()][];
 
         for (byte i = 0; i < espacios.size(); i++) {
             rv[i] = Util.crearFilaEspacio(espacios.get(i));
@@ -73,5 +76,4 @@ public class DAOEspacio {
 
         return rv;
     }
-
 }

@@ -26,6 +26,7 @@ import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.text.JTextComponent;
 import smei.modelos.Espacio;
+import smei.modelos.Reserva;
 import smei.modelos.Usuario;
 
 /**
@@ -185,11 +186,11 @@ public class Util {
         }
     }
 
-    public static ArrayList<String> getIDsFromSelectedRows(JTable tabla, int booleanIndex, int idIndex) {
-        ArrayList<String> rv = new ArrayList<String>();
-        for (byte i = 0; i < tabla.getRowCount(); i++) {
+    public static ArrayList<Integer> getIndexOfSelectedRows(JTable tabla, final int booleanIndex) {
+        ArrayList<Integer> rv = new ArrayList<Integer>();
+        for (int i = 0; i < tabla.getRowCount(); i++) {
             if ((Boolean) tabla.getValueAt(i, booleanIndex)) {
-                rv.add(String.valueOf(tabla.getValueAt(i, idIndex)));
+                rv.add(i);
             }
         }
         return rv;
@@ -267,6 +268,10 @@ public class Util {
         return new Object[]{
             false, espacio.getNombre(), espacio.getCapacidadDePersonas(),
             espacio.getDescripcion(), (espacio.isHabilitado()) ? "Sí" : "No"};
+    }
+
+    public static Object[] crearFilaReserva(Reserva reserva) {
+        return new Object[]{};
     }
 
     public static boolean validarEmail(String email) {
