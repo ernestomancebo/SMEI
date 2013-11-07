@@ -20,14 +20,15 @@ public class DBConnection {
         Connection rv = null;
 
         try {
-            Class.forName("org.postgresql.Driver");
-            rv = DriverManager.getConnection("", "", "");
+            Class.forName("com.mysql.jdbc.Driver");
+            rv = DriverManager.getConnection("jdbc:mysql://localhost/smei?"
+                    + "user=test&password=test");
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(DBConnection.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
             Logger.getLogger(DBConnection.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+        System.out.println("GOOD!");
         return rv;
     }
 }

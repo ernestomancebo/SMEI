@@ -10,6 +10,7 @@ import javax.swing.JDesktopPane;
 import javax.swing.JInternalFrame;
 import javax.swing.UIManager;
 import smei.dao.DAOUsuario;
+import smei.dao.DBConnection;
 import smei.gui.espacios.MaestroEspacios;
 import smei.gui.espacios.VisualizadorDeEspacios;
 import smei.gui.reservas.MaestroReservas;
@@ -333,6 +334,8 @@ public class Principal extends javax.swing.JFrame {
     private void jLinkBtnRegEspacioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jLinkBtnRegEspacioActionPerformed
         activeFrame = MaestroEspacios.getInstance();
         agregarMaestroInternalFrame("Registrar Espacio");
+        DBConnection conn = new DBConnection();
+        conn.getConnection();
     }//GEN-LAST:event_jLinkBtnRegEspacioActionPerformed
 
     private void jLinkBtnBuscarReservaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jLinkBtnBuscarReservaActionPerformed
