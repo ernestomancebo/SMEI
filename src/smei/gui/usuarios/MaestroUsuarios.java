@@ -50,17 +50,14 @@ public class MaestroUsuarios extends javax.swing.JInternalFrame {
             return false;
         }
 
-
-
         ArrayList<Email> correos = new ArrayList<Email>();
         correos.add(new Email(txtCorreo.getText()));
 
         ArrayList<Telefono> telefono = new ArrayList<Telefono>();
         telefono.add(new Telefono(txtTelefono.getText()));
 
-        Rol rol = new Rol();
-        rol.setNombre(cmbRol.getSelectedItem().toString());
-
+//        Rol rol = new Rol();
+//        rol.setNombre(cmbRol.getSelectedItem().toString());
         //Es nuevo
         if (usuario == null) {
             usuario = new Usuario();
@@ -69,9 +66,8 @@ public class MaestroUsuarios extends javax.swing.JInternalFrame {
         usuario.setIdentificacionP(txtIdentificacion.getText());
         usuario.setEmails(correos);
         usuario.setTelefonos(telefono);
-        usuario.setRol(rol);
-        usuario.setEstaHabilitado(chkHabilitado.isSelected());
-
+//        usuario.setRol(rol);
+        usuario.setHabilitado(chkHabilitado.isSelected());
 
         return true;
     }
@@ -191,7 +187,7 @@ public class MaestroUsuarios extends javax.swing.JInternalFrame {
         txtCorreo.setText(u.getEmails().get(0).getEmail());
         txtTelefono.setText(u.getTelefonos().get(0).getTelefono());
         cmbRol.setSelectedItem(u.getRol().getNombre());
-        chkHabilitado.setSelected(u.isEstaHabilitado());
+        chkHabilitado.setSelected(u.isHabilitado());
     }
     private void chkHabilitadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkHabilitadoActionPerformed
         // TODO add your handling code here:

@@ -261,7 +261,7 @@ public class Util {
     public static Object[] crearFilaUsuario(Usuario usuario) {
         return new Object[]{
             false, usuario.getIdUsuario(), usuario.getNombre(),
-            usuario.getEmails().get(0).getEmail(), usuario.getRol().getNombre(), (usuario.isEstaHabilitado()) ? "Sí" : "No"};
+            usuario.getEmails().get(0).getEmail(), usuario.getRol().getNombre(), (usuario.isHabilitado()) ? "Sí" : "No"};
     }
 
     public static Object[] crearFilaEspacio(Espacio espacio) {

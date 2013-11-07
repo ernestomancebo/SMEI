@@ -19,7 +19,7 @@ public class Usuario {
     private String identificacionP;
     private ArrayList<Email> emails;
     private ArrayList<Telefono> telefonos;
-    private boolean estaHabilitado;
+    private boolean habilitado;
 
     public Integer getIdUsuario() {
         return idUsuario;
@@ -61,12 +61,12 @@ public class Usuario {
         this.identificacionP = identificacionP;
     }
 
-    public boolean isEstaHabilitado() {
-        return estaHabilitado;
+    public boolean isHabilitado() {
+        return habilitado;
     }
 
-    public void setEstaHabilitado(boolean estaHabilitado) {
-        this.estaHabilitado = estaHabilitado;
+    public void setHabilitado(boolean estaHabilitado) {
+        this.habilitado = estaHabilitado;
     }
 
     public ArrayList<Email> getEmails() {

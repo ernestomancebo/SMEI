@@ -4,8 +4,14 @@
  */
 package smei.dao;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import smei.modelos.Email;
 import smei.modelos.Rol;
 import smei.modelos.Telefono;
@@ -18,17 +24,69 @@ import smei.util.Util;
  */
 public class DAOUsuario {
 
-    public void insertarUsuario(Usuario usuario) {
-        System.out.println("Usuario insertado");
+    private Connection conn = DBConnection.getConnection();
+    private PreparedStatement pstm;
+    private ResultSet rs;
+
+    public boolean insertarUsuario(Usuario usuario) {
+        try {
+            pstm = conn.prepareStatement(
+                    "insert into "
+                    + "usuario(nombre, password, idRol, identificacion, email, telefono, habilitado) "
+                    + "values(?, ?, ?, ?, ?, ?, ?)");
+
+            pstm.setString(1, usuario.getNombre());
+            pstm.setString(2, usuario.getPassword());
+            pstm.setInt(3, 2);
+            pstm.setString(4, usuario.getIdentificacionP());
+            pstm.setString(5, usuario.getEmails().get(0).getEmail());
+            pstm.setString(6, usuario.getTelefonos().get(0).getTelefono());
+            pstm.setBoolean(7, usuario.isHabilitado());
+
+            return pstm.execute();
+        } catch (SQLException ex) {
+            Logger.getLogger(DAOUsuario.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
     }
 
-    public void actualizarUsuario(Usuario usuario) {
-        System.out.println("Usuario " + usuario.getIdUsuario() + " actualizado");
+    public boolean actualizarUsuario(Usuario usuario) {
+        try {
+            pstm = conn.prepareStatement(
+                    "update usuario set "
+                    + "nombre = ?, password = ?, idRol = ?, identificacion = ?, email = ?, telefono = ?, habilitado = ? "
+                    + "where idUsuario = ?");
+
+            pstm.setString(1, usuario.getNombre());
+            pstm.setString(2, usuario.getPassword());
+            pstm.setInt(3, 2);
+            pstm.setString(4, usuario.getIdentificacionP());
+            pstm.setString(5, usuario.getEmails().get(0).getEmail());
+            pstm.setString(6, usuario.getTelefonos().get(0).getTelefono());
+            pstm.setBoolean(7, usuario.isHabilitado());
+            pstm.setInt(8, usuario.getIdUsuario());
+
+            return pstm.execute();
+        } catch (SQLException ex) {
+            Logger.getLogger(DAOUsuario.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
     }
 
-    public void deshabilitarUsuarios(List<Integer> idUsuarios) {
-        for (Integer s : idUsuarios) {
-            System.out.println(s + " deshabilitado");
+    public boolean deshabilitarUsuarios(List<Integer> idUsuarios, boolean habilitado) {
+        try {
+            pstm = conn.prepareCall("update usuario set habilitado = ? where idUsuario = ?");
+            for (Integer s : idUsuarios) {
+                pstm.setBoolean(1, habilitado);
+                pstm.setInt(2, s);
+                if (!pstm.execute()) {
+                    return false;
+                }
+            }
+            return true;
+        } catch (SQLException ex) {
+            Logger.getLogger(DAOUsuario.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
         }
     }
 
@@ -41,53 +99,67 @@ public class DAOUsuario {
     public Usuario getUsuarioByID(Integer id) {
         Usuario u = new Usuario();
 
-        Email e = new Email(id + "@ee.com");
-        ArrayList<Email> email = new ArrayList<Email>();
-        email.add(e);
+        try {
+            pstm = conn.prepareCall("select idUsuario, r.nombre, u.nombre, identificacion, email, telefono, habilitado from usuario u, rol r where u.idRol = r.idRol and idUsuario = ?");
+            pstm.setInt(1, id);
+            rs = pstm.executeQuery();
 
-        Telefono t = new Telefono("000-000-000" + id);
-        ArrayList<Telefono> telefono = new ArrayList<Telefono>();
-        telefono.add(t);
+            while (rs.next()) {
+                Email e = new Email(rs.getString("email"));
+                ArrayList<Email> email = new ArrayList<Email>();
+                email.add(e);
 
-        u.setIdUsuario(new Integer((int) id));
-        u.setNombre("u" + id);
-        u.setIdentificacionP("0000-000" + id);
-        u.setPassword(Util.generarClaveDeUsuario(u));
-        u.setEmails(email);
-        u.setTelefonos(telefono);
-        u.setRol(new Rol("adm"));
-        u.setEstaHabilitado((id % 2 == 0));
+                Telefono t = new Telefono(rs.getString("telefono"));
+                ArrayList<Telefono> telefono = new ArrayList<Telefono>();
+                telefono.add(t);
 
-        return u;
+                u.setIdUsuario(rs.getInt("idUsuario"));
+                u.setNombre(rs.getString(3));
+                u.setEmails(email);
+                u.setTelefonos(telefono);
+                u.setIdentificacionP(rs.getString("identificacion"));
+                u.setRol(new Rol(rs.getString(2)));
+                u.setHabilitado(rs.getBoolean("habilitado"));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(DAOUsuario.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            return u;
+        }
     }
 
     public ArrayList<Usuario> getAllUsuarios() {
-
         ArrayList<Usuario> usuarios = new ArrayList<Usuario>();
 
-        for (byte i = 0; i < 5; i++) {
-            Usuario u = new Usuario();
+        try {
+            pstm = conn.prepareCall("select idUsuario, r.nombre, u.nombre, email, telefono, habilitado from usuario u, rol r where u.idRol = r.idRol");
+            rs = pstm.executeQuery();
 
-            Email e = new Email(i + "@ee.com");
-            ArrayList<Email> email = new ArrayList<Email>();
-            email.add(e);
+            while (rs.next()) {
+                Usuario u = new Usuario();
 
-            Telefono t = new Telefono("000-000-000" + i);
-            ArrayList<Telefono> telefono = new ArrayList<Telefono>();
-            telefono.add(t);
+                Email e = new Email(rs.getString("email"));
+                ArrayList<Email> email = new ArrayList<Email>();
+                email.add(e);
 
-            u.setIdUsuario(new Integer((int) i));
-            u.setNombre("u" + i);
-            u.setEmails(email);
-            u.setTelefonos(telefono);
-            u.setRol(new Rol("adm"));
-            u.setEstaHabilitado((i % 2 == 0));
+                Telefono t = new Telefono(rs.getString("telefono"));
+                ArrayList<Telefono> telefono = new ArrayList<Telefono>();
+                telefono.add(t);
 
-            usuarios.add(u);
+                u.setIdUsuario(rs.getInt("idUsuario"));
+                u.setNombre(rs.getString(3));
+                u.setEmails(email);
+                u.setTelefonos(telefono);
+                u.setRol(new Rol(rs.getString(2)));
+                u.setHabilitado(rs.getBoolean("habilitado"));
+
+                usuarios.add(u);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(DAOUsuario.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            return usuarios;
         }
-
-        return usuarios;
-
     }
 
     public static Object[][] crearTablaUsuario(List<Usuario> usuarios) {

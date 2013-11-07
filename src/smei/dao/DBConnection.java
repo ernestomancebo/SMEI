@@ -4,6 +4,7 @@
  */
 package smei.dao;
 
+import com.sun.org.apache.xerces.internal.util.DOMUtil;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -16,19 +17,22 @@ import java.util.logging.Logger;
  */
 public class DBConnection {
 
-    public Connection getConnection() {
-        Connection rv = null;
+    private static Connection conn;
 
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-            rv = DriverManager.getConnection("jdbc:mysql://localhost/smei?"
-                    + "user=test&password=test");
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(DBConnection.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
-            Logger.getLogger(DBConnection.class.getName()).log(Level.SEVERE, null, ex);
+    public static Connection getConnection() {
+
+        if (conn == null) {
+            try {
+                Class.forName("com.mysql.jdbc.Driver");
+                conn = DriverManager.getConnection("jdbc:mysql://localhost/smei?"
+                        + "user=test&password=test");
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(DBConnection.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (SQLException ex) {
+                Logger.getLogger(DBConnection.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
-        System.out.println("GOOD!");
-        return rv;
+
+        return conn;
     }
 }

@@ -335,7 +335,6 @@ public class Principal extends javax.swing.JFrame {
         activeFrame = MaestroEspacios.getInstance();
         agregarMaestroInternalFrame("Registrar Espacio");
         DBConnection conn = new DBConnection();
-        conn.getConnection();
     }//GEN-LAST:event_jLinkBtnRegEspacioActionPerformed
 
     private void jLinkBtnBuscarReservaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jLinkBtnBuscarReservaActionPerformed

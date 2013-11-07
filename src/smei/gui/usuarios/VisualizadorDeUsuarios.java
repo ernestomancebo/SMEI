@@ -172,7 +172,7 @@ public class VisualizadorDeUsuarios extends javax.swing.JInternalFrame {
         }
 
         if (!values.isEmpty()) {
-            daoUsuario.deshabilitarUsuarios(values);
+            daoUsuario.deshabilitarUsuarios(values, false);
         } else {
             JOptionPane.showMessageDialog(rootPane, "Favor seleccione al menos un usuario para deshabilitar", "Informacion", JOptionPane.INFORMATION_MESSAGE);
         }
