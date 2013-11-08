@@ -67,7 +67,7 @@ public class VisualizadorDeEspacios extends javax.swing.JInternalFrame {
 
     private void cargarTabla() {
         Util.setMultiPuporseModelToTable(tblVisualizarEspacios,
-                daoEspacio.crearTablaEspacio(modeloEspacio), columnHeaders, columnsTypes);
+                daoEspacio.crearTablaEspacio(modeloEspacio = daoEspacio.getAllEspacios()), columnHeaders, columnsTypes);
     }
 
     /**
@@ -87,6 +87,16 @@ public class VisualizadorDeEspacios extends javax.swing.JInternalFrame {
         btnAceptar = new javax.swing.JButton();
 
         setPreferredSize(new java.awt.Dimension(726, 374));
+        addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                formFocusGained(evt);
+            }
+        });
+        addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                formPropertyChange(evt);
+            }
+        });
 
         tblVisualizarEspacios.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -174,6 +184,14 @@ public class VisualizadorDeEspacios extends javax.swing.JInternalFrame {
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
         this.setVisible(false);
     }//GEN-LAST:event_btnAceptarActionPerformed
+
+    private void formFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_formFocusGained
+
+    }//GEN-LAST:event_formFocusGained
+
+    private void formPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_formPropertyChange
+        cargarTabla();
+    }//GEN-LAST:event_formPropertyChange
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

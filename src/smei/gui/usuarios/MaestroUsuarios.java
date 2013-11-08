@@ -216,6 +216,7 @@ public class MaestroUsuarios extends javax.swing.JInternalFrame {
         if (llenarUsuario()) {
             if (usuario.getIdUsuario() != null) {
                 daoUsuario.actualizarUsuario(usuario);
+                usuario = null;
             } else {
                 usuario.setPassword(Util.generarClaveDeUsuario(usuario));
                 daoUsuario.insertarUsuario(usuario);

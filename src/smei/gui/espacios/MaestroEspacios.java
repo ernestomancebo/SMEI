@@ -188,6 +188,7 @@ public class MaestroEspacios extends javax.swing.JInternalFrame {
         if (llenarEspacio()) {
             if (espacio.getId() != null) {
                 daoEspacio.actualizarEspacio(espacio);
+                espacio = null;
             } else {
                 daoEspacio.insertarEspacio(espacio);
             }
