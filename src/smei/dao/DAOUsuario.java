@@ -90,17 +90,11 @@ public class DAOUsuario {
         }
     }
 
-    public Usuario getUsuario() {
-        Usuario usuario = new Usuario();
-        usuario.setIdUsuario(1);
-        return usuario;
-    }
-
     public Usuario getUsuarioByID(Integer id) {
         Usuario u = new Usuario();
 
         try {
-            pstm = conn.prepareCall("select idUsuario, r.nombre, u.nombre, identificacion, email, telefono, habilitado from usuario u, rol r where u.idRol = r.idRol and idUsuario = ?");
+            pstm = conn.prepareCall("select idUsuario, r.nombre, u.nombre, password, identificacion, email, telefono, habilitado from usuario u, rol r where u.idRol = r.idRol and idUsuario = ?");
             pstm.setInt(1, id);
             rs = pstm.executeQuery();
 
@@ -120,6 +114,7 @@ public class DAOUsuario {
                 u.setIdentificacionP(rs.getString("identificacion"));
                 u.setRol(new Rol(rs.getString(2)));
                 u.setHabilitado(rs.getBoolean("habilitado"));
+                u.setPassword(rs.getString("password"));
             }
         } catch (SQLException ex) {
             Logger.getLogger(DAOUsuario.class.getName()).log(Level.SEVERE, null, ex);
@@ -171,8 +166,17 @@ public class DAOUsuario {
         return rv;
     }
 
-    public boolean cambiarContrasena(String contrasena) {
-        System.out.println("Nueva contrasena: " + contrasena);
-        return true;
+    public boolean cambiarContrasena(Usuario usuario) {
+        try {
+            System.out.println(usuario.getPassword() + "" + usuario.getIdUsuario());
+            pstm = conn.prepareCall("update usuario set password = ? where idUsuario = ?");
+            pstm.setString(1, usuario.getPassword());
+            pstm.setInt(2, usuario.getIdUsuario());
+
+            return (pstm.executeUpdate() == 1);
+        } catch (SQLException ex) {
+            Logger.getLogger(DAOUsuario.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
     }
 }

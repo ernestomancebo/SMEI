@@ -5,7 +5,6 @@
 package smei.gui.usuarios;
 
 import javax.swing.JOptionPane;
-import javax.swing.text.JTextComponent;
 import smei.dao.DAOUsuario;
 import smei.modelos.Usuario;
 import smei.util.Util;
@@ -21,36 +20,36 @@ public class ModificarContrasena extends javax.swing.JInternalFrame {
      */
     private static ModificarContrasena instancia = new ModificarContrasena();
     private Usuario usuario = new Usuario();
-
+    
     private ModificarContrasena() {
         initComponents();
     }
-
+    
     public static ModificarContrasena getInstance() {
         return instancia;
     }
-
+    
     public void initializeValues() {
         this.setSize(248, 214);
     }
-
+    
     public void setUsuario(Usuario u) {
         this.usuario = u;
     }
-
+    
     public String validarCambio() {
         if (!usuario.getIdentificacionP().equals(txtIdentificacion.getText())) {
             txtIdentificacion.selectAll();
             txtIdentificacion.requestFocus();
             return "Identificacion inválida.";
         }
-
+        
         if (!usuario.getPassword().equals(txtContrasena.getText())) {
             txtContrasena.selectAll();
             txtContrasena.requestFocus();
             return "Antigua contraseña inválida.";
         }
-
+        
         if (!txtNuevaContrasena.getText().isEmpty() && !txtNuevaContrasena.getText()
                 .equals(txtNuevaContrasenaConf.getText())) {
             txtNuevaContrasenaConf.setText("");
@@ -58,6 +57,7 @@ public class ModificarContrasena extends javax.swing.JInternalFrame {
             txtNuevaContrasena.requestFocus();
             return "Nueva contraseña no coincide.";
         }
+        usuario.setPassword(txtNuevaContrasena.getText());
         return "";
     }
 
@@ -179,15 +179,15 @@ public class ModificarContrasena extends javax.swing.JInternalFrame {
         Util.limpiarContenido(getInstance());
         this.setVisible(false);
     }//GEN-LAST:event_btnSalirActionPerformed
-
+    
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
         Util.limpiarContenido(getInstance());
     }//GEN-LAST:event_btnLimpiarActionPerformed
-
+    
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         String msg = validarCambio();
         if (msg.isEmpty()) {
-            new DAOUsuario().cambiarContrasena(txtNuevaContrasena.getText());
+            System.out.println(new DAOUsuario().cambiarContrasena(usuario));
         } else {
             JOptionPane.showMessageDialog(rootPane, msg);
         }
