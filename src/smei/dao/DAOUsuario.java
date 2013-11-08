@@ -66,20 +66,20 @@ public class DAOUsuario {
             pstm.setBoolean(7, usuario.isHabilitado());
             pstm.setInt(8, usuario.getIdUsuario());
 
-            return pstm.execute();
+            return (pstm.executeUpdate() == 1);
         } catch (SQLException ex) {
             Logger.getLogger(DAOUsuario.class.getName()).log(Level.SEVERE, null, ex);
             return false;
         }
     }
 
-    public boolean deshabilitarUsuarios(List<Integer> idUsuarios, boolean habilitado) {
+    private boolean cambiarHabilitadoUsuario(List<Integer> idUsuarios,  final boolean habilitado) {
         try {
             pstm = conn.prepareCall("update usuario set habilitado = ? where idUsuario = ?");
             for (Integer s : idUsuarios) {
                 pstm.setBoolean(1, habilitado);
                 pstm.setInt(2, s);
-                if (!pstm.execute()) {
+                if (pstm.executeUpdate() != 1) {
                     return false;
                 }
             }
@@ -88,6 +88,14 @@ public class DAOUsuario {
             Logger.getLogger(DAOUsuario.class.getName()).log(Level.SEVERE, null, ex);
             return false;
         }
+    }
+
+    public boolean deshabilitarUsuarios(List<Integer> idUsuarios) {
+        return cambiarHabilitadoUsuario(idUsuarios, false);
+    }
+
+    public boolean habilitarUsuarios(List<Integer> idUsuarios) {
+        return cambiarHabilitadoUsuario(idUsuarios, true);
     }
 
     public Usuario getUsuarioByID(Integer id) {

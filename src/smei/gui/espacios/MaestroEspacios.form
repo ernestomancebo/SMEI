@@ -52,6 +52,9 @@
       </Constraints>
     </Component>
     <Component class="javax.swing.JTextField" name="txtLimiteP">
+      <Properties>
+        <Property name="name" type="java.lang.String" value=" " noResource="true"/>
+      </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtLimitePActionPerformed"/>
         <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtLimitePKeyTyped"/>
@@ -63,6 +66,9 @@
       </Constraints>
     </Component>
     <Component class="javax.swing.JTextField" name="txtNombre">
+      <Properties>
+        <Property name="name" type="java.lang.String" value=" " noResource="true"/>
+      </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
           <AbsoluteConstraints x="120" y="10" width="166" height="-1"/>
@@ -87,6 +93,7 @@
             <Property name="lineWrap" type="boolean" value="true"/>
             <Property name="rows" type="int" value="5"/>
             <Property name="wrapStyleWord" type="boolean" value="true"/>
+            <Property name="name" type="java.lang.String" value=" " noResource="true"/>
           </Properties>
         </Component>
       </SubComponents>

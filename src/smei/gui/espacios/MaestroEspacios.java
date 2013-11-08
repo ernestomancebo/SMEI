@@ -105,6 +105,7 @@ public class MaestroEspacios extends javax.swing.JInternalFrame {
         jLabel3.setText("Descripción:");
         getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 70, -1, -1));
 
+        txtLimiteP.setName(" "); // NOI18N
         txtLimiteP.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtLimitePActionPerformed(evt);
@@ -116,12 +117,15 @@ public class MaestroEspacios extends javax.swing.JInternalFrame {
             }
         });
         getContentPane().add(txtLimiteP, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 40, 76, -1));
+
+        txtNombre.setName(" "); // NOI18N
         getContentPane().add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 10, 166, -1));
 
         txtDescripcion.setColumns(20);
         txtDescripcion.setLineWrap(true);
         txtDescripcion.setRows(5);
         txtDescripcion.setWrapStyleWord(true);
+        txtDescripcion.setName(" "); // NOI18N
         jScrollPane1.setViewportView(txtDescripcion);
 
         getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 70, -1, -1));

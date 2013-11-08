@@ -42,7 +42,7 @@ public class VisualizadorDeUsuarios extends javax.swing.JInternalFrame {
 
     public void initializeValues() {
         this.setSize(726, 374);
-        
+
         tblVisualizarUsuario.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         tblVisualizarUsuario.addMouseListener(new MouseAdapter() {
             @Override
@@ -172,7 +172,7 @@ public class VisualizadorDeUsuarios extends javax.swing.JInternalFrame {
         }
 
         if (!values.isEmpty()) {
-            daoUsuario.deshabilitarUsuarios(values, false);
+            daoUsuario.deshabilitarUsuarios(values);
         } else {
             JOptionPane.showMessageDialog(rootPane, "Favor seleccione al menos un usuario para deshabilitar", "Informacion", JOptionPane.INFORMATION_MESSAGE);
         }

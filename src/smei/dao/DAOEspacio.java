@@ -5,8 +5,14 @@
  */
 package smei.dao;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import smei.modelos.Espacio;
 import smei.util.Util;
 
@@ -16,18 +22,73 @@ import smei.util.Util;
  */
 public class DAOEspacio {
 
-    public void insertarEspacio(Espacio espacio) {
-        System.out.println("Espacio " + espacio.getId() + " insertado");
-    }
+    private Connection conn = DBConnection.getConnection();
+    private PreparedStatement pstm;
+    private ResultSet rs;
 
-    public void actualizarEspacio(Espacio espacio) {
-        System.out.println("Espacio " + espacio.getId() + " actualizado");
-    }
+    public boolean insertarEspacio(Espacio espacio) {
+        try {
+            pstm = conn.prepareStatement(
+                    "insert into "
+                    + "espacios(nombre, capacidadDePersonas, habilitado, descripcion) "
+                    + "values(?, ?, ?, ?)");
 
-    public void deshabilitarEspacios(List<Integer> idEspacios) {
-        for (Integer s : idEspacios) {
-            System.out.println(s + " deshabilitado");
+            pstm.setString(1, espacio.getNombre());
+            pstm.setInt(2, espacio.getCapacidadDePersonas());
+            pstm.setBoolean(3, espacio.isHabilitado());
+            pstm.setString(4, espacio.getDescripcion());
+
+            return pstm.execute();
+        } catch (SQLException ex) {
+            Logger.getLogger(DAOEspacio.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
         }
+    }
+
+    public boolean actualizarEspacio(Espacio espacio) {
+        try {
+            pstm = conn.prepareStatement(
+                    "update espacios set "
+                    + "nombre = ?, capacidadDePersonas = ?, habilitado = ?, descripcion = ? "
+                    + "where idEspacio = ?"
+            );
+
+            pstm.setString(1, espacio.getNombre());
+            pstm.setInt(2, espacio.getCapacidadDePersonas());
+            pstm.setBoolean(3, espacio.isHabilitado());
+            pstm.setString(4, espacio.getDescripcion());
+            pstm.setInt(5, espacio.getId());
+
+            return (pstm.executeUpdate() == 1);
+        } catch (SQLException ex) {
+            Logger.getLogger(DAOEspacio.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
+    }
+
+    private boolean cambiarHabilitadoEspacio(List<Integer> idEspacios, final boolean habilitado) {
+        try {
+            pstm = conn.prepareCall("update espacios set habilitado = ? where idEspacio = ?");
+            for (Integer s : idEspacios) {
+                pstm.setBoolean(1, habilitado);
+                pstm.setInt(2, s);
+                if (pstm.executeUpdate() != 1) {
+                    return false;
+                }
+            }
+            return true;
+        } catch (SQLException ex) {
+            Logger.getLogger(DAOEspacio.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
+    }
+
+    public boolean deshabilitarEspacios(List<Integer> idEspacios) {
+        return cambiarHabilitadoEspacio(idEspacios, false);
+    }
+
+    public boolean habilitarEspacios(List<Integer> idEspacios) {
+        return cambiarHabilitadoEspacio(idEspacios, true);
     }
 
     public Espacio getEspacio() {
@@ -39,32 +100,47 @@ public class DAOEspacio {
     public Espacio getEspacioByID(Integer id) {
         Espacio e = new Espacio();
 
-        e.setId(new Integer((int) id));
-        e.setNombre("e" + id);
-        e.setCapacidadDePersonas(id);
-        e.setDescripcion("D" + id);
-        e.setHabilitado((id % 2 == 0));
+        try {
+            pstm = conn.prepareCall("select idEspacio, nombre, capacidadDePersonas, habilitado, descripcion from espacios where idEspacio = ?");
+            pstm.setInt(1, id);
+            rs = pstm.executeQuery();
 
-        return e;
+            while (rs.next()) {
+                e.setId(rs.getInt("idEspacio"));
+                e.setNombre(rs.getString("nombre"));
+                e.setCapacidadDePersonas(rs.getInt("capacidadDePersonas"));
+                e.setHabilitado(rs.getBoolean("habilitado"));
+                e.setDescripcion(rs.getString("descripcion"));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(DAOUsuario.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            return e;
+        }
     }
 
     public ArrayList<Espacio> getAllEspacios() {
-
         ArrayList<Espacio> espacios = new ArrayList<Espacio>();
 
-        for (int i = 0; i < 5; i++) {
-            Espacio e = new Espacio();
+        try {
+            pstm = conn.prepareCall("select idEspacio, nombre, capacidadDePersonas, habilitado, descripcion from espacios");
+            rs = pstm.executeQuery();
 
-            e.setId(new Integer((int) i));
-            e.setNombre("e" + i);
-//            e.setCapacidadDePersonas(new Integer((int) i));
-            e.setDescripcion("D" + i);
-            e.setHabilitado((i % 2 == 0));
+            while (rs.next()) {
+                Espacio e = new Espacio();
 
-            espacios.add(e);
+                e.setId(rs.getInt("idEspacio"));
+                e.setNombre(rs.getString("nombre"));
+                e.setCapacidadDePersonas(rs.getInt("capacidadDePersonas"));
+                e.setDescripcion(rs.getString("descripcion"));
+                e.setHabilitado(rs.getBoolean("habilitado"));
+                espacios.add(e);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(DAOUsuario.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            return espacios;
         }
-
-        return espacios;
     }
 
     public static Object[][] crearTablaEspacio(List<Espacio> espacios) {
