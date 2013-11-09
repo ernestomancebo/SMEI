@@ -4,12 +4,17 @@
  */
 package smei.util;
 
+import com.toedter.calendar.JCalendar;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.beans.PropertyVetoException;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
@@ -35,14 +40,6 @@ import smei.modelos.Usuario;
  */
 public class GUIUtil {
 
-    public enum patrones {
-    }
-    private static final Pattern EMAIL_PATTERN = Pattern.compile("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
-            + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$");
-    private static final Pattern CEDULA_PATTERN = Pattern.compile("^[0-9]{3}-[0-9]{7}-[0-9]{1}$");
-    private static final Pattern MATRICULA_PATTERN = Pattern.compile("^[0-9]{4}-[0-9]{4}$");
-    private static final Pattern TELEFONO_PATTERN = Pattern.compile("^[0-9]{3}-[0-9]{3}-[0-9]{4}$");
-
     public static void limpiarContenido(Container container) {
         for (Component c : container.getComponents()) {
             if (c instanceof JSpinner) {
@@ -52,9 +49,10 @@ public class GUIUtil {
                 } else if (modelo instanceof SpinnerListModel) {
                     ((JSpinner) c).setValue(((SpinnerListModel) modelo).getList().get(0));
                 }
-            } else if (c instanceof JComboBox) {
-                ((JComboBox) c).removeAllItems();
-            } else if (c instanceof JTextComponent) {
+            } //            else if (c instanceof JComboBox) {
+            //                ((JComboBox) c).removeAllItems();
+            //            }
+            else if (c instanceof JTextComponent) {
                 ((JTextComponent) c).setText("");
             } else if (c instanceof Container) {
                 limpiarContenido((Container) c);
@@ -180,12 +178,6 @@ public class GUIUtil {
 
     }
 
-    public static void aceptaSoloNumeros(KeyEvent evt, char c) {
-        if (!Character.isDigit(c) && c != KeyEvent.VK_BACK_SPACE) {
-            evt.consume();
-        }
-    }
-
     public static ArrayList<Integer> getIndexOfSelectedRows(JTable tabla, final int booleanIndex) {
         ArrayList<Integer> rv = new ArrayList<Integer>();
         for (int i = 0; i < tabla.getRowCount(); i++) {
@@ -200,10 +192,6 @@ public class GUIUtil {
         return new ImageIcon();
     }
 
-    public static boolean validateStringWithPattern(String strToValidate, Pattern pattern) {
-        return strToValidate.split(pattern.toString()).length == 0;
-    }
-
     public static String validarCampos(Container container) {
         String rv = new String();
         String value;
@@ -216,15 +204,15 @@ public class GUIUtil {
 
                 if (!value.trim().isEmpty()) {
                     if (txtName.equals("Correo")) {
-                        if (!validarEmail(value)) {
+                        if (!Util.validarEmail(value)) {
                             rv = txtName;
                         }
                     } else if (txtName.equals("Telefono")) {
-                        if (!validarTelefono(value)) {
+                        if (!Util.validarTelefono(value)) {
                             rv = txtName;
                         }
                     } else if (txtName.equals("Identificacion")) {
-                        if (!validarMatricula(value)) {
+                        if (!Util.validarMatricula(value)) {
                             rv = txtName;
                         }
                     }
@@ -248,14 +236,22 @@ public class GUIUtil {
         return rv;
     }
 
-    public static String generarClaveDeUsuario(Usuario usuario) {
-        final String nombre = usuario.getNombre();
-        final String identificacion = usuario.getIdentificacionP();
-        final String rv = (nombre.substring(0, 1).toUpperCase()
-                + identificacion.substring(identificacion.length() - 4, identificacion.length())
-                + nombre.substring(nombre.length() - 1, nombre.length()).toLowerCase());
-        System.out.println(rv);
-        return rv;
+    public static JCalendar setCalendarChooserAfterToday(JCalendar calendar) {
+
+        Calendar c = Calendar.getInstance();
+        c.add(Calendar.YEAR, 2);
+        calendar.setSelectableDateRange(new Date(), new Date(c.getTime().getYear(), c.getTime().getMonth(), c.getTime().getDate()));
+
+        PropertyChangeListener calendarChangeListener = new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                Date selectedDate = ((JCalendar) evt.getSource()).getDate();
+            }
+        };
+
+        calendar.addPropertyChangeListener("calendar", calendarChangeListener);
+
+        return calendar;
     }
 
     public static Object[] crearFilaUsuario(Usuario usuario) {
@@ -272,21 +268,5 @@ public class GUIUtil {
 
     public static Object[] crearFilaReserva(Reserva reserva) {
         return new Object[]{};
-    }
-
-    public static boolean validarEmail(String email) {
-        return validateStringWithPattern(email, EMAIL_PATTERN);
-    }
-
-    public static boolean validarCedula(String cedula) {
-        return validateStringWithPattern(cedula, CEDULA_PATTERN);
-    }
-
-    public static boolean validarMatricula(String matricula) {
-        return validateStringWithPattern(matricula, MATRICULA_PATTERN);
-    }
-
-    public static boolean validarTelefono(String telefono) {
-        return validateStringWithPattern(telefono, TELEFONO_PATTERN);
     }
 }

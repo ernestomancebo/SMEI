@@ -51,7 +51,7 @@ public class VisualizadorDeReservas extends javax.swing.JInternalFrame {
                     if (target.getSelectedColumn() != 0) {
                         MaestroReservas activeFrame = MaestroReservas.getInstance();
 
-                        activeFrame.cargarDataFromID(String.valueOf(target.getValueAt(target.getSelectedRow(), 1)));
+                        activeFrame.cargarDataFromID(modeloReserva.get(target.getSelectedRow()));
                         GUIUtil.addFrameToDesktopPanel(getInstance().getDesktopPane(), activeFrame);
                         GUIUtil.deshabilitarEdicion(activeFrame);
                         if (esConsulta) {
@@ -65,16 +65,17 @@ public class VisualizadorDeReservas extends javax.swing.JInternalFrame {
         });
 
         //Add table Model
-        modeloReserva = daoReservas.getAllReservas();
+
         cargarTablaReservas();
     }
 
     private void cargarTablaReservas() {
-        GUIUtil.setMultiPuporseModelToTable(tblVisualizarReserva, daoReservas.crearTablaReserva(modeloReserva), columnHeaders, columnsTypes);
+        GUIUtil.setMultiPuporseModelToTable(tblVisualizarReserva,
+                daoReservas.crearTablaReserva(modeloReserva = daoReservas.getAllReservas()), columnHeaders, columnsTypes);
     }
 
     public boolean setConsulta(boolean esConsulta) {
-        return esConsulta = esConsulta;
+        return this.esConsulta = esConsulta;
     }
 
     public boolean esConsulta() {
@@ -206,7 +207,6 @@ public class VisualizadorDeReservas extends javax.swing.JInternalFrame {
         }
         return values;
     }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAceptar;
     private javax.swing.JButton btnCancelarReserva;

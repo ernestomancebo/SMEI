@@ -102,7 +102,7 @@ public class DAOUsuario {
         Usuario u = new Usuario();
 
         try {
-            pstm = conn.prepareCall("select idUsuario, r.nombre, u.nombre, password, identificacion, email, telefono, habilitado from usuario u, rol r where u.idRol = r.idRol and idUsuario = ?");
+            pstm = conn.prepareCall("select idUsuario, r.nombre, r.idRol, u.nombre, password, identificacion, email, telefono, habilitado from usuario u, rol r where u.idRol = r.idRol and idUsuario = ?");
             pstm.setInt(1, id);
             rs = pstm.executeQuery();
 
@@ -115,12 +115,16 @@ public class DAOUsuario {
                 ArrayList<Telefono> telefono = new ArrayList<Telefono>();
                 telefono.add(t);
 
+                Rol r = new Rol();
+                r.setNombre(rs.getString(2));
+                r.setIdRol(rs.getInt(3));
+
                 u.setIdUsuario(rs.getInt("idUsuario"));
-                u.setNombre(rs.getString(3));
+                u.setNombre(rs.getString(4));
                 u.setEmails(email);
                 u.setTelefonos(telefono);
                 u.setIdentificacionP(rs.getString("identificacion"));
-                u.setRol(new Rol(rs.getString(2)));
+                u.setRol(r);
                 u.setHabilitado(rs.getBoolean("habilitado"));
                 u.setPassword(rs.getString("password"));
             }
@@ -135,7 +139,7 @@ public class DAOUsuario {
         ArrayList<Usuario> usuarios = new ArrayList<Usuario>();
 
         try {
-            pstm = conn.prepareCall("select idUsuario, r.nombre, u.nombre, email, telefono, habilitado from usuario u, rol r where u.idRol = r.idRol");
+            pstm = conn.prepareCall("select idUsuario, r.nombre, r.idRol, u.nombre, email, telefono, habilitado from usuario u, rol r where u.idRol = r.idRol");
             rs = pstm.executeQuery();
 
             while (rs.next()) {
@@ -149,11 +153,15 @@ public class DAOUsuario {
                 ArrayList<Telefono> telefono = new ArrayList<Telefono>();
                 telefono.add(t);
 
+                Rol r = new Rol();
+                r.setNombre(rs.getString(2));
+                r.setIdRol(rs.getInt(3));
+                
                 u.setIdUsuario(rs.getInt("idUsuario"));
-                u.setNombre(rs.getString(3));
+                u.setNombre(rs.getString(4));
                 u.setEmails(email);
                 u.setTelefonos(telefono);
-                u.setRol(new Rol(rs.getString(2)));
+                u.setRol(r);
                 u.setHabilitado(rs.getBoolean("habilitado"));
 
                 usuarios.add(u);

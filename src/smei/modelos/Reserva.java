@@ -15,6 +15,8 @@ public class Reserva {
     private Integer id;
     private Usuario usuario;
     private Espacio espacio;
+    private int cantPersonas;
+    private String descripcion;
     private Date fechaCreacion;
     private Date fechaModificacion;
     private Date fechaInicio;
@@ -76,4 +78,19 @@ public class Reserva {
         this.fechaFin = fechaFin;
     }
 
+    public int getCantPersonas() {
+        return cantPersonas;
+    }
+
+    public void setCantPersonas(int cantPersonas) {
+        this.cantPersonas = cantPersonas;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
 }

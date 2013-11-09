@@ -9,13 +9,14 @@ import javax.swing.JOptionPane;
 import smei.dao.DAOEspacio;
 import smei.modelos.Espacio;
 import smei.util.GUIUtil;
+import smei.util.Util;
 
 /**
  *
  * @author Ernesto Mancebo T
  */
 public class MaestroEspacios extends javax.swing.JInternalFrame {
-
+    
     private static MaestroEspacios instancia = new MaestroEspacios();
     private Espacio espacio;
     private DAOEspacio daoEspacio = new DAOEspacio();
@@ -27,19 +28,19 @@ public class MaestroEspacios extends javax.swing.JInternalFrame {
         initComponents();
         initializeValues();
     }
-
+    
     public static MaestroEspacios getInstance() {
         return instancia;
     }
-
+    
     public void initializeValues() {
         this.setSize(323, 274);
         btnModificar.setLocation(btnAceptar.getLocation());
     }
-
+    
     public boolean llenarEspacio() {
         String validar = GUIUtil.validarCampos(getInstance());
-
+        
         if (!validar.isEmpty()) {
             JOptionPane.showMessageDialog(rootPane, "Verificar " + validar);
             return false;
@@ -49,22 +50,22 @@ public class MaestroEspacios extends javax.swing.JInternalFrame {
         if (espacio == null) {
             espacio = new Espacio();
         }
-
+        
         espacio.setNombre(txtNombre.getText());
         espacio.setCapacidadDePersonas(Integer.valueOf(txtLimiteP.getText()));
         espacio.setDescripcion(txtDescripcion.getText());
         espacio.setHabilitado(chkHabilitado.isSelected());
-
+        
         return true;
     }
-
+    
     public void cargarDataFromID(Espacio espacio) {
         this.espacio = espacio;
         llenarCamposFromEspacio(espacio);
         GUIUtil.asignarTitulo(getInstance(), "Espacio " + espacio.getId());
     }
-
-    public void llenarCamposFromEspacio(Espacio e) {
+    
+    private void llenarCamposFromEspacio(Espacio e) {
         txtNombre.setText(e.getNombre());
         txtLimiteP.setText(String.valueOf(e.getCapacidadDePersonas()));
         txtDescripcion.setText(e.getDescripcion());
@@ -173,17 +174,21 @@ public class MaestroEspacios extends javax.swing.JInternalFrame {
         GUIUtil.limpiarContenido(getInstance());
         this.setVisible(false);
     }//GEN-LAST:event_btnSalirActionPerformed
-
+    
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
-        GUIUtil.limpiarContenido(getInstance());
+        if (espacio == null) {
+            GUIUtil.limpiarContenido(getInstance());
+        } else {
+            llenarCamposFromEspacio(espacio);
+        }
     }//GEN-LAST:event_btnLimpiarActionPerformed
-
+    
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
         GUIUtil.deshabilitarBtnModificar(getInstance());
 //        GUIUtil.habilitarBtnSalir(getInstance());
         GUIUtil.habilitarEdicion(getInstance());
     }//GEN-LAST:event_btnModificarActionPerformed
-
+    
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
         if (llenarEspacio()) {
             if (espacio.getId() != null) {
@@ -195,11 +200,11 @@ public class MaestroEspacios extends javax.swing.JInternalFrame {
             this.setVisible(false);
         }
     }//GEN-LAST:event_btnAceptarActionPerformed
-
+    
     private void txtLimitePKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtLimitePKeyTyped
-        GUIUtil.aceptaSoloNumeros(evt, evt.getKeyChar());
+        Util.aceptaSoloNumeros(evt, evt.getKeyChar());
     }//GEN-LAST:event_txtLimitePKeyTyped
-
+    
     private void txtLimitePActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtLimitePActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtLimitePActionPerformed

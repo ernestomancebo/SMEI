@@ -6,15 +6,20 @@ package smei.gui.reservas;
 
 import javax.swing.SpinnerListModel;
 import javax.swing.SpinnerNumberModel;
+import smei.dao.DAOReservas;
+import smei.modelos.Reserva;
 import smei.util.GUIUtil;
+import smei.util.Util;
 
 /**
  *
  * @author Ernesto
  */
 public final class MaestroReservas extends javax.swing.JInternalFrame {
-    
+
     private static MaestroReservas instancia = new MaestroReservas();
+    private DAOReservas daoReserva = new DAOReservas();
+    private Reserva reserva;
 
     /**
      * Creates new form MaestroReservas
@@ -23,11 +28,11 @@ public final class MaestroReservas extends javax.swing.JInternalFrame {
         initComponents();
         initComponentsValues();
     }
-    
+
     public static MaestroReservas getInstance() {
         return instancia;
     }
-    
+
     public void initComponentsValues() {
         // SpinnerModel modeloHora = new SpinnerNumberModel(1, 1, 12, 1);
         spnHoraI.setModel(new SpinnerNumberModel(1, 1, 12, 1));
@@ -36,7 +41,7 @@ public final class MaestroReservas extends javax.swing.JInternalFrame {
         // SpinnerModel modeloMint = new SpinnerNumberModel(1, 0, 59, 5);
         spnMinutoI.setModel(new SpinnerNumberModel(0, 0, 59, 5));
         spnMinutoF.setModel(new SpinnerNumberModel(0, 0, 59, 5));
-        
+
         String[] tandaList = {"a.m.", "p.m."};
         // SpinnerListModel modelotanda = new SpinnerListModel(tandaList);
         spnTandaI.setModel(new SpinnerListModel(tandaList));
@@ -44,13 +49,28 @@ public final class MaestroReservas extends javax.swing.JInternalFrame {
 
         //Aceptar y Modificar deben estar en el mismo lugar!
         btnModificar.setLocation(btnAceptar.getLocation());
-        
+
+        GUIUtil.setCalendarChooserAfterToday(dChooserFecha.getJCalendar());
         this.setSize(380, 400);
     }
-    
-    public void cargarDataFromID(String reservaID) {
-        GUIUtil.asignarTitulo(getInstance(), "Reserva " + reservaID);
+
+    private void llenarReserva() {
     }
+
+    public void cargarDataFromID(Reserva reserva) {
+        this.reserva = reserva;
+
+        GUIUtil.asignarTitulo(getInstance(), "Reserva " + reserva);
+    }
+
+    private void llenarCamposFromReserva(Reserva r) {
+        dChooserFecha.setDate(r.getFechaInicio());
+
+        txtCantPersonas.setText(String.valueOf(r.getCantPersonas()));
+        txtDesc.setText(r.getDescripcion());
+    }
+    
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -170,20 +190,19 @@ public final class MaestroReservas extends javax.swing.JInternalFrame {
 //        GUIUtil.habilitarBtnSalir(getInstance());
         GUIUtil.habilitarEdicion(getInstance());
     }//GEN-LAST:event_btnModificarActionPerformed
-    
+
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
         GUIUtil.limpiarContenido(getInstance());
         this.setVisible(false);
     }//GEN-LAST:event_btnSalirActionPerformed
-    
+
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
         GUIUtil.limpiarContenido(getInstance());
     }//GEN-LAST:event_btnLimpiarActionPerformed
 
     private void txtCantPersonasKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCantPersonasKeyTyped
-        GUIUtil.aceptaSoloNumeros(evt, evt.getKeyChar());
+        Util.aceptaSoloNumeros(evt, evt.getKeyChar());
     }//GEN-LAST:event_txtCantPersonasKeyTyped
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAceptar;
     private javax.swing.JButton btnLimpiar;

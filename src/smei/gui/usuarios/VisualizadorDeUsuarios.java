@@ -52,7 +52,7 @@ public class VisualizadorDeUsuarios extends javax.swing.JInternalFrame {
                     if (target.getSelectedColumn() != 0) {
                         MaestroUsuarios activeFrame = MaestroUsuarios.getInstance();
 
-                        activeFrame.cargarDataFromID(daoUsuario.getUsuarioByID(
+                        activeFrame.cargarDataFromUsuario(daoUsuario.getUsuarioByID(
                                 modeloUsuario.get(target.getSelectedRow()).getIdUsuario()));
 
                         GUIUtil.addFrameToDesktopPanel(getInstance().getDesktopPane(), activeFrame);

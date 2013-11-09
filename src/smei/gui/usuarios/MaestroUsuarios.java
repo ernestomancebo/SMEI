@@ -6,7 +6,6 @@
 package smei.gui.usuarios;
 
 import java.util.ArrayList;
-import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import smei.dao.DAORol;
@@ -16,6 +15,7 @@ import smei.modelos.Rol;
 import smei.modelos.Telefono;
 import smei.modelos.Usuario;
 import smei.util.GUIUtil;
+import smei.util.Util;
 
 /**
  *
@@ -184,7 +184,7 @@ public class MaestroUsuarios extends javax.swing.JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    public void cargarDataFromID(Usuario usuario) {
+    public void cargarDataFromUsuario(Usuario usuario) {
         this.usuario = usuario;
         llenarCamposFromUsuario(usuario);
         GUIUtil.asignarTitulo(getInstance(), "Usuario " + usuario.getIdUsuario());
@@ -195,9 +195,21 @@ public class MaestroUsuarios extends javax.swing.JInternalFrame {
         txtIdentificacion.setText(u.getIdentificacionP());
         txtCorreo.setText(u.getEmails().get(0).getEmail());
         txtTelefono.setText(u.getTelefonos().get(0).getTelefono());
-        cmbRol.setSelectedItem(u.getRol().getNombre());
+        cmbRol.setSelectedIndex(getRolIndex(u));
         chkHabilitado.setSelected(u.isHabilitado());
     }
+
+    private int getRolIndex(Usuario u) {
+        int id = u.getRol().getIdRol();
+
+        for (int i = 0; i < roles.size(); i++) {
+            if (roles.get(i).getIdRol() == id) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
     private void chkHabilitadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkHabilitadoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_chkHabilitadoActionPerformed
@@ -227,7 +239,7 @@ public class MaestroUsuarios extends javax.swing.JInternalFrame {
                 daoUsuario.actualizarUsuario(usuario);
                 usuario = null;
             } else {
-                usuario.setPassword(GUIUtil.generarClaveDeUsuario(usuario));
+                usuario.setPassword(Util.generarClaveDeUsuario(usuario));
                 daoUsuario.insertarUsuario(usuario);
             }
 
