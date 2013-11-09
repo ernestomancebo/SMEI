@@ -8,7 +8,6 @@ import com.toedter.calendar.JCalendar;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyVetoException;
@@ -17,7 +16,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.regex.Pattern;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -254,19 +252,22 @@ public class GUIUtil {
         return calendar;
     }
 
-    public static Object[] crearFilaUsuario(Usuario usuario) {
+    public static Object[] crearFilaUsuario(Usuario u) {
         return new Object[]{
-            false, usuario.getIdUsuario(), usuario.getNombre(),
-            usuario.getEmails().get(0).getEmail(), usuario.getRol().getNombre(), (usuario.isHabilitado()) ? "Sí" : "No"};
+            false, u.getIdUsuario(), u.getNombre(),
+            u.getEmails().get(0).getEmail(), u.getRol().getNombre(), (u.isHabilitado()) ? "Sí" : "No"};
     }
 
-    public static Object[] crearFilaEspacio(Espacio espacio) {
+    public static Object[] crearFilaEspacio(Espacio e) {
         return new Object[]{
-            false, espacio.getNombre(), espacio.getCapacidadDePersonas(),
-            espacio.getDescripcion(), (espacio.isHabilitado()) ? "Sí" : "No"};
+            false, e.getNombre(), e.getCapacidadDePersonas(),
+            e.getDescripcion(), (e.isHabilitado()) ? "Sí" : "No"};
     }
 
-    public static Object[] crearFilaReserva(Reserva reserva) {
-        return new Object[]{};
+    public static Object[] crearFilaReserva(Reserva r) {
+        return new Object[]{false, r.getId(), r.getUsuario().getNombre(),
+            Util.getFechaFromDate(r.getFechaInicio()), Util.getHoraFromDate(r.getFechaInicio()) + " - "
+            + Util.getHoraFromDate(r.getFechaFin()), r.getEspacio().getNombre(),
+            (r.isHabilitada()) ? "Sí" : "No"};
     }
 }

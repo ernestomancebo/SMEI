@@ -25,7 +25,7 @@ public class VisualizadorDeReservas extends javax.swing.JInternalFrame {
      * Creates new form VisualizadorDeReservas
      */
     private static VisualizadorDeReservas instancia = new VisualizadorDeReservas();
-    private final Object[] columnHeaders = {"", "ID Reservacion", "Descripcion", "Fecha", "Hora Inicio - Fin", "Lugar", "Estado"};
+    private final Object[] columnHeaders = {"", "ID Reservacion", "Usuario", "Fecha", "Hora Inicio - Fin", "Lugar", "Habilitada"};
     private final Class[] columnsTypes = {java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class};
     DAOReservas daoReservas = new DAOReservas();
     ArrayList<Reserva> modeloReserva;
@@ -71,7 +71,7 @@ public class VisualizadorDeReservas extends javax.swing.JInternalFrame {
 
     private void cargarTablaReservas() {
         GUIUtil.setMultiPuporseModelToTable(tblVisualizarReserva,
-                daoReservas.crearTablaReserva(modeloReserva = daoReservas.getAllReservas()), columnHeaders, columnsTypes);
+                daoReservas.crearTablaReserva(modeloReserva = daoReservas.getReservas()), columnHeaders, columnsTypes);
     }
 
     public boolean setConsulta(boolean esConsulta) {

@@ -21,6 +21,7 @@ public class Reserva {
     private Date fechaModificacion;
     private Date fechaInicio;
     private Date fechaFin;
+    private boolean habilitada;
 
     public Integer getId() {
         return id;
@@ -92,5 +93,13 @@ public class Reserva {
 
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
+    }
+
+    public boolean isHabilitada() {
+        return habilitada;
+    }
+
+    public void setHabilitada(boolean habilitada) {
+        this.habilitada = habilitada;
     }
 }

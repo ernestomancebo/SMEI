@@ -10,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -50,8 +51,7 @@ public class DAOEspacio {
             pstm = conn.prepareStatement(
                     "update espacios set "
                     + "nombre = ?, capacidadDePersonas = ?, habilitado = ?, descripcion = ? "
-                    + "where idEspacio = ?"
-            );
+                    + "where idEspacio = ?");
 
             pstm.setString(1, espacio.getNombre());
             pstm.setInt(2, espacio.getCapacidadDePersonas());
@@ -141,6 +141,38 @@ public class DAOEspacio {
         } finally {
             return espacios;
         }
+    }
+
+    public ArrayList<Espacio> getEspaciosDisponiblesParaReserva(int cantPersonas, int idUsuario, Date fInicio, Date fFin) {
+        ArrayList<Espacio> rv = new ArrayList<Espacio>();
+
+        try {
+            pstm = conn.prepareStatement("select e.idEspacio, e.nombre from espacios e "
+                    + "where e.habilitado = ? and e.capacidadDePersonas >= ? and e.idEspacio not in ("
+                    + "select r.idEspacio from reservaciones r where r.fechaInicio = ? and r.fechaFin = ? "
+                    + "and idUsuario != ?)");
+
+            pstm.setBoolean(1, true);
+            pstm.setInt(2, cantPersonas);
+            pstm.setDate(3, new java.sql.Date(fInicio.getTime()));
+            pstm.setDate(4, new java.sql.Date(fFin.getTime()));
+            pstm.setInt(5, idUsuario);
+
+            rs = pstm.executeQuery();
+
+            while (rs.next()) {
+                Espacio e = new Espacio();
+
+                e.setId(rs.getInt("idEspacio"));
+                e.setNombre(rs.getString("nombre"));
+
+                rv.add(e);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(DAOEspacio.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return rv;
     }
 
     public static Object[][] crearTablaEspacio(List<Espacio> espacios) {

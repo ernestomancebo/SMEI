@@ -5,8 +5,12 @@
 package smei.util;
 
 import java.awt.event.KeyEvent;
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import smei.modelos.Usuario;
 
@@ -59,14 +63,32 @@ public class Util {
         return validateStringWithPattern(telefono, TELEFONO_PATTERN);
     }
 
-    public static String[] getHoraDeFecha(Date d) {
-        String[] rv ;//= new String[3];
+    public static String[] getHoraDesdeFecha(Date d) {
+        return new SimpleDateFormat("hh:mm a").format(d).split("(\\s|\\:)");
+    }
 
-        rv = new SimpleDateFormat("hh:mm a").format(d).split("");
+    public static String buildHoraFromStrings(String s1, String s2, String s3) {
+        return (s1 + ":" + s2 + " " + ((s3 != null) ? s3 : "")).trim();
+    }
 
-        rv[0] = String.valueOf(d.getHours());
-        rv[0] = String.valueOf(d.getMinutes());
-        rv[0] = String.valueOf(d.getHours());
+    public static Date crearDateConHora(Date d, String t) {
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm a");
+        Date rv = new Date();
+
+        try {
+            rv = df.parse(d.getYear() + "-" + d.getMonth() + "-" + d.getDay() + " " + t);
+        } catch (ParseException ex) {
+            Logger.getLogger(Util.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
         return rv;
+    }
+
+    public static String getFechaFromDate(Date d) {
+        return new SimpleDateFormat("MM-dd-yyyy").format(d);
+    }
+
+    public static String getHoraFromDate(Date d) {
+        return new SimpleDateFormat("hh:mm a").format(d);
     }
 }

@@ -5,9 +5,17 @@
  */
 package smei.dao;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import smei.modelos.Espacio;
 import smei.modelos.Reserva;
+import smei.modelos.Usuario;
 import smei.util.GUIUtil;
 
 /**
@@ -15,6 +23,10 @@ import smei.util.GUIUtil;
  * @author Ernesto Mancebo T
  */
 public class DAOReservas {
+
+    Connection conn = DBConnection.getConnection();
+    PreparedStatement pstm;
+    ResultSet rs;
 
     public void insertarReserva(Reserva reserva) {
         System.out.println("Reserva " + reserva.getId() + " insertado");
@@ -44,18 +56,39 @@ public class DAOReservas {
         return e;
     }
 
-    public ArrayList<Reserva> getAllReservas() {
-
+    public ArrayList<Reserva> getReservas() {
         ArrayList<Reserva> reservas = new ArrayList<Reserva>();
 
-        for (byte i = 0; i < 5; i++) {
-            Reserva e = new Reserva();
+        try {
+            pstm = conn.prepareStatement("select r.idReservacion, u.idUsuario, u.nombre, e.idEspacio, e.nombre, r.cantidadDePersonas, "
+                    + "r.descripcion, r.fechaInicio, r.fechaFin, r.habilitada from reservaciones r, espacios e, usuario u "
+                    + "where u.idUsuario = r.idUsuario and e.idEspacio = r.idEspacio");
+            rs = pstm.executeQuery();
 
-            e.setId(new Integer((int) i));
+            while (rs.next()) {
+                Usuario u = new Usuario();
+                u.setIdUsuario(rs.getInt("idUsuario"));
+                u.setNombre(rs.getString(3));
 
-            reservas.add(e);
+                Espacio e = new Espacio();
+                e.setId(rs.getInt("idEspacio"));
+                e.setNombre(rs.getString(5));
+
+                Reserva r = new Reserva();
+                r.setId(rs.getInt("idReservacion"));
+                r.setCantPersonas(rs.getInt("cantidadDePersonas"));
+                r.setDescripcion(rs.getString("descripcion"));
+                r.setFechaInicio(rs.getDate("fechaInicio"));
+                r.setFechaFin(rs.getDate("fechaFin"));
+                r.setHabilitada(rs.getBoolean("habilitada"));
+                r.setUsuario(u);
+                r.setEspacio(e);
+
+                reservas.add(r);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(DAOReservas.class.getName()).log(Level.SEVERE, null, ex);
         }
-
         return reservas;
     }
 
