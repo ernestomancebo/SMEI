@@ -18,7 +18,7 @@ import smei.gui.usuarios.MaestroUsuarios;
 import smei.gui.usuarios.ModificarContrasena;
 import smei.gui.usuarios.VisualizadorDeUsuarios;
 import smei.modelos.Usuario;
-import smei.util.Util;
+import smei.util.GUIUtil;
 
 /**
  *
@@ -365,15 +365,15 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_jLinkBtnModContrActionPerformed
 
     private void agregarMaestroInternalFrame(String titulo) {
-        Util.addFrameToDesktopPanel(PrincipalDesktopPane, activeFrame);
-        Util.asignarTitulo(activeFrame, titulo);
-        Util.habilitarEdicion(activeFrame);
-        Util.deshabilitarBtnModificar(activeFrame);
+        GUIUtil.addFrameToDesktopPanel(PrincipalDesktopPane, activeFrame);
+        GUIUtil.asignarTitulo(activeFrame, titulo);
+        GUIUtil.habilitarEdicion(activeFrame);
+        GUIUtil.deshabilitarBtnModificar(activeFrame);
     }
 
     private void agregarVisualizadorInternalFrame(String titulo) {
-        Util.addFrameToDesktopPanel(PrincipalDesktopPane, activeFrame);
-        Util.asignarTitulo(activeFrame, titulo);
+        GUIUtil.addFrameToDesktopPanel(PrincipalDesktopPane, activeFrame);
+        GUIUtil.asignarTitulo(activeFrame, titulo);
     }
 
     /**

@@ -13,7 +13,7 @@ import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import smei.dao.DAOUsuario;
 import smei.modelos.Usuario;
-import smei.util.Util;
+import smei.util.GUIUtil;
 
 /**
  *
@@ -55,12 +55,12 @@ public class VisualizadorDeUsuarios extends javax.swing.JInternalFrame {
                         activeFrame.cargarDataFromID(daoUsuario.getUsuarioByID(
                                 modeloUsuario.get(target.getSelectedRow()).getIdUsuario()));
 
-                        Util.addFrameToDesktopPanel(getInstance().getDesktopPane(), activeFrame);
-                        Util.deshabilitarEdicion(activeFrame);
+                        GUIUtil.addFrameToDesktopPanel(getInstance().getDesktopPane(), activeFrame);
+                        GUIUtil.deshabilitarEdicion(activeFrame);
                         if (esConsulta) {
-                            Util.habilitarBtnSalir(activeFrame);
+                            GUIUtil.habilitarBtnSalir(activeFrame);
                         } else {
-                            Util.habilitarBtnModificar(activeFrame);
+                            GUIUtil.habilitarBtnModificar(activeFrame);
                         }
                     }
                 }
@@ -68,13 +68,12 @@ public class VisualizadorDeUsuarios extends javax.swing.JInternalFrame {
         });
 
         //Add table Model
-        modeloUsuario = daoUsuario.getAllUsuarios();
         cargarTabla();
     }
 
     private void cargarTabla() {
-        Util.setMultiPuporseModelToTable(tblVisualizarUsuario,
-                daoUsuario.crearTablaUsuario(modeloUsuario), columnHeaders, columnsTypes);
+        GUIUtil.setMultiPuporseModelToTable(tblVisualizarUsuario,
+                daoUsuario.crearTablaUsuario(modeloUsuario = daoUsuario.getAllUsuarios()), columnHeaders, columnsTypes);
     }
 
     /**
@@ -94,6 +93,11 @@ public class VisualizadorDeUsuarios extends javax.swing.JInternalFrame {
         jLabel1 = new javax.swing.JLabel();
 
         setPreferredSize(new java.awt.Dimension(726, 374));
+        addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                formPropertyChange(evt);
+            }
+        });
 
         btnEliminar.setText("Deshabilitar Usuario");
         btnEliminar.addActionListener(new java.awt.event.ActionListener() {
@@ -167,12 +171,13 @@ public class VisualizadorDeUsuarios extends javax.swing.JInternalFrame {
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         ArrayList<Integer> values = new ArrayList<Integer>();
 
-        for (int i : Util.getIndexOfSelectedRows(tblVisualizarUsuario, 0)) {
+        for (int i : GUIUtil.getIndexOfSelectedRows(tblVisualizarUsuario, 0)) {
             values.add(modeloUsuario.get(i).getIdUsuario());
         }
 
         if (!values.isEmpty()) {
             daoUsuario.deshabilitarUsuarios(values);
+            cargarTabla();
         } else {
             JOptionPane.showMessageDialog(rootPane, "Favor seleccione al menos un usuario para deshabilitar", "Informacion", JOptionPane.INFORMATION_MESSAGE);
         }
@@ -181,6 +186,10 @@ public class VisualizadorDeUsuarios extends javax.swing.JInternalFrame {
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
         this.setVisible(false);
     }//GEN-LAST:event_btnAceptarActionPerformed
+
+    private void formPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_formPropertyChange
+        cargarTabla();
+    }//GEN-LAST:event_formPropertyChange
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAceptar;
     private javax.swing.JButton btnEliminar;

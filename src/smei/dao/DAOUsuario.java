@@ -16,7 +16,7 @@ import smei.modelos.Email;
 import smei.modelos.Rol;
 import smei.modelos.Telefono;
 import smei.modelos.Usuario;
-import smei.util.Util;
+import smei.util.GUIUtil;
 
 /**
  *
@@ -59,7 +59,7 @@ public class DAOUsuario {
 
             pstm.setString(1, usuario.getNombre());
             pstm.setString(2, usuario.getPassword());
-            pstm.setInt(3, 2);
+            pstm.setInt(3, usuario.getRol().getIdRol());
             pstm.setString(4, usuario.getIdentificacionP());
             pstm.setString(5, usuario.getEmails().get(0).getEmail());
             pstm.setString(6, usuario.getTelefonos().get(0).getTelefono());
@@ -73,7 +73,7 @@ public class DAOUsuario {
         }
     }
 
-    private boolean cambiarHabilitadoUsuario(List<Integer> idUsuarios,  final boolean habilitado) {
+    private boolean cambiarHabilitadoUsuario(List<Integer> idUsuarios, final boolean habilitado) {
         try {
             pstm = conn.prepareCall("update usuario set habilitado = ? where idUsuario = ?");
             for (Integer s : idUsuarios) {
@@ -169,7 +169,7 @@ public class DAOUsuario {
         Object[][] rv = new Object[usuarios.size()][];
 
         for (byte i = 0; i < usuarios.size(); i++) {
-            rv[i] = Util.crearFilaUsuario(usuarios.get(i));
+            rv[i] = GUIUtil.crearFilaUsuario(usuarios.get(i));
         }
         return rv;
     }

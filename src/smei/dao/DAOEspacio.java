@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import smei.modelos.Espacio;
-import smei.util.Util;
+import smei.util.GUIUtil;
 
 /**
  *
@@ -147,7 +147,7 @@ public class DAOEspacio {
         Object[][] rv = new Object[espacios.size()][];
 
         for (int i = 0; i < espacios.size(); i++) {
-            rv[i] = Util.crearFilaEspacio(espacios.get(i));
+            rv[i] = GUIUtil.crearFilaEspacio(espacios.get(i));
         }
 
         return rv;

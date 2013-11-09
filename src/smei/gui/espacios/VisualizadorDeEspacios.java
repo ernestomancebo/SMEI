@@ -13,7 +13,7 @@ import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import smei.dao.DAOEspacio;
 import smei.modelos.Espacio;
-import smei.util.Util;
+import smei.util.GUIUtil;
 
 /**
  *
@@ -51,10 +51,10 @@ public class VisualizadorDeEspacios extends javax.swing.JInternalFrame {
                         MaestroEspacios activeFrame = MaestroEspacios.getInstance();
 
                         activeFrame.cargarDataFromID(daoEspacio.getEspacioByID(modeloEspacio.get(target.getSelectedRow()).getId()));
-                        Util.addFrameToDesktopPanel(getInstance().getDesktopPane(), activeFrame);
-                        Util.deshabilitarEdicion(activeFrame);
-                        Util.habilitarBtnModificar(activeFrame);
-                        Util.habilitarBtnSalir(activeFrame);
+                        GUIUtil.addFrameToDesktopPanel(getInstance().getDesktopPane(), activeFrame);
+                        GUIUtil.deshabilitarEdicion(activeFrame);
+                        GUIUtil.habilitarBtnModificar(activeFrame);
+                        GUIUtil.habilitarBtnSalir(activeFrame);
                     }
                 }
             }
@@ -66,7 +66,7 @@ public class VisualizadorDeEspacios extends javax.swing.JInternalFrame {
     }
 
     private void cargarTabla() {
-        Util.setMultiPuporseModelToTable(tblVisualizarEspacios,
+        GUIUtil.setMultiPuporseModelToTable(tblVisualizarEspacios,
                 daoEspacio.crearTablaEspacio(modeloEspacio = daoEspacio.getAllEspacios()), columnHeaders, columnsTypes);
     }
 
@@ -170,12 +170,13 @@ public class VisualizadorDeEspacios extends javax.swing.JInternalFrame {
     private void btnEliminarEspaciosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarEspaciosActionPerformed
         ArrayList<Integer> values = new ArrayList<Integer>();
 
-        for (Integer i : Util.getIndexOfSelectedRows(tblVisualizarEspacios, 0)) {
+        for (Integer i : GUIUtil.getIndexOfSelectedRows(tblVisualizarEspacios, 0)) {
             values.add(modeloEspacio.get(i).getId());
         }
 
         if (!values.isEmpty()) {
             daoEspacio.deshabilitarEspacios(values);
+            cargarTabla();
         } else {
             JOptionPane.showMessageDialog(rootPane, "Favor seleccione al menos un espacio para deshabilitar", "Informacion", JOptionPane.INFORMATION_MESSAGE);
         }
@@ -186,7 +187,6 @@ public class VisualizadorDeEspacios extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnAceptarActionPerformed
 
     private void formFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_formFocusGained
-
     }//GEN-LAST:event_formFocusGained
 
     private void formPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_formPropertyChange

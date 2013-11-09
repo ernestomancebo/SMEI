@@ -13,7 +13,7 @@ import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import smei.dao.DAOReservas;
 import smei.modelos.Reserva;
-import smei.util.Util;
+import smei.util.GUIUtil;
 
 /**
  *
@@ -52,12 +52,12 @@ public class VisualizadorDeReservas extends javax.swing.JInternalFrame {
                         MaestroReservas activeFrame = MaestroReservas.getInstance();
 
                         activeFrame.cargarDataFromID(String.valueOf(target.getValueAt(target.getSelectedRow(), 1)));
-                        Util.addFrameToDesktopPanel(getInstance().getDesktopPane(), activeFrame);
-                        Util.deshabilitarEdicion(activeFrame);
+                        GUIUtil.addFrameToDesktopPanel(getInstance().getDesktopPane(), activeFrame);
+                        GUIUtil.deshabilitarEdicion(activeFrame);
                         if (esConsulta) {
-                            Util.habilitarBtnSalir(activeFrame);
+                            GUIUtil.habilitarBtnSalir(activeFrame);
                         } else {
-                            Util.habilitarBtnModificar(activeFrame);
+                            GUIUtil.habilitarBtnModificar(activeFrame);
                         }
                     }
                 }
@@ -70,7 +70,7 @@ public class VisualizadorDeReservas extends javax.swing.JInternalFrame {
     }
 
     private void cargarTablaReservas() {
-        Util.setMultiPuporseModelToTable(tblVisualizarReserva, daoReservas.crearTablaReserva(modeloReserva), columnHeaders, columnsTypes);
+        GUIUtil.setMultiPuporseModelToTable(tblVisualizarReserva, daoReservas.crearTablaReserva(modeloReserva), columnHeaders, columnsTypes);
     }
 
     public boolean setConsulta(boolean esConsulta) {
@@ -201,7 +201,7 @@ public class VisualizadorDeReservas extends javax.swing.JInternalFrame {
 
     private ArrayList<Integer> getIdReservasSeleccionadas() {
         ArrayList<Integer> values = new ArrayList<Integer>();
-        for (Integer i : Util.getIndexOfSelectedRows(tblVisualizarReserva, 0)) {
+        for (Integer i : GUIUtil.getIndexOfSelectedRows(tblVisualizarReserva, 0)) {
             values.add(modeloReserva.get(i).getId());
         }
         return values;

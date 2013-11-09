@@ -7,7 +7,7 @@ package smei.gui.usuarios;
 import javax.swing.JOptionPane;
 import smei.dao.DAOUsuario;
 import smei.modelos.Usuario;
-import smei.util.Util;
+import smei.util.GUIUtil;
 
 /**
  *
@@ -176,12 +176,12 @@ public class ModificarContrasena extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
-        Util.limpiarContenido(getInstance());
+        GUIUtil.limpiarContenido(getInstance());
         this.setVisible(false);
     }//GEN-LAST:event_btnSalirActionPerformed
     
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
-        Util.limpiarContenido(getInstance());
+        GUIUtil.limpiarContenido(getInstance());
     }//GEN-LAST:event_btnLimpiarActionPerformed
     
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed

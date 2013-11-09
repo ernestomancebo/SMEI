@@ -8,7 +8,7 @@ package smei.gui.espacios;
 import javax.swing.JOptionPane;
 import smei.dao.DAOEspacio;
 import smei.modelos.Espacio;
-import smei.util.Util;
+import smei.util.GUIUtil;
 
 /**
  *
@@ -38,7 +38,7 @@ public class MaestroEspacios extends javax.swing.JInternalFrame {
     }
 
     public boolean llenarEspacio() {
-        String validar = Util.validarCampos(getInstance());
+        String validar = GUIUtil.validarCampos(getInstance());
 
         if (!validar.isEmpty()) {
             JOptionPane.showMessageDialog(rootPane, "Verificar " + validar);
@@ -61,7 +61,7 @@ public class MaestroEspacios extends javax.swing.JInternalFrame {
     public void cargarDataFromID(Espacio espacio) {
         this.espacio = espacio;
         llenarCamposFromEspacio(espacio);
-        Util.asignarTitulo(getInstance(), "Espacio " + espacio.getId());
+        GUIUtil.asignarTitulo(getInstance(), "Espacio " + espacio.getId());
     }
 
     public void llenarCamposFromEspacio(Espacio e) {
@@ -170,18 +170,18 @@ public class MaestroEspacios extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
-        Util.limpiarContenido(getInstance());
+        GUIUtil.limpiarContenido(getInstance());
         this.setVisible(false);
     }//GEN-LAST:event_btnSalirActionPerformed
 
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
-        Util.limpiarContenido(getInstance());
+        GUIUtil.limpiarContenido(getInstance());
     }//GEN-LAST:event_btnLimpiarActionPerformed
 
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
-        Util.deshabilitarBtnModificar(getInstance());
-//        Util.habilitarBtnSalir(getInstance());
-        Util.habilitarEdicion(getInstance());
+        GUIUtil.deshabilitarBtnModificar(getInstance());
+//        GUIUtil.habilitarBtnSalir(getInstance());
+        GUIUtil.habilitarEdicion(getInstance());
     }//GEN-LAST:event_btnModificarActionPerformed
 
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
@@ -192,11 +192,12 @@ public class MaestroEspacios extends javax.swing.JInternalFrame {
             } else {
                 daoEspacio.insertarEspacio(espacio);
             }
+            this.setVisible(false);
         }
     }//GEN-LAST:event_btnAceptarActionPerformed
 
     private void txtLimitePKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtLimitePKeyTyped
-        Util.aceptaSoloNumeros(evt, evt.getKeyChar());
+        GUIUtil.aceptaSoloNumeros(evt, evt.getKeyChar());
     }//GEN-LAST:event_txtLimitePKeyTyped
 
     private void txtLimitePActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtLimitePActionPerformed

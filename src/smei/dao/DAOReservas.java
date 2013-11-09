@@ -8,7 +8,7 @@ package smei.dao;
 import java.util.ArrayList;
 import java.util.List;
 import smei.modelos.Reserva;
-import smei.util.Util;
+import smei.util.GUIUtil;
 
 /**
  *
@@ -63,7 +63,7 @@ public class DAOReservas {
         Object[][] rv = new Object[reservas.size()][];
 
         for (byte i = 0; i < reservas.size(); i++) {
-            rv[i] = Util.crearFilaReserva(reservas.get(i));
+            rv[i] = GUIUtil.crearFilaReserva(reservas.get(i));
         }
 
         return rv;

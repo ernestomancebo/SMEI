@@ -6,7 +6,7 @@ package smei.gui.reservas;
 
 import javax.swing.SpinnerListModel;
 import javax.swing.SpinnerNumberModel;
-import smei.util.Util;
+import smei.util.GUIUtil;
 
 /**
  *
@@ -49,7 +49,7 @@ public final class MaestroReservas extends javax.swing.JInternalFrame {
     }
     
     public void cargarDataFromID(String reservaID) {
-        Util.asignarTitulo(getInstance(), "Reserva " + reservaID);
+        GUIUtil.asignarTitulo(getInstance(), "Reserva " + reservaID);
     }
 
     /**
@@ -166,22 +166,22 @@ public final class MaestroReservas extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
-        Util.deshabilitarBtnModificar(getInstance());
-//        Util.habilitarBtnSalir(getInstance());
-        Util.habilitarEdicion(getInstance());
+        GUIUtil.deshabilitarBtnModificar(getInstance());
+//        GUIUtil.habilitarBtnSalir(getInstance());
+        GUIUtil.habilitarEdicion(getInstance());
     }//GEN-LAST:event_btnModificarActionPerformed
     
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
-        Util.limpiarContenido(getInstance());
+        GUIUtil.limpiarContenido(getInstance());
         this.setVisible(false);
     }//GEN-LAST:event_btnSalirActionPerformed
     
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
-        Util.limpiarContenido(getInstance());
+        GUIUtil.limpiarContenido(getInstance());
     }//GEN-LAST:event_btnLimpiarActionPerformed
 
     private void txtCantPersonasKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCantPersonasKeyTyped
-        Util.aceptaSoloNumeros(evt, evt.getKeyChar());
+        GUIUtil.aceptaSoloNumeros(evt, evt.getKeyChar());
     }//GEN-LAST:event_txtCantPersonasKeyTyped
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

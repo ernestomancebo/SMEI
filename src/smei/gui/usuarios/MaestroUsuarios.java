@@ -6,13 +6,16 @@
 package smei.gui.usuarios;
 
 import java.util.ArrayList;
+import javax.swing.ComboBoxModel;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
+import smei.dao.DAORol;
 import smei.dao.DAOUsuario;
 import smei.modelos.Email;
 import smei.modelos.Rol;
 import smei.modelos.Telefono;
 import smei.modelos.Usuario;
-import smei.util.Util;
+import smei.util.GUIUtil;
 
 /**
  *
@@ -21,8 +24,9 @@ import smei.util.Util;
 public class MaestroUsuarios extends javax.swing.JInternalFrame {
 
     private static MaestroUsuarios instancia = new MaestroUsuarios();
-    private Usuario usuario;
     private DAOUsuario daoUsuario = new DAOUsuario();
+    private Usuario usuario;
+    private ArrayList<Rol> roles;
 
     /**
      * Creates new form MaestroUsuarios
@@ -37,14 +41,21 @@ public class MaestroUsuarios extends javax.swing.JInternalFrame {
     }
 
     public void initializeComponets() {
-//        jCheckBox1.setHorizontalTextPosition(SwingConstants.LEFT);
+        roles = new DAORol().getRoles();
+        String[] values = new String[roles.size()];
+
+        for (int i = 0; i < roles.size(); i++) {
+            values[i] = roles.get(i).getNombre();
+        }
+
+        cmbRol.setModel(new DefaultComboBoxModel(values));
         this.setSize(287, 266);
         btnModificar.setLocation(btnAceptar.getLocation());
     }
 
     public boolean llenarUsuario() {
 
-        String validar = Util.validarCampos(getInstance());
+        String validar = GUIUtil.validarCampos(getInstance());
         if (!validar.isEmpty()) {
             JOptionPane.showMessageDialog(rootPane, "Verificar " + validar);
             return false;
@@ -56,8 +67,6 @@ public class MaestroUsuarios extends javax.swing.JInternalFrame {
         ArrayList<Telefono> telefono = new ArrayList<Telefono>();
         telefono.add(new Telefono(txtTelefono.getText()));
 
-//        Rol rol = new Rol();
-//        rol.setNombre(cmbRol.getSelectedItem().toString());
         //Es nuevo
         if (usuario == null) {
             usuario = new Usuario();
@@ -66,7 +75,7 @@ public class MaestroUsuarios extends javax.swing.JInternalFrame {
         usuario.setIdentificacionP(txtIdentificacion.getText());
         usuario.setEmails(correos);
         usuario.setTelefonos(telefono);
-//        usuario.setRol(rol);
+        usuario.setRol(roles.get(cmbRol.getSelectedIndex()));
         usuario.setHabilitado(chkHabilitado.isSelected());
 
         return true;
@@ -178,7 +187,7 @@ public class MaestroUsuarios extends javax.swing.JInternalFrame {
     public void cargarDataFromID(Usuario usuario) {
         this.usuario = usuario;
         llenarCamposFromUsuario(usuario);
-        Util.asignarTitulo(getInstance(), "Usuario " + usuario.getIdUsuario());
+        GUIUtil.asignarTitulo(getInstance(), "Usuario " + usuario.getIdUsuario());
     }
 
     public void llenarCamposFromUsuario(Usuario u) {
@@ -194,19 +203,19 @@ public class MaestroUsuarios extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_chkHabilitadoActionPerformed
 
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
-        Util.deshabilitarBtnModificar(getInstance());
-        //        Util.habilitarBtnSalir(getInstance());
-        Util.habilitarEdicion(getInstance());
+        GUIUtil.deshabilitarBtnModificar(getInstance());
+        //        GUIUtil.habilitarBtnSalir(getInstance());
+        GUIUtil.habilitarEdicion(getInstance());
     }//GEN-LAST:event_btnModificarActionPerformed
 
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
-        Util.limpiarContenido(getInstance());
+        GUIUtil.limpiarContenido(getInstance());
         this.setVisible(false);
     }//GEN-LAST:event_btnSalirActionPerformed
 
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
         if (usuario == null) {
-            Util.limpiarContenido(getInstance());
+            GUIUtil.limpiarContenido(getInstance());
         } else {
             llenarCamposFromUsuario(usuario);
         }
@@ -218,9 +227,11 @@ public class MaestroUsuarios extends javax.swing.JInternalFrame {
                 daoUsuario.actualizarUsuario(usuario);
                 usuario = null;
             } else {
-                usuario.setPassword(Util.generarClaveDeUsuario(usuario));
+                usuario.setPassword(GUIUtil.generarClaveDeUsuario(usuario));
                 daoUsuario.insertarUsuario(usuario);
             }
+
+            this.setVisible(false);
         }
     }//GEN-LAST:event_btnAceptarActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
