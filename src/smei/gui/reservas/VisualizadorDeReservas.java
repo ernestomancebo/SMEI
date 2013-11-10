@@ -25,7 +25,7 @@ public class VisualizadorDeReservas extends javax.swing.JInternalFrame {
      * Creates new form VisualizadorDeReservas
      */
     private static VisualizadorDeReservas instancia = new VisualizadorDeReservas();
-    private final Object[] columnHeaders = {"", "ID Reservacion", "Usuario", "Fecha", "Hora Inicio - Fin", "Lugar", "Habilitada"};
+    private final Object[] columnHeaders = {"", "ID Reservacion", "Usuario", "Fecha", "Hora Inicio - Fin", "Lugar", "Estado"};
     private final Class[] columnsTypes = {java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class};
     DAOReservas daoReservas = new DAOReservas();
     ArrayList<Reserva> modeloReserva;
@@ -51,7 +51,7 @@ public class VisualizadorDeReservas extends javax.swing.JInternalFrame {
                     if (target.getSelectedColumn() != 0) {
                         MaestroReservas activeFrame = MaestroReservas.getInstance();
 
-                        activeFrame.cargarDataFromID(modeloReserva.get(target.getSelectedRow()));
+                        activeFrame.cargarData(modeloReserva.get(target.getSelectedRow()));
                         GUIUtil.addFrameToDesktopPanel(getInstance().getDesktopPane(), activeFrame);
                         GUIUtil.deshabilitarEdicion(activeFrame);
                         if (esConsulta) {
@@ -98,6 +98,12 @@ public class VisualizadorDeReservas extends javax.swing.JInternalFrame {
         btnCancelarReserva = new javax.swing.JButton();
         btnAceptar = new javax.swing.JButton();
         btnExportarReserva = new javax.swing.JButton();
+
+        addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                formPropertyChange(evt);
+            }
+        });
 
         jLabel1.setText("Buscar:");
 
@@ -172,7 +178,7 @@ public class VisualizadorDeReservas extends javax.swing.JInternalFrame {
                     .addComponent(btnAceptar)
                     .addComponent(btnExportarReserva)
                     .addComponent(btnCancelarReserva))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(19, Short.MAX_VALUE))
         );
 
         pack();
@@ -199,6 +205,10 @@ public class VisualizadorDeReservas extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(rootPane, "Favor seleccione al menos una reservacion para exportar", "Informacion", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_btnExportarReservaActionPerformed
+
+    private void formPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_formPropertyChange
+        cargarTablaReservas();
+    }//GEN-LAST:event_formPropertyChange
 
     private ArrayList<Integer> getIdReservasSeleccionadas() {
         ArrayList<Integer> values = new ArrayList<Integer>();

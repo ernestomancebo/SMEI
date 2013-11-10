@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import smei.modelos.Espacio;
+import smei.modelos.Reserva;
 import smei.util.GUIUtil;
 
 /**
@@ -143,7 +144,7 @@ public class DAOEspacio {
         }
     }
 
-    public ArrayList<Espacio> getEspaciosDisponiblesParaReserva(int cantPersonas, int idUsuario, Date fInicio, Date fFin) {
+    public ArrayList<Espacio> getEspaciosDisponiblesParaReserva(Reserva r) {
         ArrayList<Espacio> rv = new ArrayList<Espacio>();
 
         try {
@@ -153,10 +154,10 @@ public class DAOEspacio {
                     + "and idUsuario != ?)");
 
             pstm.setBoolean(1, true);
-            pstm.setInt(2, cantPersonas);
-            pstm.setDate(3, new java.sql.Date(fInicio.getTime()));
-            pstm.setDate(4, new java.sql.Date(fFin.getTime()));
-            pstm.setInt(5, idUsuario);
+            pstm.setInt(2, r.getCantPersonas());
+            pstm.setDate(3, new java.sql.Date(r.getFechaInicio().getTime()));
+            pstm.setDate(4, new java.sql.Date(r.getFechaFin().getTime()));
+            pstm.setInt(5, r.getUsuario().getIdUsuario());
 
             rs = pstm.executeQuery();
 

@@ -6,6 +6,7 @@ package smei.util;
 
 import java.awt.event.KeyEvent;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -68,18 +69,27 @@ public class Util {
     }
 
     public static String buildHoraFromStrings(String s1, String s2, String s3) {
+        DecimalFormat df = new DecimalFormat("00");
+
+        try {
+            df.parse(s1);
+            df.parse(s2);
+        } catch (ParseException ex) {
+            Logger.getLogger(Util.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
         return (s1 + ":" + s2 + " " + ((s3 != null) ? s3 : "")).trim();
     }
 
     public static Date crearDateConHora(Date d, String t) {
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm a");
-        Date rv = new Date();
+        SimpleDateFormat df = new SimpleDateFormat("MM-dd-yyyy hh:mm a");
+        Date rv = new Date(d.getYear(), d.getMonth(), d.getDay());
 
-        try {
-            rv = df.parse(d.getYear() + "-" + d.getMonth() + "-" + d.getDay() + " " + t);
-        } catch (ParseException ex) {
-            Logger.getLogger(Util.class.getName()).log(Level.SEVERE, null, ex);
-        }
+//        try {
+//            rv = df.parse(d.getYear() + "-" + d.getMonth() + "-" + d.getDay() + " " + t);
+//        } catch (ParseException ex) {
+//            Logger.getLogger(Util.class.getName()).log(Level.SEVERE, null, ex);
+//        }
 
         return rv;
     }

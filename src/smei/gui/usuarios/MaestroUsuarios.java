@@ -200,7 +200,7 @@ public class MaestroUsuarios extends javax.swing.JInternalFrame {
     }
 
     private int getRolIndex(Usuario u) {
-        int id = u.getRol().getIdRol();
+        final int id = u.getRol().getIdRol();
 
         for (int i = 0; i < roles.size(); i++) {
             if (roles.get(i).getIdRol() == id) {

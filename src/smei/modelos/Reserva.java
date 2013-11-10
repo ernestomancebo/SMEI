@@ -21,7 +21,7 @@ public class Reserva {
     private Date fechaModificacion;
     private Date fechaInicio;
     private Date fechaFin;
-    private boolean habilitada;
+    private EstadoReservacion estado;
 
     public Integer getId() {
         return id;
@@ -95,11 +95,11 @@ public class Reserva {
         this.descripcion = descripcion;
     }
 
-    public boolean isHabilitada() {
-        return habilitada;
+    public EstadoReservacion getEstado() {
+        return estado;
     }
 
-    public void setHabilitada(boolean habilitada) {
-        this.habilitada = habilitada;
+    public void setEstado(EstadoReservacion estado) {
+        this.estado = estado;
     }
 }

@@ -267,7 +267,6 @@ public class GUIUtil {
     public static Object[] crearFilaReserva(Reserva r) {
         return new Object[]{false, r.getId(), r.getUsuario().getNombre(),
             Util.getFechaFromDate(r.getFechaInicio()), Util.getHoraFromDate(r.getFechaInicio()) + " - "
-            + Util.getHoraFromDate(r.getFechaFin()), r.getEspacio().getNombre(),
-            (r.isHabilitada()) ? "Sí" : "No"};
+            + Util.getHoraFromDate(r.getFechaFin()), r.getEspacio().getNombre(), r.getEstado().getNombre()};
     }
 }

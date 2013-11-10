@@ -10,10 +10,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import smei.modelos.Espacio;
+import smei.modelos.EstadoReservacion;
 import smei.modelos.Reserva;
 import smei.modelos.Usuario;
 import smei.util.GUIUtil;
@@ -61,8 +63,8 @@ public class DAOReservas {
 
         try {
             pstm = conn.prepareStatement("select r.idReservacion, u.idUsuario, u.nombre, e.idEspacio, e.nombre, r.cantidadDePersonas, "
-                    + "r.descripcion, r.fechaInicio, r.fechaFin, r.habilitada from reservaciones r, espacios e, usuario u "
-                    + "where u.idUsuario = r.idUsuario and e.idEspacio = r.idEspacio");
+                    + "r.descripcion, r.fechaInicio, r.fechaFin, r.idEstado, es.nombre from reservaciones r, espacios e, usuario u, estados_reservaciones es "
+                    + "where u.idUsuario = r.idUsuario and e.idEspacio = r.idEspacio and es.idEstado = r.idEstado");
             rs = pstm.executeQuery();
 
             while (rs.next()) {
@@ -74,13 +76,17 @@ public class DAOReservas {
                 e.setId(rs.getInt("idEspacio"));
                 e.setNombre(rs.getString(5));
 
+                EstadoReservacion es = new EstadoReservacion();
+                es.setIdEstado(rs.getInt("idEstado"));
+                es.setNombre(rs.getString(11));
+
                 Reserva r = new Reserva();
                 r.setId(rs.getInt("idReservacion"));
                 r.setCantPersonas(rs.getInt("cantidadDePersonas"));
                 r.setDescripcion(rs.getString("descripcion"));
-                r.setFechaInicio(rs.getDate("fechaInicio"));
-                r.setFechaFin(rs.getDate("fechaFin"));
-                r.setHabilitada(rs.getBoolean("habilitada"));
+                r.setFechaInicio(new Date(rs.getTimestamp("fechaInicio").getTime()));
+                r.setFechaFin(new Date(rs.getTimestamp("fechaFin").getTime()));
+                r.setEstado(es);
                 r.setUsuario(u);
                 r.setEspacio(e);
 

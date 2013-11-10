@@ -5,6 +5,7 @@
 package smei.gui.reservas;
 
 import java.util.ArrayList;
+import java.util.Date;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.SpinnerListModel;
 import javax.swing.SpinnerNumberModel;
@@ -22,7 +23,7 @@ import smei.util.Util;
  * @author Ernesto
  */
 public final class MaestroReservas extends javax.swing.JInternalFrame {
-    
+
     private static MaestroReservas instancia = new MaestroReservas();
     private DAOReservas daoReserva = new DAOReservas();
     private ArrayList<Espacio> modeloEspacios;
@@ -35,11 +36,11 @@ public final class MaestroReservas extends javax.swing.JInternalFrame {
         initComponents();
         initComponentsValues();
     }
-    
+
     public static MaestroReservas getInstance() {
         return instancia;
     }
-    
+
     public void initComponentsValues() {
         // SpinnerModel modeloHora = new SpinnerNumberModel(1, 1, 12, 1);
         spnHoraI.setModel(new SpinnerNumberModel(1, 1, 12, 1));
@@ -48,7 +49,7 @@ public final class MaestroReservas extends javax.swing.JInternalFrame {
         // SpinnerModel modeloMint = new SpinnerNumberModel(1, 0, 59, 5);
         spnMinutoI.setModel(new SpinnerNumberModel(0, 0, 59, 5));
         spnMinutoF.setModel(new SpinnerNumberModel(0, 0, 59, 5));
-        
+
         String[] tandaList = {"AM", "PM"};
         // SpinnerListModel modelotanda = new SpinnerListModel(tandaList);
         spnTandaI.setModel(new SpinnerListModel(tandaList));
@@ -56,55 +57,82 @@ public final class MaestroReservas extends javax.swing.JInternalFrame {
 
         //Aceptar y Modificar deben estar en el mismo lugar!
         btnModificar.setLocation(btnAceptar.getLocation());
-        
+
         GUIUtil.setCalendarChooserAfterToday(dChooserFecha.getJCalendar());
         this.setSize(380, 400);
     }
-    
-    private void llenarReserva() {
+
+    private boolean llenarReserva() {
+        Date fInicio = Util.crearDateConHora(dChooserFecha.getDate(), Util.buildHoraFromStrings(
+                String.valueOf(spnHoraI.getValue()), String.valueOf(spnMinutoI.getValue()), (String) spnTandaI.getValue()));
+        Date fFin = Util.crearDateConHora(dChooserFecha.getDate(), Util.buildHoraFromStrings(
+                String.valueOf(spnHoraF.getValue()), String.valueOf(spnMinutoF.getValue()), (String) spnTandaF.getValue()));
+
+        System.out.println(
+                Util.buildHoraFromStrings(
+                String.valueOf(spnHoraI.getValue()), String.valueOf(spnMinutoI.getValue()), (String) spnTandaI.getValue()));
+
+        System.out.println(fInicio + " - " + fFin);
+        if (fInicio.after(fFin) || fInicio.equals(fFin)) {
+            return false;
+        }
+
+        return true;
     }
-    
-    public void cargarDataFromID(Reserva reserva) {
+
+    public void cargarData(Reserva reserva) {
         this.reserva = reserva;
-        
-        GUIUtil.asignarTitulo(getInstance(), "Reserva " + reserva);
+
+        llenarCamposFromReserva(reserva);
+        GUIUtil.asignarTitulo(getInstance(), "Reserva " + reserva.getId());
     }
-    
+
     private void llenarCamposFromReserva(Reserva r) {
         String[] hInicio = Util.getHoraDesdeFecha(r.getFechaInicio());
         String[] hFin = Util.getHoraDesdeFecha(r.getFechaFin());
-        
+
         dChooserFecha.setDate(r.getFechaInicio());
 
         //Hora de inicio
-        spnHoraI.setValue(hInicio[0]);
-        spnMinutoI.setValue(hInicio[1]);
-        spnTandaI.setValue(hInicio[3]);
+        spnHoraI.setValue(new Integer(hInicio[0]));
+        spnMinutoI.setValue(new Integer(hInicio[1]));
+        spnTandaI.setValue(hInicio[2]);
 
         //Hora fin
-        spnHoraF.setValue(hFin[0]);
-        spnMinutoF.setValue(hFin[1]);
-        spnTandaF.setValue(hFin[3]);
+        spnHoraF.setValue(new Integer(hFin[0]));
+        spnMinutoF.setValue(new Integer(hFin[1]));
+        spnTandaF.setValue(hFin[2]);
+
+        txtCantPersonas.setText(String.valueOf(r.getCantPersonas()));
+        txtDesc.setText(r.getDescripcion());
 
         //Llenando Combo Box
-        llenarEspacios(r, null);
-        
-        txtCantPersonas.setText(String.valueOf(r.getCantPersonas()));
-        
-        txtDesc.setText(r.getDescripcion());
+        llenarCMBEspacios(r);
+        cbbLugar.setSelectedIndex(getEspacioIndex(r));
     }
-    
-    private void llenarEspacios(Reserva r, Usuario u) {
+
+    private void llenarCMBEspacios(Reserva r) {
         //If reserva == null; 
-        modeloEspacios = new DAOEspacio().getEspaciosDisponiblesParaReserva(
-                r.getCantPersonas(), 1, r.getFechaInicio(), r.getFechaFin());
+
+        modeloEspacios = new DAOEspacio().getEspaciosDisponiblesParaReserva(r);
         String[] values = new String[modeloEspacios.size()];
-        
+
         for (int i = 0; i < modeloEspacios.size(); i++) {
             values[i] = modeloEspacios.get(i).getNombre();
         }
-        
+
         cbbLugar.setModel(new DefaultComboBoxModel(values));
+    }
+
+    private int getEspacioIndex(Reserva r) {
+        final int id = r.getEspacio().getId();
+
+        for (int i = 0; i < modeloEspacios.size(); i++) {
+            if (modeloEspacios.get(i).getId() == id) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     /**
@@ -207,6 +235,11 @@ public final class MaestroReservas extends javax.swing.JInternalFrame {
         getContentPane().add(btnLimpiar, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 330, 75, -1));
 
         btnAceptar.setText("Aceptar");
+        btnAceptar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAceptarActionPerformed(evt);
+            }
+        });
         getContentPane().add(btnAceptar, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 330, 75, -1));
 
         btnModificar.setText("Modificar");
@@ -225,12 +258,12 @@ public final class MaestroReservas extends javax.swing.JInternalFrame {
 //        GUIUtil.habilitarBtnSalir(getInstance());
         GUIUtil.habilitarEdicion(getInstance());
     }//GEN-LAST:event_btnModificarActionPerformed
-    
+
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
         GUIUtil.limpiarContenido(getInstance());
         this.setVisible(false);
     }//GEN-LAST:event_btnSalirActionPerformed
-    
+
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
         if (reserva == null) {
             GUIUtil.limpiarContenido(getInstance());
@@ -239,10 +272,14 @@ public final class MaestroReservas extends javax.swing.JInternalFrame {
             llenarCamposFromReserva(reserva);
         }
     }//GEN-LAST:event_btnLimpiarActionPerformed
-    
+
     private void txtCantPersonasKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCantPersonasKeyTyped
         Util.aceptaSoloNumeros(evt, evt.getKeyChar());
     }//GEN-LAST:event_txtCantPersonasKeyTyped
+
+    private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
+        llenarReserva();
+    }//GEN-LAST:event_btnAceptarActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAceptar;
     private javax.swing.JButton btnLimpiar;
