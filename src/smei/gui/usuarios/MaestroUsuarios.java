@@ -49,8 +49,9 @@ public class MaestroUsuarios extends javax.swing.JInternalFrame {
         }
 
         cmbRol.setModel(new DefaultComboBoxModel(values));
-        this.setSize(287, 266);
         btnModificar.setLocation(btnAceptar.getLocation());
+        chkHabilitado.setSelected(true);
+        this.setSize(287, 266);
     }
 
     public boolean llenarUsuario() {
@@ -210,6 +211,10 @@ public class MaestroUsuarios extends javax.swing.JInternalFrame {
         return -1;
     }
 
+    public void setUsuarioNull() {
+        usuario = null;
+    }
+
     private void chkHabilitadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkHabilitadoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_chkHabilitadoActionPerformed
@@ -222,6 +227,7 @@ public class MaestroUsuarios extends javax.swing.JInternalFrame {
 
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
         GUIUtil.limpiarContenido(getInstance());
+        usuario = null;
         this.setVisible(false);
     }//GEN-LAST:event_btnSalirActionPerformed
 
@@ -241,8 +247,13 @@ public class MaestroUsuarios extends javax.swing.JInternalFrame {
             } else {
                 usuario.setPassword(Util.generarClaveDeUsuario(usuario));
                 daoUsuario.insertarUsuario(usuario);
-            }
 
+                if (JOptionPane.showConfirmDialog(rootPane, "¿Desea ingresar un nuevo usuario?", "", JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION) {
+                    GUIUtil.limpiarContenido(getInstance());
+                    return;
+                }
+            }
+            GUIUtil.limpiarContenido(getInstance());
             this.setVisible(false);
         }
     }//GEN-LAST:event_btnAceptarActionPerformed

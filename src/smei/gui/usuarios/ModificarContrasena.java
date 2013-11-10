@@ -20,36 +20,36 @@ public class ModificarContrasena extends javax.swing.JInternalFrame {
      */
     private static ModificarContrasena instancia = new ModificarContrasena();
     private Usuario usuario = new Usuario();
-    
+
     private ModificarContrasena() {
         initComponents();
     }
-    
+
     public static ModificarContrasena getInstance() {
         return instancia;
     }
-    
+
     public void initializeValues() {
         this.setSize(248, 214);
     }
-    
+
     public void setUsuario(Usuario u) {
         this.usuario = u;
     }
-    
+
     public String validarCambio() {
         if (!usuario.getIdentificacionP().equals(txtIdentificacion.getText())) {
             txtIdentificacion.selectAll();
             txtIdentificacion.requestFocus();
-            return "Identificacion inválida.";
+            return "La identificacion no corresponde.";
         }
-        
+
         if (!usuario.getPassword().equals(txtContrasena.getText())) {
             txtContrasena.selectAll();
             txtContrasena.requestFocus();
-            return "Antigua contraseña inválida.";
+            return "La antigua contraseña no corresponde.";
         }
-        
+
         if (!txtNuevaContrasena.getText().isEmpty() && !txtNuevaContrasena.getText()
                 .equals(txtNuevaContrasenaConf.getText())) {
             txtNuevaContrasenaConf.setText("");
@@ -179,15 +179,16 @@ public class ModificarContrasena extends javax.swing.JInternalFrame {
         GUIUtil.limpiarContenido(getInstance());
         this.setVisible(false);
     }//GEN-LAST:event_btnSalirActionPerformed
-    
+
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
         GUIUtil.limpiarContenido(getInstance());
     }//GEN-LAST:event_btnLimpiarActionPerformed
-    
+
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         String msg = validarCambio();
         if (msg.isEmpty()) {
             System.out.println(new DAOUsuario().cambiarContrasena(usuario));
+            GUIUtil.limpiarContenido(getInstance());
         } else {
             JOptionPane.showMessageDialog(rootPane, msg);
         }

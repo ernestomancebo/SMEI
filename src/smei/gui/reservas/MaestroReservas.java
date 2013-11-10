@@ -4,7 +4,6 @@
  */
 package smei.gui.reservas;
 
-import com.sun.org.apache.bcel.internal.generic.CALOAD;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -15,7 +14,6 @@ import javax.swing.SpinnerNumberModel;
 import smei.dao.DAOEspacio;
 import smei.dao.DAOReservas;
 import smei.modelos.Espacio;
-import smei.modelos.EstadoReservacion;
 import smei.modelos.Reserva;
 import smei.modelos.Usuario;
 import smei.util.GUIUtil;
@@ -307,6 +305,7 @@ public final class MaestroReservas extends javax.swing.JInternalFrame {
 
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
         GUIUtil.limpiarContenido(getInstance());
+        reserva = null;
         this.setVisible(false);
     }//GEN-LAST:event_btnSalirActionPerformed
 
@@ -327,9 +326,16 @@ public final class MaestroReservas extends javax.swing.JInternalFrame {
         if (llenarReserva()) {
             if (reserva.getId() == null) {
                 daoReserva.insertarReserva(reserva);
+                if (JOptionPane.showConfirmDialog(rootPane, "¿Desea ingresar una nueva reserva?", "", JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION) {
+                    GUIUtil.limpiarContenido(getInstance());
+                    return;
+                }
             } else {
                 daoReserva.actualizarReserva(reserva);
+                reserva = null;
             }
+            GUIUtil.limpiarContenido(getInstance());
+            this.setVisible(false);
         }
     }//GEN-LAST:event_btnAceptarActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
