@@ -9,6 +9,7 @@ import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -68,30 +69,30 @@ public class Util {
         return new SimpleDateFormat("hh:mm a").format(d).split("(\\s|\\:)");
     }
 
-    public static String buildHoraFromStrings(String s1, String s2, String s3) {
-        DecimalFormat df = new DecimalFormat("00");
+    public static String[] getHoraDesdeString(String h) {
+        return h.split("(\\s|\\:)");
+    }
 
-        try {
-            df.parse(s1);
-            df.parse(s2);
-        } catch (ParseException ex) {
-            Logger.getLogger(Util.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    public static String buildHoraFromStrings(String s1, String s2, String s3) {
+        s1 = String.format("%2s", s1).replace(' ', '0');
+        s2 = String.format("%2s", s2).replace(' ', '0');
 
         return (s1 + ":" + s2 + " " + ((s3 != null) ? s3 : "")).trim();
     }
 
     public static Date crearDateConHora(Date d, String t) {
-        SimpleDateFormat df = new SimpleDateFormat("MM-dd-yyyy hh:mm a");
-        Date rv = new Date(d.getYear(), d.getMonth(), d.getDay());
+        Calendar cal = Calendar.getInstance();
 
-//        try {
-//            rv = df.parse(d.getYear() + "-" + d.getMonth() + "-" + d.getDay() + " " + t);
-//        } catch (ParseException ex) {
-//            Logger.getLogger(Util.class.getName()).log(Level.SEVERE, null, ex);
-//        }
+        //Asignando Fecha
+        cal.setTime(d);
 
-        return rv;
+        //Asignando Hora
+        String[] hora = Util.getHoraDesdeString(t);
+        cal.set(Calendar.HOUR, Integer.valueOf(hora[0]));
+        cal.set(Calendar.MINUTE, Integer.valueOf(hora[1]));
+        cal.set(Calendar.AM_PM, (hora[2].equals("AM") ? Calendar.AM : Calendar.PM));
+
+        return cal.getTime();
     }
 
     public static String getFechaFromDate(Date d) {

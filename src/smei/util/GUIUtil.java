@@ -5,6 +5,7 @@
 package smei.util;
 
 import com.toedter.calendar.JCalendar;
+import com.toedter.calendar.JDateChooser;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -192,13 +193,15 @@ public class GUIUtil {
 
     public static String validarCampos(Container container) {
         String rv = new String();
-        String value;
-        String txtName;
 
         for (Component c : container.getComponents()) {
+            if (c instanceof JComboBox || c instanceof JDateChooser) {
+                continue;
+            }
+
             if (c instanceof JTextComponent) {
-                value = ((JTextComponent) c).getText();
-                txtName = ((JTextComponent) c).getName();
+                String value = ((JTextComponent) c).getText();
+                String txtName = ((JTextComponent) c).getName();
 
                 if (!value.trim().isEmpty()) {
                     if (txtName.equals("Correo")) {

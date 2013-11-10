@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -30,32 +31,82 @@ public class DAOReservas {
     PreparedStatement pstm;
     ResultSet rs;
 
-    public void insertarReserva(Reserva reserva) {
-        System.out.println("Reserva " + reserva.getId() + " insertado");
-    }
+    public boolean insertarReserva(Reserva reserva) {
+        try {
+            int idEstado = 0;
+            pstm = conn.prepareStatement("select idEstado from estados_reservaciones where upper(nombre) = 'PENDIENTE'");
+            rs = pstm.executeQuery();
 
-    public void actualizarReserva(Reserva reserva) {
-        System.out.println("Reserva " + reserva.getId() + " actualizado");
-    }
+            if (rs.next()) {
+                idEstado = rs.getInt(1);
+            }
 
-    public void deshabilitarReservas(List<Integer> idReservas) {
-        for (Integer s : idReservas) {
-            System.out.println(s + " deshabilitado");
+            pstm = conn.prepareStatement("insert into reservaciones"
+                    + "(idUsuario, idEspacio, fechaCreacion, fechaModificacion, fechaInicio, fechaFin, cantidadDePersonas, descripcion, idEstado) "
+                    + "values(?, ?, sysdate(), sysdate(), ?, ?, ?, ?, ?)");
+            pstm.setInt(1, reserva.getUsuario().getIdUsuario());
+            pstm.setInt(2, reserva.getEspacio().getId());
+            pstm.setTimestamp(3, new Timestamp(reserva.getFechaInicio().getTime()));
+            pstm.setTimestamp(4, new Timestamp(reserva.getFechaFin().getTime()));
+            pstm.setInt(5, reserva.getCantPersonas());
+            pstm.setString(6, reserva.getDescripcion());
+            pstm.setInt(7, idEstado);
+
+            return pstm.execute();
+        } catch (SQLException ex) {
+            Logger.getLogger(DAOReservas.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            return false;
         }
     }
 
-    public Reserva getReserva() {
-        Reserva reserva = new Reserva();
-        reserva.setId(1);
-        return reserva;
+    public boolean actualizarReserva(Reserva reserva) {
+        try {
+            pstm = conn.prepareStatement("update reservaciones set "
+                    + "idEspacio = ?, fechaModificacion = ?, fechaInicio = ?, "
+                    + "fechaFin = ?, cantidadDePersonas = ?, descripcion = ? "
+                    + "where idReservacion = ?");
+
+            pstm.setInt(1, reserva.getEspacio().getId());
+            pstm.setTimestamp(2, new Timestamp(new Date().getTime()));
+            pstm.setTimestamp(3, new Timestamp(reserva.getFechaInicio().getTime()));
+            pstm.setTimestamp(4, new Timestamp(reserva.getFechaFin().getTime()));
+            pstm.setInt(5, reserva.getCantPersonas());
+            pstm.setString(6, reserva.getDescripcion());
+            pstm.setInt(7, reserva.getId());
+
+            return (pstm.executeUpdate() == 2);
+        } catch (SQLException ex) {
+            Logger.getLogger(DAOReservas.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            return false;
+        }
     }
 
-    public Reserva getReservaByID(Integer id) {
-        Reserva e = new Reserva();
+    public boolean deshabilitarReservas(List<Integer> idReservas) {
+        try {
+            int idCancelado = 0;
+            pstm = conn.prepareStatement("select idEstado from estados_reservaciones where upper(nombre) = 'CANCELADA'");
+            rs = pstm.executeQuery();
 
-        e.setId(new Integer((int) id));
+            if (rs.next()) {
+                idCancelado = rs.getInt(1);
+            }
 
-        return e;
+            pstm = conn.prepareStatement("update reservaciones set idEstado = ? where idReservacion = ?");
+            pstm.setInt(1, idCancelado);
+
+            for (Integer s : idReservas) {
+                pstm.setInt(2, s);
+                if ((pstm.executeUpdate() != 2)) {
+                    return false;
+                }
+            }
+            return true;
+        } catch (SQLException ex) {
+            Logger.getLogger(DAOReservas.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
     }
 
     public ArrayList<Reserva> getReservas() {
