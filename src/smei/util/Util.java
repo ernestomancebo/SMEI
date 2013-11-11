@@ -5,14 +5,9 @@
 package smei.util;
 
 import java.awt.event.KeyEvent;
-import java.text.DateFormat;
-import java.text.DecimalFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import smei.modelos.Usuario;
 
@@ -28,11 +23,24 @@ public class Util {
     private static final Pattern MATRICULA_PATTERN = Pattern.compile("^[0-9]{4}-[0-9]{4}$");
     private static final Pattern TELEFONO_PATTERN = Pattern.compile("^[0-9]{3}-[0-9]{3}-[0-9]{4}$");
 
-    public static void aceptaSoloNumeros(KeyEvent evt, char c) {
+    public static boolean aceptaSoloNumeros(KeyEvent evt, char c) {
         if (!Character.isDigit(c) && c != KeyEvent.VK_BACK_SPACE) {
             evt.consume();
+            return true;
         }
+        return false;
+    }
 
+    public static void limitaLongitud(KeyEvent evt, String str, int l) {
+        if (str.length() == l) {
+            evt.consume();
+        }
+    }
+
+    public static void aceptaSoloTelefono(KeyEvent evt, char c) {
+        if (c != '-' && aceptaSoloNumeros(evt, c)) {
+            evt.consume();
+        }
     }
 
     public static boolean validateStringWithPattern(String strToValidate, Pattern pattern) {

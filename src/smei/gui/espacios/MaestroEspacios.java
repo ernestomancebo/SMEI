@@ -29,7 +29,7 @@ public class MaestroEspacios extends javax.swing.JInternalFrame {
         initializeValues();
     }
 
-    public static MaestroEspacios getInstance() {        
+    public static MaestroEspacios getInstance() {
         return instancia;
     }
 
@@ -128,6 +128,11 @@ public class MaestroEspacios extends javax.swing.JInternalFrame {
         txtDescripcion.setRows(5);
         txtDescripcion.setWrapStyleWord(true);
         txtDescripcion.setName(" "); // NOI18N
+        txtDescripcion.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtDescripcionKeyTyped(evt);
+            }
+        });
         jScrollPane1.setViewportView(txtDescripcion);
 
         getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 70, -1, -1));
@@ -209,6 +214,9 @@ public class MaestroEspacios extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_btnAceptarActionPerformed
 
+//    private static void setEspacioToNull() {
+//        espacio = null;
+//    }
     private void txtLimitePKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtLimitePKeyTyped
         Util.aceptaSoloNumeros(evt, evt.getKeyChar());
     }//GEN-LAST:event_txtLimitePKeyTyped
@@ -216,6 +224,10 @@ public class MaestroEspacios extends javax.swing.JInternalFrame {
     private void txtLimitePActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtLimitePActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtLimitePActionPerformed
+
+    private void txtDescripcionKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDescripcionKeyTyped
+        Util.limitaLongitud(evt, txtDescripcion.getText(), 200);
+    }//GEN-LAST:event_txtDescripcionKeyTyped
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAceptar;
     private javax.swing.JButton btnLimpiar;

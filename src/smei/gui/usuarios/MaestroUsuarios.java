@@ -37,6 +37,7 @@ public class MaestroUsuarios extends javax.swing.JInternalFrame {
     }
 
     public static MaestroUsuarios getInstance() {
+//        setUsuarioNull();
         return instancia;
     }
 
@@ -180,6 +181,11 @@ public class MaestroUsuarios extends javax.swing.JInternalFrame {
         getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 110, -1, -1));
 
         txtTelefono.setName("Telefono"); // NOI18N
+        txtTelefono.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtTelefonoKeyTyped(evt);
+            }
+        });
         getContentPane().add(txtTelefono, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 110, 130, -1));
 
         pack();
@@ -211,10 +217,9 @@ public class MaestroUsuarios extends javax.swing.JInternalFrame {
         return -1;
     }
 
-    public void setUsuarioNull() {
-        usuario = null;
-    }
-
+//    public static void setUsuarioNull() {
+//        usuario = null;
+//    }
     private void chkHabilitadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkHabilitadoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_chkHabilitadoActionPerformed
@@ -257,6 +262,10 @@ public class MaestroUsuarios extends javax.swing.JInternalFrame {
             this.setVisible(false);
         }
     }//GEN-LAST:event_btnAceptarActionPerformed
+
+    private void txtTelefonoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTelefonoKeyTyped
+        Util.aceptaSoloTelefono(evt, evt.getKeyChar());
+    }//GEN-LAST:event_txtTelefonoKeyTyped
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAceptar;
     private javax.swing.JButton btnLimpiar;

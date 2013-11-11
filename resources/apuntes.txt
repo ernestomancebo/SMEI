@@ -1,49 +1,23 @@
-* Validar que se ingrese solo numeros
-Validar la hora de la reservacion
-Validar que la fecha sea igual o mayor a la actual
-
-
-Buscar reservaciones
-
-Contenido de la tabla:
-
-Check
-idReservacion
-Fecha
-descripcion
-hora inicio - hora fin
-Lugar
-Estado
-
-*Al doble click abir para visualizar y modificar
+Pendiente: 
 
 Texto de busqueda (inteligente)
 Buscar por id, fecha, lugar, estado
 
+Seleccionar si habilitar o deshabilitar
+recargar espacios
+Cuando le da a modificar, luego a nuevo y limpiar, recarga el objeto a modificar
 
-Check:
-*Si se selecciona -> Habilitar el boton de cancelar reserva
-*Si se desselecciona -> evaluar si existe un check disponible, si no, deshabilita el boton cancelar reserva;
-(si si, rompe el bucle)
-
+job que cambie estado de reservaciones
 Futuro:
     Agregar en reservacion:
 
         Entrega de reservacion:
         Buscar por No. de reserva y cambiar a 'en curso'
 
-Usuario:
-Nombre
-Apellido
-Identificacion (cedula/pasaporte)
-Rol
-Esta habilitado   
-
 
 Historico:
 
 Debe mostrar las reservaciones que ya pasaron
-
 
 Tendencias:
 

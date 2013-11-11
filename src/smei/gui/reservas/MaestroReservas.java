@@ -4,11 +4,14 @@
  */
 package smei.gui.reservas;
 
+import java.awt.Component;
+import java.awt.Container;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
+import javax.swing.JSpinner;
 import javax.swing.SpinnerListModel;
 import javax.swing.SpinnerNumberModel;
 import smei.dao.DAOEspacio;
@@ -39,6 +42,7 @@ public final class MaestroReservas extends javax.swing.JInternalFrame {
     }
 
     public static MaestroReservas getInstance() {
+//        setReservaToNull();
         return instancia;
     }
 
@@ -60,12 +64,31 @@ public final class MaestroReservas extends javax.swing.JInternalFrame {
         btnModificar.setLocation(btnAceptar.getLocation());
 
         GUIUtil.setCalendarChooserAfterToday(dChooserFecha.getJCalendar());
+
+
+        agregarEventoSpinners(this);
+
         this.setSize(380, 400);
     }
 
-    private boolean llenarReserva() {
+    private void agregarEventoSpinners(Container con) {
+        for (Component c : con.getComponents()) {
+            if (c instanceof JSpinner) {
+                ((JSpinner) c).addChangeListener(new javax.swing.event.ChangeListener() {
+                    @Override
+                    public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                        llenarCMBEspaciosEnVivo();
+                    }
+                });
+            } else if (c instanceof Container) {
+                agregarEventoSpinners((Container) c);
+            }
+        }
+    }
 
+    private boolean llenarReserva() {
         String validar = GUIUtil.validarCampos(getInstance());
+
         if (!validar.isEmpty()) {
             JOptionPane.showMessageDialog(rootPane, "Verificar " + validar.replace('_', ' '));
             return false;
@@ -106,7 +129,7 @@ public final class MaestroReservas extends javax.swing.JInternalFrame {
         u.setIdUsuario(1);
 
         Espacio e = new Espacio();
-        e.setId(1);
+        e.setId(modeloEspacios.get(cbbLugar.getSelectedIndex()).getId());
 
         reserva.setUsuario(u);
         reserva.setEspacio(e);
@@ -148,11 +171,11 @@ public final class MaestroReservas extends javax.swing.JInternalFrame {
         txtDesc.setText(r.getDescripcion());
 
         //Llenando Combo Box
-        llenarCMBEspacios(r);
+        llenarCMBEspaciosFromReserva(reserva);
         cbbLugar.setSelectedIndex(getEspacioIndex(r));
     }
 
-    private void llenarCMBEspacios(Reserva r) {
+    private void llenarCMBEspaciosFromReserva(Reserva r) {
         //If reserva == null; 
 
         modeloEspacios = new DAOEspacio().getEspaciosDisponiblesParaReserva(r);
@@ -163,6 +186,33 @@ public final class MaestroReservas extends javax.swing.JInternalFrame {
         }
 
         cbbLugar.setModel(new DefaultComboBoxModel(values));
+    }
+
+    private void llenarCMBEspaciosEnVivo() {
+        Reserva r = new Reserva();
+
+        Date fecha = dChooserFecha.getDate();
+        Integer cant = null;
+
+        if (!txtCantPersonas.getText().trim().isEmpty()) {
+            cant = Integer.valueOf(txtCantPersonas.getText());
+        }
+
+        if (fecha == null || cant == null) {
+            return;
+        }
+
+        Usuario u = new Usuario();
+        u.setIdUsuario(1);
+
+        r.setUsuario(u);
+        r.setFechaInicio(Util.crearDateConHora(fecha, Util.buildHoraFromStrings(
+                String.valueOf(spnHoraI.getValue()), String.valueOf(spnMinutoI.getValue()), (String) spnTandaI.getValue())));
+        r.setFechaFin(Util.crearDateConHora(fecha, Util.buildHoraFromStrings(
+                String.valueOf(spnHoraF.getValue()), String.valueOf(spnMinutoF.getValue()), (String) spnTandaF.getValue())));
+        r.setCantPersonas(cant);
+
+        llenarCMBEspaciosFromReserva(r);
     }
 
     private int getEspacioIndex(Reserva r) {
@@ -176,6 +226,9 @@ public final class MaestroReservas extends javax.swing.JInternalFrame {
         return -1;
     }
 
+//    public static void setReservaToNull() {
+//        reserva = null;
+//    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -213,10 +266,19 @@ public final class MaestroReservas extends javax.swing.JInternalFrame {
 
         cbbLugar.setName(""); // NOI18N
         getContentPane().add(cbbLugar, new org.netbeans.lib.awtextra.AbsoluteConstraints(143, 183, 186, -1));
+
+        dChooserFecha.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                dChooserFechaPropertyChange(evt);
+            }
+        });
         getContentPane().add(dChooserFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(143, 38, 186, -1));
 
         txtCantPersonas.setName("Cantidad_de_Personas"); // NOI18N
         txtCantPersonas.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtCantPersonasKeyReleased(evt);
+            }
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtCantPersonasKeyTyped(evt);
             }
@@ -250,6 +312,11 @@ public final class MaestroReservas extends javax.swing.JInternalFrame {
         txtDesc.setRows(5);
         txtDesc.setWrapStyleWord(true);
         txtDesc.setName("Descripcion"); // NOI18N
+        txtDesc.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtDescKeyTyped(evt);
+            }
+        });
         jScrollPane1.setViewportView(txtDesc);
 
         getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(143, 221, 186, -1));
@@ -303,12 +370,6 @@ public final class MaestroReservas extends javax.swing.JInternalFrame {
         GUIUtil.habilitarEdicion(getInstance());
     }//GEN-LAST:event_btnModificarActionPerformed
 
-    private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
-        GUIUtil.limpiarContenido(getInstance());
-        reserva = null;
-        this.setVisible(false);
-    }//GEN-LAST:event_btnSalirActionPerformed
-
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
         if (reserva == null) {
             GUIUtil.limpiarContenido(getInstance());
@@ -338,6 +399,24 @@ public final class MaestroReservas extends javax.swing.JInternalFrame {
             this.setVisible(false);
         }
     }//GEN-LAST:event_btnAceptarActionPerformed
+
+    private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
+        GUIUtil.limpiarContenido(getInstance());
+        reserva = null;
+        this.setVisible(false);
+    }//GEN-LAST:event_btnSalirActionPerformed
+
+    private void dChooserFechaPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_dChooserFechaPropertyChange
+        llenarCMBEspaciosEnVivo();
+    }//GEN-LAST:event_dChooserFechaPropertyChange
+
+    private void txtCantPersonasKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCantPersonasKeyReleased
+        llenarCMBEspaciosEnVivo();
+    }//GEN-LAST:event_txtCantPersonasKeyReleased
+
+    private void txtDescKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDescKeyTyped
+        Util.limitaLongitud(evt, txtDesc.getText(), 200);
+    }//GEN-LAST:event_txtDescKeyTyped
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAceptar;
     private javax.swing.JButton btnLimpiar;
