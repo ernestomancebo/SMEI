@@ -12,6 +12,7 @@ import javax.swing.UIManager;
 import smei.dao.DAOUsuario;
 import smei.gui.espacios.MaestroEspacios;
 import smei.gui.espacios.VisualizadorDeEspacios;
+import smei.gui.historico.MaestroTendencia;
 import smei.gui.reservas.MaestroReservas;
 import smei.gui.reservas.VisualizadorDeReservas;
 import smei.gui.usuarios.MaestroUsuarios;
@@ -153,6 +154,11 @@ public class Principal extends javax.swing.JFrame {
         jLinkBtnTendReser.setText("Tendencias Reservaciones");
         jLinkBtnTendReser.setMaximumSize(new java.awt.Dimension(112, 22));
         jLinkBtnTendReser.setMinimumSize(new java.awt.Dimension(112, 22));
+        jLinkBtnTendReser.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jLinkBtnTendReserActionPerformed(evt);
+            }
+        });
 
         jLinkBtnConsHisto.setText("Consultar Historico Resvaciones");
         jLinkBtnConsHisto.setMaximumSize(new java.awt.Dimension(112, 22));
@@ -366,6 +372,11 @@ public class Principal extends javax.swing.JFrame {
         ModificarContrasena.getInstance().setUsuario(usuario);
         agregarMaestroInternalFrame("Modificar Contraseña");
     }//GEN-LAST:event_jLinkBtnModContrActionPerformed
+
+    private void jLinkBtnTendReserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jLinkBtnTendReserActionPerformed
+        activeFrame = MaestroTendencia.getInstance();
+        agregarMaestroInternalFrame("Reportes");
+    }//GEN-LAST:event_jLinkBtnTendReserActionPerformed
 
     private void agregarMaestroInternalFrame(String titulo) {
         GUIUtil.addFrameToDesktopPanel(PrincipalDesktopPane, activeFrame);

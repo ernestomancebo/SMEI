@@ -4,6 +4,9 @@
  */
 package smei.gui.historico;
 
+import java.awt.event.ActionEvent;
+import java.util.ArrayList;
+
 /**
  *
  * @author Ernesto
@@ -13,10 +16,81 @@ public class MaestroTendencia extends javax.swing.JInternalFrame {
     /**
      * Creates new form MaestroTendencia
      */
-    public MaestroTendencia() {
+    private static MaestroTendencia instancia = new MaestroTendencia();
+
+    private MaestroTendencia() {
         initComponents();
+        initializeValues();
     }
 
+    public static MaestroTendencia getInstance() {
+        return instancia;
+    }
+
+    public void initializeValues() {
+        //Registrando el grupo de Entidades
+        grpEntidades.add(rbtnReserva);
+        grpEntidades.add(rbtnEspacio);
+        grpEntidades.add(rbtnUsuario);
+
+        //Registrando el grupo de Tipo de reporte
+        grpTipo.add(rbtnRegistro);
+        grpTipo.add(rbtnTendencia);
+
+        //Seleccionando las opciones 
+        rbtnReserva.setSelected(true);
+        rbtnRegistro.setSelected(true);
+
+        this.setSize(297, 193);
+    }
+
+    private void cambiarEstadoCheckBoxes(boolean b) {
+        chkCompletada.setVisible(b);
+        chkPendiente.setVisible(b);
+        chkCancelada.setVisible(b);
+
+        rbtnTendencia.setVisible(!b);
+    }
+
+    private void cambiarEstadoAntiguedad(boolean b) {
+        spnTiempo.setVisible(b);
+        jLabel1.setVisible(b);
+    }
+
+    private void esconderCheckBoxes() {
+        cambiarEstadoCheckBoxes(false);
+    }
+
+    private void mostrarCheckBoxes() {
+        cambiarEstadoCheckBoxes(true);
+    }
+
+    private void esconderAntiguedad() {
+        cambiarEstadoAntiguedad(false);
+    }
+
+    private void mostrarAntiguedad() {
+        cambiarEstadoAntiguedad(true);
+    }
+
+    private void verificarSiMuestraCheckBoxes() {
+        if (rbtnReserva.isSelected()) {
+            rbtnRegistro.setSelected(true);
+            mostrarCheckBoxes();
+        } else {
+            esconderCheckBoxes();
+        }
+    }
+
+    private void verificarSiMuestraAntiguedad() {
+        if (!rbtnReserva.isSelected() && rbtnTendencia.isSelected()) {
+            mostrarAntiguedad();
+        } else {
+            esconderAntiguedad();
+        }
+    }
+
+//    private void 
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -26,19 +100,165 @@ public class MaestroTendencia extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 394, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 274, Short.MAX_VALUE)
-        );
+        grpEntidades = new javax.swing.ButtonGroup();
+        grpTipo = new javax.swing.ButtonGroup();
+        rbtnReserva = new javax.swing.JRadioButton();
+        rbtnEspacio = new javax.swing.JRadioButton();
+        rbtnUsuario = new javax.swing.JRadioButton();
+        jSeparator1 = new javax.swing.JSeparator();
+        rbtnRegistro = new javax.swing.JRadioButton();
+        rbtnTendencia = new javax.swing.JRadioButton();
+        jSeparator2 = new javax.swing.JSeparator();
+        chkCompletada = new javax.swing.JCheckBox();
+        chkPendiente = new javax.swing.JCheckBox();
+        chkCancelada = new javax.swing.JCheckBox();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
+        spnTiempo = new javax.swing.JSpinner();
+        jLabel1 = new javax.swing.JLabel();
+
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        rbtnReserva.setText("Reservaciones");
+        rbtnReserva.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                rbtnReservaStateChanged(evt);
+            }
+        });
+        getContentPane().add(rbtnReserva, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 7, -1, -1));
+
+        rbtnEspacio.setText("Espacios");
+        getContentPane().add(rbtnEspacio, new org.netbeans.lib.awtextra.AbsoluteConstraints(105, 7, -1, -1));
+
+        rbtnUsuario.setText("Usuarios");
+        getContentPane().add(rbtnUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(174, 7, -1, -1));
+        getContentPane().add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 37, 260, 10));
+
+        rbtnRegistro.setText("Histórico");
+        rbtnRegistro.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                rbtnRegistroStateChanged(evt);
+            }
+        });
+        getContentPane().add(rbtnRegistro, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 49, -1, -1));
+
+        rbtnTendencia.setText("Tendencia");
+        rbtnTendencia.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                rbtnTendenciaStateChanged(evt);
+            }
+        });
+        getContentPane().add(rbtnTendencia, new org.netbeans.lib.awtextra.AbsoluteConstraints(77, 49, -1, -1));
+        getContentPane().add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 79, 260, 10));
+
+        chkCompletada.setText("Completadas");
+        getContentPane().add(chkCompletada, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 91, -1, -1));
+
+        chkPendiente.setText("Pendientes");
+        getContentPane().add(chkPendiente, new org.netbeans.lib.awtextra.AbsoluteConstraints(97, 91, -1, -1));
+
+        chkCancelada.setText("Canceladas");
+        getContentPane().add(chkCancelada, new org.netbeans.lib.awtextra.AbsoluteConstraints(176, 91, -1, -1));
+
+        jButton1.setText("Generar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 132, -1, -1));
+
+        jButton2.setText("Limpiar");
+        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(87, 132, 71, -1));
+
+        jButton3.setText("Salir");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(164, 132, 71, -1));
+
+        spnTiempo.setModel(new javax.swing.SpinnerNumberModel(1, 1, 12, 1));
+        getContentPane().add(spnTiempo, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 50, -1, -1));
+
+        jLabel1.setText("Mes/es");
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 50, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void rbtnRegistroStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_rbtnRegistroStateChanged
+        verificarSiMuestraCheckBoxes();
+        verificarSiMuestraAntiguedad();
+    }//GEN-LAST:event_rbtnRegistroStateChanged
+
+    private void rbtnReservaStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_rbtnReservaStateChanged
+        verificarSiMuestraCheckBoxes();
+        if (rbtnReserva.isSelected()) {
+            rbtnRegistro.setText("Histórico");
+        } else {
+            rbtnRegistro.setText("Registro");
+        }
+    }//GEN-LAST:event_rbtnReservaStateChanged
+
+    private void generarReporteReservaciones() {
+        ArrayList<String> estados = new ArrayList<String>();
+
+        estados.add((chkCompletada.isSelected()) ? chkCompletada.getText() : null);
+        estados.add((chkPendiente.isSelected()) ? chkPendiente.getText() : null);
+        estados.add((chkCancelada.isSelected()) ? chkCancelada.getText() : null);
+
+//        estados.remove(null);
+//        for (String s : estados) {
+//            System.out.print(s + " ");
+//        }
+        String titulo = new String();
+        for (int i = 0; i < estados.size(); i++) {
+            if (estados.get(i) == null) {
+                estados.remove(i);
+            }
+        }
+    }
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        getInstance().setVisible(false);
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void rbtnTendenciaStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_rbtnTendenciaStateChanged
+        verificarSiMuestraAntiguedad();
+    }//GEN-LAST:event_rbtnTendenciaStateChanged
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        generarReporteReservaciones();
+        if (rbtnReserva.isSelected()) {
+
+        } else if (rbtnEspacio.isSelected()) {
+
+        } else {
+
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JCheckBox chkCancelada;
+    private javax.swing.JCheckBox chkCompletada;
+    private javax.swing.JCheckBox chkPendiente;
+    private javax.swing.ButtonGroup grpEntidades;
+    private javax.swing.ButtonGroup grpTipo;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JRadioButton rbtnEspacio;
+    private javax.swing.JRadioButton rbtnRegistro;
+    private javax.swing.JRadioButton rbtnReserva;
+    private javax.swing.JRadioButton rbtnTendencia;
+    private javax.swing.JRadioButton rbtnUsuario;
+    private javax.swing.JSpinner spnTiempo;
     // End of variables declaration//GEN-END:variables
 }
