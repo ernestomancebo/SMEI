@@ -37,7 +37,23 @@ Espacios
 (idEspacio, nombre, limite de personas, descripcion, habilitado)
 
 Tendencias
-()
+
+Hecho!
+Consultar cantidad de reservaciones para un espacio (ordenar de mas reservado a menos)
+	select e.Nombre, (select count(r.idReservacion) from reservaciones r where r.idEspacio = e.idEspacio
+        and r.fechaInicio >= date_sub(curdate(), interval 3 month)) as `Catidad de Reservaciones`
+        (select count(r.idReservacion) from reservaciones r where r.fechaInicio >= date_sub(curdate(), interval 3 month)) as `Total de Reservaciones`
+		from espacios e order by 2 desc;
+
+Consultar por meses cantidad de reservaciones para cada espacio
+
+Hecho!
+Consultar usuarios con mas resrevaciones
+
+	select u.Nombre, (select  count(r.idReservacion) from reservaciones r where r.idEspacio = u.idUsuario
+        and r.fechaInicio >= date_sub(curdate(), interval 3 month)) as `Catidad de Reservaciones`,
+        (select count(r.idReservacion) from reservaciones r where r.fechaInicio >= date_sub(curdate(), interval 3 month)) as `Total de Reservaciones`
+		from usuario u order by 2 desc;
 
 ---
 
