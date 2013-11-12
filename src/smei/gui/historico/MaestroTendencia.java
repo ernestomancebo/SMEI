@@ -4,8 +4,13 @@
  */
 package smei.gui.historico;
 
-import java.awt.event.ActionEvent;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import smei.dao.DBConnection;
 
 /**
  *
@@ -17,6 +22,11 @@ public class MaestroTendencia extends javax.swing.JInternalFrame {
      * Creates new form MaestroTendencia
      */
     private static MaestroTendencia instancia = new MaestroTendencia();
+    private Map<String, String> mapeoReservaciones;
+    private Map<String, String> mapeoParametros;
+    private Connection conn = DBConnection.getConnection();
+    private PreparedStatement pstm;
+    private ResultSet rs;
 
     private MaestroTendencia() {
         initComponents();
@@ -41,7 +51,14 @@ public class MaestroTendencia extends javax.swing.JInternalFrame {
         rbtnReserva.setSelected(true);
         rbtnRegistro.setSelected(true);
 
+        mapeoReservaciones = new HashMap<String, String>();
+
+        mapeoReservaciones.put("Canceladas", "CANCELADA");
+        mapeoReservaciones.put("Completadas", "COMPLETADA");
+        mapeoReservaciones.put("Pendientes", "PENDIENTE");
+
         this.setSize(297, 193);
+
     }
 
     private void cambiarEstadoCheckBoxes(boolean b) {
@@ -54,7 +71,7 @@ public class MaestroTendencia extends javax.swing.JInternalFrame {
 
     private void cambiarEstadoAntiguedad(boolean b) {
         spnTiempo.setVisible(b);
-        jLabel1.setVisible(b);
+        lblMes.setVisible(b);
     }
 
     private void esconderCheckBoxes() {
@@ -83,7 +100,7 @@ public class MaestroTendencia extends javax.swing.JInternalFrame {
     }
 
     private void verificarSiMuestraAntiguedad() {
-        if (!rbtnReserva.isSelected() && rbtnTendencia.isSelected()) {
+        if ((!rbtnReserva.isSelected() && rbtnTendencia.isSelected()) || rbtnReserva.isSelected()) {
             mostrarAntiguedad();
         } else {
             esconderAntiguedad();
@@ -116,7 +133,7 @@ public class MaestroTendencia extends javax.swing.JInternalFrame {
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         spnTiempo = new javax.swing.JSpinner();
-        jLabel1 = new javax.swing.JLabel();
+        lblMes = new javax.swing.JLabel();
 
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -181,10 +198,15 @@ public class MaestroTendencia extends javax.swing.JInternalFrame {
         getContentPane().add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(164, 132, 71, -1));
 
         spnTiempo.setModel(new javax.swing.SpinnerNumberModel(1, 1, 12, 1));
+        spnTiempo.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                spnTiempoStateChanged(evt);
+            }
+        });
         getContentPane().add(spnTiempo, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 50, -1, -1));
 
-        jLabel1.setText("Mes/es");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 50, -1, -1));
+        lblMes.setText("Mes");
+        getContentPane().add(lblMes, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 50, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -196,6 +218,7 @@ public class MaestroTendencia extends javax.swing.JInternalFrame {
 
     private void rbtnReservaStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_rbtnReservaStateChanged
         verificarSiMuestraCheckBoxes();
+        verificarSiMuestraAntiguedad();
         if (rbtnReserva.isSelected()) {
             rbtnRegistro.setText("Histórico");
         } else {
@@ -210,15 +233,29 @@ public class MaestroTendencia extends javax.swing.JInternalFrame {
         estados.add((chkPendiente.isSelected()) ? chkPendiente.getText() : null);
         estados.add((chkCancelada.isSelected()) ? chkCancelada.getText() : null);
 
-//        estados.remove(null);
-//        for (String s : estados) {
-//            System.out.print(s + " ");
-//        }
-        String titulo = new String();
-        for (int i = 0; i < estados.size(); i++) {
+        for (byte i = 0; i < estados.size(); i++) {
             if (estados.get(i) == null) {
                 estados.remove(i);
             }
+        }
+
+        mapeoParametros = new HashMap<String, String>();
+        mapeoParametros.put("periodo", (String) spnTiempo.getValue());
+        mapeoParametros.put("idEstado1", new String());
+        mapeoParametros.put("idEstado2", new String());
+        mapeoParametros.put("idEstado3", new String());
+        mapeoParametros.put("reporte", new String());
+
+        /*
+         reporte
+         idEstado1
+         idEstado2
+         idEstado3
+         periodo
+         */
+
+        String titulo = new String();
+        for (byte i = 0; i < estados.size(); i++) {
         }
     }
 
@@ -233,15 +270,18 @@ public class MaestroTendencia extends javax.swing.JInternalFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         generarReporteReservaciones();
         if (rbtnReserva.isSelected()) {
-
         } else if (rbtnEspacio.isSelected()) {
-
         } else {
-
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
-
+    private void spnTiempoStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_spnTiempoStateChanged
+        if ((Integer) spnTiempo.getValue() > 1) {
+            lblMes.setText("Meses");
+        } else {
+            lblMes.setText("Mes");
+        }
+    }//GEN-LAST:event_spnTiempoStateChanged
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox chkCancelada;
     private javax.swing.JCheckBox chkCompletada;
@@ -251,9 +291,9 @@ public class MaestroTendencia extends javax.swing.JInternalFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JLabel lblMes;
     private javax.swing.JRadioButton rbtnEspacio;
     private javax.swing.JRadioButton rbtnRegistro;
     private javax.swing.JRadioButton rbtnReserva;
