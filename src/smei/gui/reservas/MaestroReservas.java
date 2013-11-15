@@ -65,7 +65,6 @@ public final class MaestroReservas extends javax.swing.JInternalFrame {
 
         GUIUtil.setCalendarChooserAfterToday(dChooserFecha.getJCalendar());
 
-
         agregarEventoSpinners(this);
 
         this.setSize(380, 400);
@@ -118,7 +117,6 @@ public final class MaestroReservas extends javax.swing.JInternalFrame {
 //            JOptionPane.showMessageDialog(rootPane, "Debe de seleccionar un espacio a reservar");
 //            return false;
 //        }
-
         //Es nuevo
         if (reserva == null) {
             reserva = new Reserva();
@@ -134,7 +132,6 @@ public final class MaestroReservas extends javax.swing.JInternalFrame {
         reserva.setUsuario(u);
         reserva.setEspacio(e);
 
-
         //OK
         reserva.setFechaInicio(fInicio);
         reserva.setFechaFin(fFin);
@@ -149,6 +146,14 @@ public final class MaestroReservas extends javax.swing.JInternalFrame {
 
         llenarCamposFromReserva(reserva);
         GUIUtil.asignarTitulo(getInstance(), "Reserva " + reserva.getId());
+
+        if (!this.reserva.getEstado().getNombre().equals("Pendiente")) {
+            btnModificar.setVisible(false);
+            btnModificar.setEnabled(false);
+        } else {
+            btnModificar.setVisible(true);
+            btnModificar.setEnabled(true);
+        }
     }
 
     private void llenarCamposFromReserva(Reserva r) {
