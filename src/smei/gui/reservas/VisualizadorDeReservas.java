@@ -50,7 +50,8 @@ public class VisualizadorDeReservas extends javax.swing.JInternalFrame {
                     JTable target = (JTable) e.getSource();
                     if (target.getSelectedColumn() != 0) {
                         MaestroReservas activeFrame = MaestroReservas.getInstance();
-                        
+                        activeFrame.cargarData(modeloReserva.get(target.getSelectedRow()));
+
                         GUIUtil.addFrameToDesktopPanel(getInstance().getDesktopPane(), activeFrame);
                         GUIUtil.deshabilitarEdicion(activeFrame);
                         if (esConsulta) {
@@ -58,15 +59,13 @@ public class VisualizadorDeReservas extends javax.swing.JInternalFrame {
                         } else {
                             GUIUtil.habilitarBtnModificar(activeFrame);
                         }
-                        
-                        activeFrame.cargarData(modeloReserva.get(target.getSelectedRow()));
+                        activeFrame.deshabilitarModReservasNoPendientes();
                     }
                 }
             }
         });
 
         //Add table Model
-
         cargarTablaReservas();
     }
 

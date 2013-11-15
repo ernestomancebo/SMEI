@@ -147,6 +147,9 @@ public final class MaestroReservas extends javax.swing.JInternalFrame {
         llenarCamposFromReserva(reserva);
         GUIUtil.asignarTitulo(getInstance(), "Reserva " + reserva.getId());
 
+    }
+
+    public void deshabilitarModReservasNoPendientes() {
         if (!this.reserva.getEstado().getNombre().equals("Pendiente")) {
             btnModificar.setVisible(false);
             btnModificar.setEnabled(false);
