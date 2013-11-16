@@ -50,8 +50,8 @@ public class VisualizadorDeReservas extends javax.swing.JInternalFrame {
                     JTable target = (JTable) e.getSource();
                     if (target.getSelectedColumn() != 0) {
                         MaestroReservas activeFrame = MaestroReservas.getInstance();
+                        activeFrame.limpiarData();
                         activeFrame.cargarData(modeloReserva.get(target.getSelectedRow()));
-
                         GUIUtil.addFrameToDesktopPanel(getInstance().getDesktopPane(), activeFrame);
                         GUIUtil.deshabilitarEdicion(activeFrame);
                         if (esConsulta) {
@@ -97,7 +97,6 @@ public class VisualizadorDeReservas extends javax.swing.JInternalFrame {
         tblVisualizarReserva = new javax.swing.JTable();
         btnCancelarReserva = new javax.swing.JButton();
         btnAceptar = new javax.swing.JButton();
-        btnExportarReserva = new javax.swing.JButton();
 
         addPropertyChangeListener(new java.beans.PropertyChangeListener() {
             public void propertyChange(java.beans.PropertyChangeEvent evt) {
@@ -135,13 +134,6 @@ public class VisualizadorDeReservas extends javax.swing.JInternalFrame {
             }
         });
 
-        btnExportarReserva.setText("Exportar Reservación");
-        btnExportarReserva.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnExportarReservaActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -157,9 +149,7 @@ public class VisualizadorDeReservas extends javax.swing.JInternalFrame {
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(btnCancelarReserva)
-                            .addComponent(btnExportarReserva))
+                        .addComponent(btnCancelarReserva)
                         .addGap(18, 18, 18)
                         .addComponent(btnAceptar)))
                 .addContainerGap())
@@ -176,9 +166,8 @@ public class VisualizadorDeReservas extends javax.swing.JInternalFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAceptar)
-                    .addComponent(btnExportarReserva)
                     .addComponent(btnCancelarReserva))
-                .addContainerGap(19, Short.MAX_VALUE))
+                .addContainerGap(27, Short.MAX_VALUE))
         );
 
         pack();
@@ -197,15 +186,6 @@ public class VisualizadorDeReservas extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_btnCancelarReservaActionPerformed
 
-    private void btnExportarReservaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportarReservaActionPerformed
-        ArrayList<Integer> values = getIdReservasSeleccionadas();
-        if (!values.isEmpty()) {
-            System.out.println("Exportando " + values);
-        } else {
-            JOptionPane.showMessageDialog(rootPane, "Favor seleccione al menos una reservacion para exportar", "Informacion", JOptionPane.INFORMATION_MESSAGE);
-        }
-    }//GEN-LAST:event_btnExportarReservaActionPerformed
-
     private void formPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_formPropertyChange
         cargarTablaReservas();
     }//GEN-LAST:event_formPropertyChange
@@ -220,7 +200,6 @@ public class VisualizadorDeReservas extends javax.swing.JInternalFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAceptar;
     private javax.swing.JButton btnCancelarReserva;
-    private javax.swing.JButton btnExportarReserva;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tblVisualizarReserva;

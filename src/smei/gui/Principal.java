@@ -322,12 +322,14 @@ public class Principal extends javax.swing.JFrame {
 
     private void jLinkBtnRegReservaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jLinkBtnRegReservaActionPerformed
         activeFrame = MaestroReservas.getInstance();
+        ((MaestroReservas) activeFrame).limpiarData();
         GUIUtil.limpiarContenido(activeFrame);
         agregarMaestroInternalFrame("Registrar Reservacion");
     }//GEN-LAST:event_jLinkBtnRegReservaActionPerformed
 
     private void jLinkBtnRegEspacioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jLinkBtnRegEspacioActionPerformed
         activeFrame = MaestroEspacios.getInstance();
+        ((MaestroEspacios) activeFrame).limpiarData();
         GUIUtil.limpiarContenido(activeFrame);
         agregarMaestroInternalFrame("Registrar Espacio");
     }//GEN-LAST:event_jLinkBtnRegEspacioActionPerformed
@@ -345,6 +347,7 @@ public class Principal extends javax.swing.JFrame {
 
     private void jLinkBtnRegUsuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jLinkBtnRegUsuActionPerformed
         activeFrame = MaestroUsuarios.getInstance();
+        ((MaestroUsuarios) activeFrame).limpiarData();
         GUIUtil.limpiarContenido(activeFrame);
         agregarVisualizadorInternalFrame("Registrar Usuario");
     }//GEN-LAST:event_jLinkBtnRegUsuActionPerformed

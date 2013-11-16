@@ -41,6 +41,7 @@ public class VisualizadorDeUsuarios extends javax.swing.JInternalFrame {
     }
 
     public void initializeValues() {
+
         this.setSize(726, 374);
 
         tblVisualizarUsuario.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -51,10 +52,9 @@ public class VisualizadorDeUsuarios extends javax.swing.JInternalFrame {
                     JTable target = (JTable) e.getSource();
                     if (target.getSelectedColumn() != 0) {
                         MaestroUsuarios activeFrame = MaestroUsuarios.getInstance();
-
+                        activeFrame.limpiarData();
                         activeFrame.cargarDataFromUsuario(daoUsuario.getUsuarioByID(
                                 modeloUsuario.get(target.getSelectedRow()).getIdUsuario()));
-
                         GUIUtil.addFrameToDesktopPanel(getInstance().getDesktopPane(), activeFrame);
                         GUIUtil.deshabilitarEdicion(activeFrame);
                         if (esConsulta) {
@@ -91,6 +91,7 @@ public class VisualizadorDeUsuarios extends javax.swing.JInternalFrame {
         tblVisualizarUsuario = new javax.swing.JTable();
         txtBuscar = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
+        chkDeshabilitar = new javax.swing.JCheckBox();
 
         setPreferredSize(new java.awt.Dimension(726, 374));
         addPropertyChangeListener(new java.beans.PropertyChangeListener() {
@@ -98,6 +99,7 @@ public class VisualizadorDeUsuarios extends javax.swing.JInternalFrame {
                 formPropertyChange(evt);
             }
         });
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         btnEliminar.setText("Deshabilitar Usuario");
         btnEliminar.addActionListener(new java.awt.event.ActionListener() {
@@ -105,6 +107,7 @@ public class VisualizadorDeUsuarios extends javax.swing.JInternalFrame {
                 btnEliminarActionPerformed(evt);
             }
         });
+        getContentPane().add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(484, 298, -1, -1));
 
         btnAceptar.setText("Aceptar");
         btnAceptar.addActionListener(new java.awt.event.ActionListener() {
@@ -112,6 +115,7 @@ public class VisualizadorDeUsuarios extends javax.swing.JInternalFrame {
                 btnAceptarActionPerformed(evt);
             }
         });
+        getContentPane().add(btnAceptar, new org.netbeans.lib.awtextra.AbsoluteConstraints(629, 298, -1, -1));
 
         tblVisualizarUsuario.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -127,43 +131,21 @@ public class VisualizadorDeUsuarios extends javax.swing.JInternalFrame {
         tblVisualizarUsuario.setToolTipText("");
         jScrollPane1.setViewportView(tblVisualizarUsuario);
 
-        jLabel1.setText("Buscar:");
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 49, 690, 238));
+        getContentPane().add(txtBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(64, 11, 189, -1));
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 690, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(18, 18, 18)
-                        .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(btnEliminar)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnAceptar)))
-                .addContainerGap())
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 238, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnEliminar)
-                    .addComponent(btnAceptar))
-                .addContainerGap(24, Short.MAX_VALUE))
-        );
+        jLabel1.setText("Buscar:");
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 14, -1, -1));
+
+        chkDeshabilitar.setSelected(true);
+        chkDeshabilitar.setText("Deshabilitar");
+        chkDeshabilitar.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+        chkDeshabilitar.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                chkDeshabilitarPropertyChange(evt);
+            }
+        });
+        getContentPane().add(chkDeshabilitar, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 300, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -176,10 +158,15 @@ public class VisualizadorDeUsuarios extends javax.swing.JInternalFrame {
         }
 
         if (!values.isEmpty()) {
-            daoUsuario.deshabilitarUsuarios(values);
+            if (chkDeshabilitar.isSelected()) {
+                daoUsuario.deshabilitarUsuarios(values);
+            } else {
+                daoUsuario.habilitarUsuarios(values);
+            }
             cargarTabla();
         } else {
-            JOptionPane.showMessageDialog(rootPane, "Favor seleccione al menos un usuario para deshabilitar", "Informacion", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(rootPane, "Favor seleccione al menos un usuario para " + ((chkDeshabilitar.isSelected()) ? "deshabilitar" : "habilitar"),
+                    "Informacion", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_btnEliminarActionPerformed
 
@@ -190,9 +177,19 @@ public class VisualizadorDeUsuarios extends javax.swing.JInternalFrame {
     private void formPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_formPropertyChange
         cargarTabla();
     }//GEN-LAST:event_formPropertyChange
+
+    private void chkDeshabilitarPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_chkDeshabilitarPropertyChange
+        if (chkDeshabilitar.isSelected()) {
+            btnEliminar.setText("Deshabilitar Usuario");
+        } else {
+            btnEliminar.setText("Habilitar Usuario");
+        }
+        btnEliminar.setSize(127, 23);
+    }//GEN-LAST:event_chkDeshabilitarPropertyChange
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAceptar;
     private javax.swing.JButton btnEliminar;
+    private javax.swing.JCheckBox chkDeshabilitar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tblVisualizarUsuario;

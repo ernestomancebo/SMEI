@@ -159,6 +159,10 @@ public final class MaestroReservas extends javax.swing.JInternalFrame {
         }
     }
 
+    public void limpiarData() {
+        this.reserva = null;
+    }
+
     private void llenarCamposFromReserva(Reserva r) {
         String[] hInicio = Util.getHoraDesdeFecha(r.getFechaInicio());
         String[] hFin = Util.getHoraDesdeFecha(r.getFechaFin());

@@ -60,6 +60,10 @@ public class MaestroEspacios extends javax.swing.JInternalFrame {
         return true;
     }
 
+    public void limpiarData() {
+        this.espacio = null;
+    }
+
     public void cargarDataFromID(Espacio espacio) {
         this.espacio = espacio;
         llenarCamposFromEspacio(espacio);

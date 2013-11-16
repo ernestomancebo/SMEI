@@ -50,6 +50,8 @@ public class VisualizadorDeEspacios extends javax.swing.JInternalFrame {
                     if (target.getSelectedColumn() != 0) {
                         MaestroEspacios activeFrame = MaestroEspacios.getInstance();
 
+                        activeFrame.limpiarData();
+
                         activeFrame.cargarDataFromID(daoEspacio.getEspacioByID(modeloEspacio.get(target.getSelectedRow()).getId()));
                         GUIUtil.addFrameToDesktopPanel(getInstance().getDesktopPane(), activeFrame);
                         GUIUtil.deshabilitarEdicion(activeFrame);
@@ -85,6 +87,7 @@ public class VisualizadorDeEspacios extends javax.swing.JInternalFrame {
         jLabel1 = new javax.swing.JLabel();
         btnEliminarEspacios = new javax.swing.JButton();
         btnAceptar = new javax.swing.JButton();
+        chkDeshabilitar = new javax.swing.JCheckBox();
 
         setPreferredSize(new java.awt.Dimension(726, 374));
         addFocusListener(new java.awt.event.FocusAdapter() {
@@ -97,6 +100,7 @@ public class VisualizadorDeEspacios extends javax.swing.JInternalFrame {
                 formPropertyChange(evt);
             }
         });
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         tblVisualizarEspacios.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -112,7 +116,11 @@ public class VisualizadorDeEspacios extends javax.swing.JInternalFrame {
         tblVisualizarEspacios.setToolTipText("");
         jScrollPane1.setViewportView(tblVisualizarEspacios);
 
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 49, 690, 238));
+        getContentPane().add(txtBuscarEspacio, new org.netbeans.lib.awtextra.AbsoluteConstraints(64, 11, 189, -1));
+
         jLabel1.setText("Buscar:");
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 14, -1, -1));
 
         btnEliminarEspacios.setText("Deshabilitar Espacio");
         btnEliminarEspacios.addActionListener(new java.awt.event.ActionListener() {
@@ -120,6 +128,7 @@ public class VisualizadorDeEspacios extends javax.swing.JInternalFrame {
                 btnEliminarEspaciosActionPerformed(evt);
             }
         });
+        getContentPane().add(btnEliminarEspacios, new org.netbeans.lib.awtextra.AbsoluteConstraints(484, 298, -1, -1));
 
         btnAceptar.setText("Aceptar");
         btnAceptar.addActionListener(new java.awt.event.ActionListener() {
@@ -127,42 +136,17 @@ public class VisualizadorDeEspacios extends javax.swing.JInternalFrame {
                 btnAceptarActionPerformed(evt);
             }
         });
+        getContentPane().add(btnAceptar, new org.netbeans.lib.awtextra.AbsoluteConstraints(629, 298, -1, -1));
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 690, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(18, 18, 18)
-                        .addComponent(txtBuscarEspacio, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(btnEliminarEspacios)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnAceptar)))
-                .addContainerGap())
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(txtBuscarEspacio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 238, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnEliminarEspacios)
-                    .addComponent(btnAceptar))
-                .addContainerGap(24, Short.MAX_VALUE))
-        );
+        chkDeshabilitar.setSelected(true);
+        chkDeshabilitar.setText("Deshabilitar");
+        chkDeshabilitar.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+        chkDeshabilitar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chkDeshabilitarActionPerformed(evt);
+            }
+        });
+        getContentPane().add(chkDeshabilitar, new org.netbeans.lib.awtextra.AbsoluteConstraints(397, 298, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -175,10 +159,15 @@ public class VisualizadorDeEspacios extends javax.swing.JInternalFrame {
         }
 
         if (!values.isEmpty()) {
-            daoEspacio.deshabilitarEspacios(values);
+            if (chkDeshabilitar.isSelected()) {
+                daoEspacio.deshabilitarEspacios(values);
+            } else {
+                daoEspacio.habilitarEspacios(values);
+            }
             cargarTabla();
         } else {
-            JOptionPane.showMessageDialog(rootPane, "Favor seleccione al menos un espacio para deshabilitar", "Informacion", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(rootPane, "Favor seleccione al menos un espacio para " + ((chkDeshabilitar.isSelected()) ? "deshabilitar" : "habilitar"),
+                    "Informacion", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_btnEliminarEspaciosActionPerformed
 
@@ -193,10 +182,17 @@ public class VisualizadorDeEspacios extends javax.swing.JInternalFrame {
         cargarTabla();
     }//GEN-LAST:event_formPropertyChange
 
-
+    private void chkDeshabilitarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkDeshabilitarActionPerformed
+        if (chkDeshabilitar.isSelected()) {
+            btnEliminarEspacios.setText("Deshabilitar Espacios");
+        } else {
+            btnEliminarEspacios.setText("Habilitar Espacios");
+        }
+    }//GEN-LAST:event_chkDeshabilitarActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAceptar;
     private javax.swing.JButton btnEliminarEspacios;
+    private javax.swing.JCheckBox chkDeshabilitar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tblVisualizarEspacios;

@@ -5,7 +5,6 @@ Texto de busqueda (inteligente)
 Buscar por id, fecha, lugar, estado
 
 Seleccionar si habilitar o deshabilitar
-Cuando le da a modificar, luego a nuevo y limpiar, recarga el objeto a modificar
 
 Futuro:
     Agregar en reservacion:

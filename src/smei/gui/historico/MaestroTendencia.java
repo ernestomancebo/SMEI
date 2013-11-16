@@ -4,13 +4,23 @@
  */
 package smei.gui.historico;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import net.sf.jasperreports.engine.JRException;
 import smei.dao.DBConnection;
+import smei.util.ReportGenerator;
 
 /**
  *
@@ -23,10 +33,11 @@ public class MaestroTendencia extends javax.swing.JInternalFrame {
      */
     private static MaestroTendencia instancia = new MaestroTendencia();
     private Map<String, String> mapeoReservaciones;
-    private Map<String, String> mapeoParametros;
+    private Map<String, Object> mapeoParametros;
     private Connection conn = DBConnection.getConnection();
     private PreparedStatement pstm;
     private ResultSet rs;
+    private ReportGenerator reporte;
 
     private MaestroTendencia() {
         initComponents();
@@ -233,30 +244,55 @@ public class MaestroTendencia extends javax.swing.JInternalFrame {
         estados.add((chkPendiente.isSelected()) ? chkPendiente.getText() : null);
         estados.add((chkCancelada.isSelected()) ? chkCancelada.getText() : null);
 
-        for (byte i = 0; i < estados.size(); i++) {
-            if (estados.get(i) == null) {
-                estados.remove(i);
-            }
-        }
+        estados.removeAll(Collections.singleton(null));
 
-        mapeoParametros = new HashMap<String, String>();
-        mapeoParametros.put("periodo", (String) spnTiempo.getValue());
+        mapeoParametros = new HashMap<String, Object>();
+        mapeoParametros.put("periodo", String.valueOf(spnTiempo.getValue()));
         mapeoParametros.put("idEstado1", new String());
         mapeoParametros.put("idEstado2", new String());
         mapeoParametros.put("idEstado3", new String());
-        mapeoParametros.put("reporte", new String());
-
-        /*
-         reporte
-         idEstado1
-         idEstado2
-         idEstado3
-         periodo
-         */
 
         String titulo = new String();
-        for (byte i = 0; i < estados.size(); i++) {
+        try {
+            pstm = conn.prepareCall("select idEstado from estados_reservaciones where nombre = ?");
+            for (byte i = 1; i < (estados.size() + 1); i++) {
+                pstm.setString(1, estados.get(i - 1));
+                rs = pstm.executeQuery();
+                while (rs.next()) {
+                    mapeoParametros.put("idEstado" + i, rs.getString("idEstado"));
+                }
+                titulo = titulo + estados.get(i - 1);
+                if ((estados.size() - i) > 1) {
+                    titulo = titulo + ", ";
+                } else if ((estados.size() - i) == 1) {
+                    titulo = titulo + " y ";
+                }
+            }
+            mapeoParametros.put("reporte", titulo);
+
+            reporte = new ReportGenerator();
+
+
+            String[] archivosJasper = {"Maestro_Reservas"};
+
+            ArrayList<InputStream> fis = new ArrayList<InputStream>();
+
+            for (String archivo : archivosJasper) {
+                fis.add(new FileInputStream(new File("resources/reports/"
+                        + archivo + ".jrxml")));
+            }
+
+            reporte.printExcelReport(fis, "resources/reporte.xlsx", mapeoParametros, conn);            
+        } catch (SQLException ex) {
+            Logger.getLogger(MaestroTendencia.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (JRException ex) {
+            Logger.getLogger(MaestroTendencia.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(MaestroTendencia.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    private void generarReporteEspacios() {
     }
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed

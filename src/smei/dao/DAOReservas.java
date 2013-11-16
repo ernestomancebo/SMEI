@@ -93,7 +93,8 @@ public class DAOReservas {
                 idCancelado = rs.getInt(1);
             }
 
-            pstm = conn.prepareStatement("update reservaciones set idEstado = ? where idReservacion = ?");
+            pstm = conn.prepareStatement("update reservaciones set idEstado = ? where idReservacion = ? "
+                    + "AND idEstado = (select idEstado from estados_reservaciones where upper(nombre) = 'PENDIENTE')");
             pstm.setInt(1, idCancelado);
 
             for (Integer s : idReservas) {
@@ -115,7 +116,7 @@ public class DAOReservas {
         try {
             pstm = conn.prepareStatement("select r.idReservacion, u.idUsuario, u.nombre, e.idEspacio, e.nombre, r.cantidadDePersonas, "
                     + "r.descripcion, r.fechaInicio, r.fechaFin, r.idEstado, es.nombre from reservaciones r, espacios e, usuario u, estados_reservaciones es "
-                    + "where u.idUsuario = r.idUsuario and e.idEspacio = r.idEspacio and es.idEstado = r.idEstado");
+                    + "where u.idUsuario = r.idUsuario and e.idEspacio = r.idEspacio and es.idEstado = r.idEstado order by r.idEstado desc,  r.fechaInicio desc");
             rs = pstm.executeQuery();
 
             while (rs.next()) {

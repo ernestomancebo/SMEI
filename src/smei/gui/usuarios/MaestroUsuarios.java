@@ -191,6 +191,10 @@ public class MaestroUsuarios extends javax.swing.JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    public void limpiarData() {
+        this.usuario = null;
+    }
+
     public void cargarDataFromUsuario(Usuario usuario) {
         this.usuario = usuario;
         llenarCamposFromUsuario(usuario);
