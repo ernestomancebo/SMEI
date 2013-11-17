@@ -13,6 +13,7 @@ import smei.dao.DAOUsuario;
 import smei.gui.espacios.MaestroEspacios;
 import smei.gui.espacios.VisualizadorDeEspacios;
 import smei.gui.historico.MaestroTendencia;
+import smei.gui.notificaciones.MaestroNotificaciones;
 import smei.gui.reservas.MaestroReservas;
 import smei.gui.reservas.VisualizadorDeReservas;
 import smei.gui.usuarios.MaestroUsuarios;
@@ -318,6 +319,9 @@ public class Principal extends javax.swing.JFrame {
     }
 
     private void jLinkBtnModNotifActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jLinkBtnModNotifActionPerformed
+        activeFrame = MaestroNotificaciones.getInstance();
+        GUIUtil.limpiarContenido(activeFrame);
+        agregarMaestroInternalFrame("Actualizar Notificaciones");
     }//GEN-LAST:event_jLinkBtnModNotifActionPerformed
 
     private void jLinkBtnRegReservaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jLinkBtnRegReservaActionPerformed

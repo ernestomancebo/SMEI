@@ -5,6 +5,7 @@
 package smei.modelos;
 
 import java.util.Date;
+import smei.util.Util;
 
 /**
  *
@@ -110,19 +111,8 @@ public class Reserva {
                 + "\nLugar: " + getEspacio().getNombre()
                 + "\nCantidad de Personas: " + getCantPersonas()
                 + "\nDescripción: " + getDescripcion()
-                + "\nFecha: "
+                + "\nFecha: " + Util.getFechaFromDate(fechaInicio)
+                + "\nHora: " + Util.getHoraFromDate(fechaInicio) + " - " + Util.getHoraFromDate(fechaFin)
                 + "\nEstado de la reserva: " + getEstado().getNombre());
     }
-    /*    
-     private Integer id;
-     private Usuario usuario;
-     private Espacio espacio;
-     private int cantPersonas;
-     private String descripcion;
-     private Date fechaCreacion;
-     private Date fechaModificacion;
-     private Date fechaInicio;
-     private Date fechaFin;
-     private EstadoReservacion estado;
-     */
 }

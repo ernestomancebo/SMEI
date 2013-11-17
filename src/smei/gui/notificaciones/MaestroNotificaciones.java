@@ -4,6 +4,16 @@
  */
 package smei.gui.notificaciones;
 
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
+import smei.dao.DAONotificaciones;
+import smei.modelos.Notificacion;
+import smei.util.GUIUtil;
+
 /**
  *
  * @author Ernesto
@@ -13,8 +23,50 @@ public class MaestroNotificaciones extends javax.swing.JInternalFrame {
     /**
      * Creates new form MaestroNotificaciones
      */
-    public MaestroNotificaciones() {
+    private static MaestroNotificaciones instancia = new MaestroNotificaciones();
+    private final String[] columnHeaders = {"Notificaciones"};
+    private final Class[] columnsTypes = {java.lang.Object.class};
+    private DAONotificaciones daoNotificacion = new DAONotificaciones();
+    private Notificacion notificacion;
+    private ArrayList<Notificacion> modeloNotificacion;
+    
+    private MaestroNotificaciones() {
         initComponents();
+        initializeValues();
+    }
+    
+    public static MaestroNotificaciones getInstance() {
+        return instancia;
+    }
+    
+    private void initializeValues() {
+        this.setSize(724, 341);
+        tblNotificaciones.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        tblNotificaciones.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 1) {
+                    JTable target = (JTable) e.getSource();
+                    cargarDataFromNotificacion(modeloNotificacion.get(target.getSelectedRow()));
+                }
+            }
+        });
+        
+        txtContenido.setLineWrap(true);
+        //Add table Model
+        cargarTabla();
+    }
+    
+    private void cargarTabla() {
+        GUIUtil.setMultiPuporseModelToTable(tblNotificaciones,
+                daoNotificacion.crearTablaNotificaciones(modeloNotificacion = daoNotificacion.getAllNotificaciones()), columnHeaders, columnsTypes);
+    }
+    
+    private void cargarDataFromNotificacion(Notificacion n) {
+        notificacion = n;
+        txtAsunto.setText((n.getTituloPersonalizado() != null) ? n.getTituloPersonalizado() : n.getTituloPorDefecto());
+        txtContenido.setText((n.getContenidoPersonalizado() != null) ? n.getContenidoPersonalizado() : n.getContenidoPorDefecto());
+        chkHabilitada.setSelected(n.isHabilitada());
     }
 
     /**
@@ -31,12 +83,19 @@ public class MaestroNotificaciones extends javax.swing.JInternalFrame {
         jList1 = new javax.swing.JList();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
-        jScrollPane4 = new javax.swing.JScrollPane();
-        jTextPane1 = new javax.swing.JTextPane();
-        jRadioButton1 = new javax.swing.JRadioButton();
-        jRadioButton2 = new javax.swing.JRadioButton();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        tblNotificaciones = new javax.swing.JTable();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        txtContenido = new javax.swing.JTextArea();
+        txtAsunto = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        btnRestaurarContenido = new javax.swing.JButton();
+        btnRestaurarAsunto = new javax.swing.JButton();
+        chkHabilitada = new javax.swing.JCheckBox();
+        btnActualizar = new javax.swing.JButton();
+        btnRestaurarTodo = new javax.swing.JButton();
+        btnAceptar = new javax.swing.JButton();
 
         jList1.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
@@ -58,32 +117,75 @@ public class MaestroNotificaciones extends javax.swing.JInternalFrame {
         ));
         jScrollPane2.setViewportView(jTable1);
 
-        jScrollPane4.setViewportView(jTextPane1);
-
-        jRadioButton1.setText("Mensaje por defecto");
-
-        jRadioButton2.setText("Mensaje personalizado");
-
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        tblNotificaciones.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null}
+                {null},
+                {null},
+                {null},
+                {null}
             },
             new String [] {
-                "Title 1", "Title 2"
+                "Title 1"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Boolean.class, java.lang.Object.class
+                java.lang.String.class
             };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
         });
-        jScrollPane3.setViewportView(jTable2);
+        jScrollPane3.setViewportView(tblNotificaciones);
+
+        txtContenido.setColumns(20);
+        txtContenido.setRows(5);
+        txtContenido.setWrapStyleWord(true);
+        txtContenido.setName("Contenido"); // NOI18N
+        jScrollPane5.setViewportView(txtContenido);
+
+        txtAsunto.setName("Asunto"); // NOI18N
+
+        jLabel1.setText("Asunto:");
+
+        jLabel2.setText("Contenido:");
+
+        btnRestaurarContenido.setText("Restaurar Contenido");
+        btnRestaurarContenido.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRestaurarContenidoActionPerformed(evt);
+            }
+        });
+
+        btnRestaurarAsunto.setText("Restarurar Asunto");
+        btnRestaurarAsunto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRestaurarAsuntoActionPerformed(evt);
+            }
+        });
+
+        chkHabilitada.setText("Notificación Habilitada");
+
+        btnActualizar.setText("Actualizar");
+        btnActualizar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActualizarActionPerformed(evt);
+            }
+        });
+
+        btnRestaurarTodo.setText("Restaurar Todo");
+        btnRestaurarTodo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRestaurarTodoActionPerformed(evt);
+            }
+        });
+
+        btnAceptar.setText("Aceptar");
+        btnAceptar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAceptarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -91,41 +193,137 @@ public class MaestroNotificaciones extends javax.swing.JInternalFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 75, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 385, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jRadioButton2)
-                    .addComponent(jRadioButton1)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtAsunto)
+                            .addComponent(jScrollPane5)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel1)
+                                    .addComponent(btnRestaurarAsunto)
+                                    .addComponent(jLabel2)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(btnRestaurarContenido)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(chkHabilitada)))
+                                .addGap(0, 0, Short.MAX_VALUE)))
+                        .addContainerGap())
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnActualizar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnRestaurarTodo)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnAceptar)
+                        .addGap(40, 221, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jRadioButton1)
+                        .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jRadioButton2)
+                        .addComponent(txtAsunto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(64, Short.MAX_VALUE))
+                        .addComponent(btnRestaurarAsunto)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(11, 11, 11)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnRestaurarContenido)
+                            .addComponent(chkHabilitada)))
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnActualizar)
+                    .addComponent(btnRestaurarTodo)
+                    .addComponent(btnAceptar))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
+        this.setVisible(false);
+    }//GEN-LAST:event_btnAceptarActionPerformed
+    
+    private void btnRestaurarTodoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRestaurarTodoActionPerformed
+        notificacion.setTituloPersonalizado(null);
+        notificacion.setContenidoPersonalizado(null);
+        notificacion.setHabilitada(true);
+        if (daoNotificacion.actualiarNotificacion(notificacion)) {
+            JOptionPane.showMessageDialog(rootPane, "Notificación restaurada");
+        }
+        cargarTabla();
+        cargarDataFromNotificacion(notificacion);
+    }//GEN-LAST:event_btnRestaurarTodoActionPerformed
+    
+    private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
+        boolean actualizar = false;
+        if (notificacion.isHabilitada() != chkHabilitada.isSelected()) {
+            actualizar = true;
+        }
+        
+        String validar = GUIUtil.validarCampos(getInstance());
+        if (!validar.isEmpty()) {
+            JOptionPane.showMessageDialog(rootPane, "Validar " + validar);
+        }
+        
+        if (!notificacion.getTituloPorDefecto().equals(txtAsunto.getText())) {
+            if (notificacion.getTituloPersonalizado() == null || !notificacion.getTituloPersonalizado().equals(txtAsunto.getText())) {
+                notificacion.setTituloPersonalizado(txtAsunto.getText());
+                actualizar = true;
+            }
+        }
+        
+        if (!notificacion.getContenidoPorDefecto().equals(txtContenido.getText())) {
+            if (notificacion.getContenidoPersonalizado() == null || !notificacion.getContenidoPersonalizado().equals(txtContenido.getText())) {
+                notificacion.setContenidoPersonalizado(txtContenido.getText());
+                actualizar = true;
+            }
+        }
+        
+        if (actualizar) {
+            if (daoNotificacion.actualiarNotificacion(notificacion)) {
+                JOptionPane.showMessageDialog(rootPane, "Notificación actualizada");
+            }
+        }
+    }//GEN-LAST:event_btnActualizarActionPerformed
+    
+    private void btnRestaurarAsuntoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRestaurarAsuntoActionPerformed
+        notificacion.setTituloPersonalizado(null);
+        txtAsunto.setText(notificacion.getTituloPorDefecto());
+    }//GEN-LAST:event_btnRestaurarAsuntoActionPerformed
+    
+    private void btnRestaurarContenidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRestaurarContenidoActionPerformed
+        notificacion.setContenidoPersonalizado(null);
+        txtContenido.setText(notificacion.getContenidoPorDefecto());
+    }//GEN-LAST:event_btnRestaurarContenidoActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAceptar;
+    private javax.swing.JButton btnActualizar;
+    private javax.swing.JButton btnRestaurarAsunto;
+    private javax.swing.JButton btnRestaurarContenido;
+    private javax.swing.JButton btnRestaurarTodo;
+    private javax.swing.JCheckBox chkHabilitada;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JList jList1;
-    private javax.swing.JRadioButton jRadioButton1;
-    private javax.swing.JRadioButton jRadioButton2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JSpinner jSpinner1;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable2;
-    private javax.swing.JTextPane jTextPane1;
+    private javax.swing.JTable tblNotificaciones;
+    private javax.swing.JTextField txtAsunto;
+    private javax.swing.JTextArea txtContenido;
     // End of variables declaration//GEN-END:variables
 }

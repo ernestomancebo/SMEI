@@ -85,20 +85,18 @@ public class Usuario {
         this.telefonos = telefonos;
     }
 
+    public String getDescripcion() {
+        return ("Usuario: " + getNombre() + ". ID: " + getIdUsuario());
+    }
+
     @Override
     public String toString() {
         return ("ID Usuario: " + getIdUsuario()
                 + "\nNombre: " + getNombre()
                 + "\nRol: " + getRol().getNombre()
                 + "\nIdentificación Personal: " + getIdentificacionP()
-                + "\nEmail: " + getEmails().get(0).getEmail());
+                + "\nEmail: " + getEmails().get(0).getEmail()
+                + "\nTeléfono: " + getTelefonos().get(0).getTelefono()
+                + "\nHabilitado: " + ((isHabilitado()) ? "Sí" : "No"));
     }
-//    private Integer idUsuario;
-//    private Rol rol;
-//    private String nombre;
-//    private String password;
-//    private String identificacionP;
-//    private ArrayList<Email> emails;
-//    private ArrayList<Telefono> telefonos;
-//    private boolean habilitado;
 }

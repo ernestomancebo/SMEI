@@ -30,6 +30,7 @@ import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.text.JTextComponent;
 import smei.modelos.Espacio;
+import smei.modelos.Notificacion;
 import smei.modelos.Reserva;
 import smei.modelos.Usuario;
 
@@ -38,7 +39,7 @@ import smei.modelos.Usuario;
  * @author Ernesto
  */
 public class GUIUtil {
-    
+
     public static void limpiarContenido(Container container) {
         for (Component c : container.getComponents()) {
             if (c instanceof JSpinner) {
@@ -60,7 +61,7 @@ public class GUIUtil {
             }
         }
     }
-    
+
     public static void modificarEdicion(Container container, boolean editar) {
         for (Component c : container.getComponents()) {
             if (c instanceof JSpinner) {
@@ -76,15 +77,15 @@ public class GUIUtil {
             }
         }
     }
-    
+
     public static void habilitarEdicion(Container container) {
         modificarEdicion(container, true);
     }
-    
+
     public static void deshabilitarEdicion(Container container) {
         modificarEdicion(container, false);
     }
-    
+
     public static void modificarBtnMod(Container container, boolean esVisible) {
         for (Component c : container.getComponents()) {
             if (c instanceof JButton) {
@@ -100,7 +101,7 @@ public class GUIUtil {
             }
         }
     }
-    
+
     public static void modificarBtnSalir(Container container, boolean esVisible) {
         for (Component c : container.getComponents()) {
             if (c instanceof JButton) {
@@ -113,43 +114,43 @@ public class GUIUtil {
             }
         }
     }
-    
+
     public static void habilitarBtnModificar(Container container) {
         modificarBtnMod(container, true);
         habilitarBtnSalir(container);
     }
-    
+
     public static void deshabilitarBtnModificar(Container container) {
         modificarBtnMod(container, false);
         habilitarBtnSalir(container);
     }
-    
+
     public static void habilitarBtnSalir(Container container) {
         modificarBtnSalir(container, true);
     }
-    
+
     public static void asignarTitulo(Container container, String titulo) {
         if (container instanceof JInternalFrame) {
             ((JInternalFrame) container).setTitle(titulo);
         }
     }
-    
+
     public static void setMultiPuporseModelToTable(JTable tabla, final Object[][] values, final Object[] columnHeaders, final Class[] columnsTypes) {
         tabla.setModel(new javax.swing.table.DefaultTableModel(values, columnHeaders) {
             Class[] types = columnsTypes;
-            
+
             @Override
             public Class getColumnClass(int columnIndex) {
                 return types[columnIndex];
             }
-            
+
             @Override
             public boolean isCellEditable(int row, int column) {
                 return column == 0;
             }
         });
     }
-    
+
     public static void addFrameToDesktopPanel(JDesktopPane desktopPane, JInternalFrame frameToAdd) {
         try {
             for (JInternalFrame frame : desktopPane.getAllFrames()) {
@@ -161,13 +162,13 @@ public class GUIUtil {
                     return;
                 }
             }
-            
+
             Dimension desktopSize = desktopPane.getSize();
             Dimension jInternalFrameSize = frameToAdd.getSize();
             int width = (desktopSize.width - jInternalFrameSize.width) / 2;
             int height = (desktopSize.height - jInternalFrameSize.height) / 2;
             frameToAdd.setLocation(width, height);
-            
+
             desktopPane.add(frameToAdd);
             frameToAdd.setVisible(true);
             frameToAdd.toFront();
@@ -176,9 +177,9 @@ public class GUIUtil {
         } catch (PropertyVetoException ex) {
             Logger.getLogger(GUIUtil.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
     }
-    
+
     public static ArrayList<Integer> getIndexOfSelectedRows(JTable tabla, final int booleanIndex) {
         ArrayList<Integer> rv = new ArrayList<Integer>();
         for (int i = 0; i < tabla.getRowCount(); i++) {
@@ -188,23 +189,23 @@ public class GUIUtil {
         }
         return rv;
     }
-    
+
     public static ImageIcon loadIcon(String strPath) {
         return new ImageIcon();
     }
-    
+
     public static String validarCampos(Container container) {
         String rv = new String();
-        
+
         for (Component c : container.getComponents()) {
             if (c instanceof JComboBox || c instanceof JDateChooser) {
                 continue;
             }
-            
+
             if (c instanceof JTextComponent) {
                 String value = ((JTextComponent) c).getText();
                 String txtName = ((JTextComponent) c).getName();
-                
+
                 if (!value.trim().isEmpty()) {
                     if (txtName.equals("Correo")) {
                         if (!Util.validarEmail(value)) {
@@ -219,7 +220,7 @@ public class GUIUtil {
                             rv = txtName;
                         }
                     }
-                    
+
                     if (!rv.isEmpty()) {
                         ((JTextComponent) c).selectAll();
                         ((JTextComponent) c).requestFocus();
@@ -238,40 +239,44 @@ public class GUIUtil {
         }
         return rv;
     }
-    
+
     public static JCalendar setCalendarChooserAfterToday(JCalendar calendar) {
-        
+
         Calendar c = Calendar.getInstance();
         c.add(Calendar.YEAR, 2);
         calendar.setSelectableDateRange(new Date(), new Date(c.getTime().getYear(), c.getTime().getMonth(), c.getTime().getDate()));
-        
+
         PropertyChangeListener calendarChangeListener = new PropertyChangeListener() {
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
                 Date selectedDate = ((JCalendar) evt.getSource()).getDate();
             }
         };
-        
+
         calendar.addPropertyChangeListener("calendar", calendarChangeListener);
-        
+
         return calendar;
     }
-    
+
     public static Object[] crearFilaUsuario(Usuario u) {
         return new Object[]{
             false, u.getIdUsuario(), u.getNombre(),
             u.getEmails().get(0).getEmail(), u.getRol().getNombre(), (u.isHabilitado()) ? "Sí" : "No"};
     }
-    
+
     public static Object[] crearFilaEspacio(Espacio e) {
         return new Object[]{
             false, e.getNombre(), e.getCapacidadDePersonas(),
             e.getDescripcion(), (e.isHabilitado()) ? "Sí" : "No"};
     }
-    
+
     public static Object[] crearFilaReserva(Reserva r) {
         return new Object[]{false, r.getId(), r.getUsuario().getNombre(),
             Util.getFechaFromDate(r.getFechaInicio()), Util.getHoraFromDate(r.getFechaInicio()) + " - "
             + Util.getHoraFromDate(r.getFechaFin()), r.getEspacio().getNombre(), r.getEstado().getNombre()};
+    }
+
+    public static Object[] crearFilaNotificaciones(Notificacion n) {
+        return new Object[]{n.getNombre().replace("_", " ")};
     }
 }

@@ -63,7 +63,6 @@ public class VisualizadorDeEspacios extends javax.swing.JInternalFrame {
         });
 
         //Add table Model
-        modeloEspacio = daoEspacio.getAllEspacios();
         cargarTabla();
     }
 

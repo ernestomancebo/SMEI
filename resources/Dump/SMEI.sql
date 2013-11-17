@@ -31,7 +31,7 @@ CREATE TABLE `espacios` (
   `habilitado` tinyint(1) DEFAULT NULL,
   `descripcion` varchar(200) DEFAULT NULL,
   PRIMARY KEY (`idEspacio`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -40,7 +40,7 @@ CREATE TABLE `espacios` (
 
 LOCK TABLES `espacios` WRITE;
 /*!40000 ALTER TABLE `espacios` DISABLE KEYS */;
-INSERT INTO `espacios` VALUES (1,'Salon A',15,1,'Primer salon'),(2,'Salon Principal',101,0,'adasdasd'),(3,'Cubiculo Especial',3,1,'asd');
+INSERT INTO `espacios` VALUES (1,'Salon A',15,1,'Primer salon'),(2,'Salon Principal',101,0,'adasdasd'),(3,'Cubiculo Especial',3,1,'asd'),(4,'Salon Sombras',23,1,'Algo muy oscuro'),(5,'Salon Dr. Luis Nunez',20,1,'Salon de conferencias');
 /*!40000 ALTER TABLE `espacios` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -69,6 +69,35 @@ INSERT INTO `estados_reservaciones` VALUES (1,'Cancelada'),(2,'Completada'),(3,'
 UNLOCK TABLES;
 
 --
+-- Table structure for table `notificaciones`
+--
+
+DROP TABLE IF EXISTS `notificaciones`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `notificaciones` (
+  `idNotificacion` int(11) NOT NULL AUTO_INCREMENT,
+  `contenido_por_defecto` varchar(500) NOT NULL,
+  `contenido_personalizado` varchar(500) DEFAULT NULL,
+  `titulo_por_defecto` varchar(50) NOT NULL,
+  `titulo_personalizado` varchar(50) DEFAULT NULL,
+  `nombre` varchar(20) NOT NULL,
+  `habilitada` tinyint(1) NOT NULL,
+  PRIMARY KEY (`idNotificacion`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `notificaciones`
+--
+
+LOCK TABLES `notificaciones` WRITE;
+/*!40000 ALTER TABLE `notificaciones` DISABLE KEYS */;
+INSERT INTO `notificaciones` VALUES (1,'Se ha creado un nuevo usuario en SMEI.\\nCreado por:\\n@@usuario.\\nDetalle:\\n@@detalle',NULL,'Nuevo Usuario en SMEI',NULL,'CREAR_USUARIO',1);
+/*!40000 ALTER TABLE `notificaciones` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `reservaciones`
 --
 
@@ -93,7 +122,7 @@ CREATE TABLE `reservaciones` (
   CONSTRAINT `reservaciones_ibfk_1` FOREIGN KEY (`idUsuario`) REFERENCES `usuario` (`idUsuario`),
   CONSTRAINT `reservaciones_ibfk_2` FOREIGN KEY (`idEspacio`) REFERENCES `espacios` (`idEspacio`),
   CONSTRAINT `reservaciones_ibfk_3` FOREIGN KEY (`idEstado`) REFERENCES `estados_reservaciones` (`idEstado`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -102,7 +131,7 @@ CREATE TABLE `reservaciones` (
 
 LOCK TABLES `reservaciones` WRITE;
 /*!40000 ALTER TABLE `reservaciones` DISABLE KEYS */;
-INSERT INTO `reservaciones` VALUES (1,1,1,NULL,'2013-11-10 12:32:12','2014-11-14 12:00:00','2014-11-14 13:00:00',1,'aaa',1),(2,1,1,'2013-11-10 11:03:32','2013-11-10 17:18:40','2013-11-11 01:00:00','2013-11-11 13:00:00',10,'ahkh',3),(3,1,1,'2013-11-10 11:09:08','2013-11-10 17:15:20','2013-11-12 12:00:00','2013-11-13 00:00:00',12,'asda',3),(4,1,1,'2013-11-10 11:35:23','2013-11-10 11:35:23','2013-11-10 13:00:00','2013-11-10 00:00:00',12,'ads',3),(5,1,1,'2013-11-10 17:22:43','2013-11-10 17:22:43','2013-11-11 01:00:30','2013-11-11 13:00:30',12,'qwe',3),(6,1,1,'2013-11-10 17:22:59','2013-11-10 17:22:59','2013-11-13 01:00:00','2013-11-13 13:15:00',12,'aa',3);
+INSERT INTO `reservaciones` VALUES (1,1,1,NULL,'2013-11-10 12:32:12','2014-11-14 12:00:00','2014-11-14 13:00:00',1,'aaa',1),(2,1,1,'2013-11-10 11:03:32','2013-11-10 17:18:40','2013-11-11 01:00:00','2013-11-11 13:00:00',10,'ahkh',2),(3,1,1,'2013-11-10 11:09:08','2013-11-10 17:15:20','2013-11-12 12:00:00','2013-11-13 00:00:00',12,'asda',2),(4,1,3,'2013-11-10 11:35:23','2013-11-10 22:04:46','2013-11-10 23:00:00','2013-11-10 23:15:00',1,'ads',2),(5,1,1,'2013-11-10 17:22:43','2013-11-10 17:22:43','2013-11-11 01:00:30','2013-11-11 13:00:30',12,'qwe',2),(6,1,1,'2013-11-10 17:22:59','2013-11-10 17:22:59','2013-11-13 01:00:00','2013-11-13 13:15:00',12,'aa',2),(7,1,1,'2013-11-10 21:06:14','2013-11-10 21:06:14','2013-11-15 01:00:12','2013-11-15 02:00:12',1,'11',2),(8,1,1,'2013-11-14 18:10:51','2013-11-14 18:17:24','2013-11-14 18:20:00','2013-11-14 18:40:00',10,'Prueba en clase!!',2),(9,1,4,'2013-11-14 18:27:24','2013-11-14 18:27:24','2013-11-14 18:30:26','2013-11-14 18:35:26',10,'Prueba',2),(10,1,5,'2013-11-16 17:02:02','2013-11-16 17:02:02','2013-11-17 14:00:00','2013-11-17 14:15:00',2,'Testing',2);
 /*!40000 ALTER TABLE `reservaciones` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -158,7 +187,7 @@ CREATE TABLE `usuario` (
 
 LOCK TABLES `usuario` WRITE;
 /*!40000 ALTER TABLE `usuario` DISABLE KEYS */;
-INSERT INTO `usuario` VALUES (1,2,'Ernesto','aaa','8888-8888','ernesmancebo@gmail.com','888-888-8888',1),(2,2,'Wilkys Rodriguea','W0001z','0000-0002','w@gmail.com','999-000-0000',1),(3,2,'Eduardo','E8888o','8888-8800','ernesmancebo@gmail.com','888-888-8888',1),(4,2,'Yogguie','Y9999e','9999-9999','yy@g.com','000-000-0000',1),(5,2,'Ramon','R1111n','2222-1111','aa@g.co','999-999-0000',0);
+INSERT INTO `usuario` VALUES (1,1,'Ernesto','aaa','8888-8888','ernesmancebo@gmail.com','888-888-8888',1),(2,3,'Wilkys','W0001z','0000-0002','w@gmail.com','999-000-0000',1),(3,2,'Eduardo','E8888o','8888-8800','ernesmancebo@gmail.com','888-888-8888',1),(4,2,'Yogguie','Y9999e','9999-9999','yy@g.com','000-000-0000',0),(5,2,'Ramon','R1111n','2222-1111','aa@g.co','999-999-0000',0);
 /*!40000 ALTER TABLE `usuario` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -171,4 +200,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2013-11-10 18:40:21
+-- Dump completed on 2013-11-17 15:27:50
