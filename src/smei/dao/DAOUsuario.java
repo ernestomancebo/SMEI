@@ -156,7 +156,7 @@ public class DAOUsuario {
                 Rol r = new Rol();
                 r.setNombre(rs.getString(2));
                 r.setIdRol(rs.getInt(3));
-                
+
                 u.setIdUsuario(rs.getInt("idUsuario"));
                 u.setNombre(rs.getString(4));
                 u.setEmails(email);
@@ -194,5 +194,49 @@ public class DAOUsuario {
             Logger.getLogger(DAOUsuario.class.getName()).log(Level.SEVERE, null, ex);
             return false;
         }
+    }
+
+    public Usuario getUsuarioPorLogin(Usuario u) {
+        Usuario rv = new Usuario();
+        String campo = new String();
+        String valor = new String();
+
+        if (!(valor = u.getEmails().get(0).getEmail()).isEmpty()) {
+            campo = "email";
+        } else if (!(valor = u.getIdentificacionP()).isEmpty()) {
+            campo = "identificacion";
+        } else {
+            valor = String.valueOf(u.getIdUsuario());
+            campo = "idUsuario";
+        }
+
+        try {
+            pstm = conn.prepareStatement("select idUsuario, r.idRol, r.nombre as nombreRol, u.nombre as nombreUsuario, identificacion, email \n"
+                    + "from usuario u, Rol r where u.idRol = r.idRol and " + campo + " = ? and habilitado = ?");
+            pstm.setString(1, valor);
+            pstm.setBoolean(2, true);
+
+            rs = pstm.executeQuery();
+            while (rs.next()) {
+                Rol rol = new Rol();
+                rol.setIdRol(rs.getInt("idRol"));
+                rol.setNombre(rs.getString("nombreRol"));
+
+                Email email = new Email();
+                email.setEmail(rs.getString("email"));
+
+                ArrayList<Email> arrayEmail = new ArrayList<Email>();
+                arrayEmail.add(email);
+
+                rv.setIdUsuario(rs.getInt("idUsuario"));
+                rv.setNombre(rs.getString("nombreUsuario"));
+                rv.setRol(rol);
+                rv.setEmails(arrayEmail);
+                rv.setIdentificacionP(rs.getString("identificacion"));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(DAOUsuario.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return rv;
     }
 }

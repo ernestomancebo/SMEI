@@ -34,7 +34,7 @@ public class DAONotificaciones {
             pstm.setBoolean(3, n.isHabilitada());
             pstm.setInt(4, n.getIdNotificacion());
 
-            return (pstm.executeUpdate() == 2);
+            return (!pstm.execute());
         } catch (SQLException ex) {
             Logger.getLogger(DAONotificaciones.class.getName()).log(Level.SEVERE, null, ex);
         }

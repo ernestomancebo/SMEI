@@ -73,6 +73,15 @@ public class Util {
         return validateStringWithPattern(telefono, TELEFONO_PATTERN);
     }
 
+    public static boolean validarSoloDigito(String linea) {
+        for (Character c : linea.toCharArray()) {
+            if (!Character.isDigit(c)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public static String[] getHoraDesdeFecha(Date d) {
         return new SimpleDateFormat("hh:mm a").format(d).split("(\\s|\\:)");
     }

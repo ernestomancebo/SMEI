@@ -7,6 +7,7 @@ package smei.gui.notificaciones;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
@@ -29,16 +30,16 @@ public class MaestroNotificaciones extends javax.swing.JInternalFrame {
     private DAONotificaciones daoNotificacion = new DAONotificaciones();
     private Notificacion notificacion;
     private ArrayList<Notificacion> modeloNotificacion;
-    
+
     private MaestroNotificaciones() {
         initComponents();
         initializeValues();
     }
-    
+
     public static MaestroNotificaciones getInstance() {
         return instancia;
     }
-    
+
     private void initializeValues() {
         this.setSize(724, 341);
         tblNotificaciones.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -51,17 +52,17 @@ public class MaestroNotificaciones extends javax.swing.JInternalFrame {
                 }
             }
         });
-        
+
         txtContenido.setLineWrap(true);
         //Add table Model
         cargarTabla();
     }
-    
+
     private void cargarTabla() {
         GUIUtil.setMultiPuporseModelToTable(tblNotificaciones,
                 daoNotificacion.crearTablaNotificaciones(modeloNotificacion = daoNotificacion.getAllNotificaciones()), columnHeaders, columnsTypes);
     }
-    
+
     private void cargarDataFromNotificacion(Notificacion n) {
         notificacion = n;
         txtAsunto.setText((n.getTituloPersonalizado() != null) ? n.getTituloPersonalizado() : n.getTituloPorDefecto());
@@ -253,7 +254,7 @@ public class MaestroNotificaciones extends javax.swing.JInternalFrame {
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
         this.setVisible(false);
     }//GEN-LAST:event_btnAceptarActionPerformed
-    
+
     private void btnRestaurarTodoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRestaurarTodoActionPerformed
         notificacion.setTituloPersonalizado(null);
         notificacion.setContenidoPersonalizado(null);
@@ -264,44 +265,52 @@ public class MaestroNotificaciones extends javax.swing.JInternalFrame {
         cargarTabla();
         cargarDataFromNotificacion(notificacion);
     }//GEN-LAST:event_btnRestaurarTodoActionPerformed
-    
+
     private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
         boolean actualizar = false;
+        String validar = GUIUtil.validarCampos(getInstance());
+
+        if (!validar.isEmpty()) {
+            JOptionPane.showMessageDialog(rootPane, "Validar " + validar);
+            return;
+        }
+
         if (notificacion.isHabilitada() != chkHabilitada.isSelected()) {
             actualizar = true;
         }
-        
-        String validar = GUIUtil.validarCampos(getInstance());
-        if (!validar.isEmpty()) {
-            JOptionPane.showMessageDialog(rootPane, "Validar " + validar);
-        }
-        
+
         if (!notificacion.getTituloPorDefecto().equals(txtAsunto.getText())) {
             if (notificacion.getTituloPersonalizado() == null || !notificacion.getTituloPersonalizado().equals(txtAsunto.getText())) {
                 notificacion.setTituloPersonalizado(txtAsunto.getText());
                 actualizar = true;
             }
         }
-        
+
         if (!notificacion.getContenidoPorDefecto().equals(txtContenido.getText())) {
             if (notificacion.getContenidoPersonalizado() == null || !notificacion.getContenidoPersonalizado().equals(txtContenido.getText())) {
-                notificacion.setContenidoPersonalizado(txtContenido.getText());
-                actualizar = true;
+                if (txtContenido.getText().indexOf("@@detalle") == -1) {
+                    actualizar = false;
+                    JOptionPane.showMessageDialog(rootPane, "Verificar que el contenido tenga un elemento \'@@detalle\'");
+                    return;
+                } else {
+                    notificacion.setContenidoPersonalizado(txtContenido.getText());
+                    actualizar = true;
+                }
             }
         }
-        
+
         if (actualizar) {
             if (daoNotificacion.actualiarNotificacion(notificacion)) {
                 JOptionPane.showMessageDialog(rootPane, "Notificación actualizada");
             }
         }
     }//GEN-LAST:event_btnActualizarActionPerformed
-    
+
     private void btnRestaurarAsuntoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRestaurarAsuntoActionPerformed
         notificacion.setTituloPersonalizado(null);
         txtAsunto.setText(notificacion.getTituloPorDefecto());
     }//GEN-LAST:event_btnRestaurarAsuntoActionPerformed
-    
+
     private void btnRestaurarContenidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRestaurarContenidoActionPerformed
         notificacion.setContenidoPersonalizado(null);
         txtContenido.setText(notificacion.getContenidoPorDefecto());
