@@ -102,4 +102,27 @@ public class Reserva {
     public void setEstado(EstadoReservacion estado) {
         this.estado = estado;
     }
+
+    @Override
+    public String toString() {
+        return ("Reservación: " + getId()
+                + "\nUsuario: " + getUsuario().getNombre()
+                + "\nLugar: " + getEspacio().getNombre()
+                + "\nCantidad de Personas: " + getCantPersonas()
+                + "\nDescripción: " + getDescripcion()
+                + "\nFecha: "
+                + "\nEstado de la reserva: " + getEstado().getNombre());
+    }
+    /*    
+     private Integer id;
+     private Usuario usuario;
+     private Espacio espacio;
+     private int cantPersonas;
+     private String descripcion;
+     private Date fechaCreacion;
+     private Date fechaModificacion;
+     private Date fechaInicio;
+     private Date fechaFin;
+     private EstadoReservacion estado;
+     */
 }

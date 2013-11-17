@@ -30,7 +30,7 @@ public class DBConnection {
                 prop.load(new FileInputStream("connection.properties"));
 
                 Class.forName("com.mysql.jdbc.Driver");
-                conn = DriverManager.getConnection("jdbc:mysql://" + prop.getProperty("host") + ":3306/" + prop.getProperty("db") + "?"
+                conn = DriverManager.getConnection("jdbc:mysql://" + prop.getProperty("host") + "/" + prop.getProperty("db") + "?"
                         + "user=" + prop.getProperty("user")
                         + "&password=" + prop.getProperty("password"));
             } catch (ClassNotFoundException ex) {

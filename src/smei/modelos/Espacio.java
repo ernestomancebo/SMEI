@@ -62,4 +62,13 @@ public class Espacio {
     public void setHabilitado(boolean habilitado) {
         this.habilitado = habilitado;
     }
+
+    @Override
+    public String toString() {
+        return ("Espacio: " + getNombre()
+                + "\nID Espacio: " + getId()
+                + "\nCapacidad de Personas: " + getCapacidadDePersonas()
+                + "\nDescripción: " + getDescripcion()
+                + "\nHabilitado: " + ((isHabilitado()) ? "Sí" : "No"));
+    }
 }
