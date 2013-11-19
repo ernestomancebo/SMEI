@@ -198,12 +198,12 @@ public class DAOUsuario {
 
     public Usuario getUsuarioPorLogin(Usuario u) {
         Usuario rv = new Usuario();
-        String campo = new String();
         String valor = new String();
+        String campo;
 
-        if (!(valor = u.getEmails().get(0).getEmail()).isEmpty()) {
+        if (u.getEmails() != null && !(valor = u.getEmails().get(0).getEmail()).isEmpty()) {
             campo = "email";
-        } else if (!(valor = u.getIdentificacionP()).isEmpty()) {
+        } else if (u.getIdentificacionP() != null && !(valor = u.getIdentificacionP()).isEmpty()) {
             campo = "identificacion";
         } else {
             valor = String.valueOf(u.getIdUsuario());
@@ -211,12 +211,14 @@ public class DAOUsuario {
         }
 
         try {
-            pstm = conn.prepareStatement("select idUsuario, r.idRol, r.nombre as nombreRol, u.nombre as nombreUsuario, identificacion, email \n"
-                    + "from usuario u, Rol r where u.idRol = r.idRol and " + campo + " = ? and habilitado = ?");
+            pstm = conn.prepareStatement("select idUsuario, r.idRol, r.nombre as nombreRol, u.nombre as nombreUsuario, identificacion, email "
+                    + "from usuario u, Rol r where u.idRol = r.idRol and " + campo + " = ? and habilitado = ? and password = ?");
             pstm.setString(1, valor);
             pstm.setBoolean(2, true);
+            pstm.setString(3, u.getPassword());
 
             rs = pstm.executeQuery();
+
             while (rs.next()) {
                 Rol rol = new Rol();
                 rol.setIdRol(rs.getInt("idRol"));
