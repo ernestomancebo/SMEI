@@ -13,7 +13,6 @@ import javax.swing.UIManager;
 import smei.dao.DAOUsuario;
 import smei.modelos.Email;
 import smei.modelos.Usuario;
-import smei.util.GUIUtil;
 import smei.util.Util;
 
 /**
@@ -28,13 +27,14 @@ public class IniciarSesion extends javax.swing.JFrame {
     private static IniciarSesion instancia = new IniciarSesion();
     private DAOUsuario daoUsuario = new DAOUsuario();
     private Usuario usuario;
+    private Principal principal;
 
     private IniciarSesion() {
         initComponents();
         initializeComponents();
     }
 
-    public IniciarSesion getInstance() {
+    public static IniciarSesion getInstance() {
         return instancia;
     }
 
@@ -74,6 +74,11 @@ public class IniciarSesion extends javax.swing.JFrame {
         txtUsuario.setName("Usuario"); // NOI18N
 
         txtPassword.setName("Contraseña"); // NOI18N
+        txtPassword.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtPasswordActionPerformed(evt);
+            }
+        });
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(51, 153, 255));
@@ -135,8 +140,12 @@ public class IniciarSesion extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void llenarUsuario() {
-        String validar = GUIUtil.validarCampos(getInstance());
+    private void iniciarSesion() {
+        String validar = (txtUsuario.getText().isEmpty() ? txtUsuario.getName() : "");
+
+        if (validar.isEmpty()) {
+            validar = (new String(txtPassword.getPassword()).isEmpty() ? txtPassword.getName() : "");
+        }
 
         if (!validar.isEmpty()) {
             JOptionPane.showMessageDialog(rootPane, "Validar " + validar);
@@ -144,6 +153,8 @@ public class IniciarSesion extends javax.swing.JFrame {
         }
 
         final String valor = txtUsuario.getText();
+        usuario = new Usuario();
+        usuario.setPassword(new String(txtPassword.getPassword()));
         if (Util.validarEmail(valor)) {
             ArrayList<Email> email = new ArrayList<Email>();
             email.add(new Email(valor));
@@ -160,32 +171,57 @@ public class IniciarSesion extends javax.swing.JFrame {
             usuario.setIdUsuario(Integer.valueOf(valor));
             usuario.setIdentificacionP(null);
         } else {
+            JOptionPane.showMessageDialog(rootPane, "Fallo en combinación usuario/contraseña");
             return;
         }
 
         usuario = daoUsuario.getUsuarioPorLogin(usuario);
+        if (usuario.getIdUsuario() == null) {
+            JOptionPane.showMessageDialog(rootPane, "Fallo en combinación usuario/contraseña");
+            return;
+        }
+
+        this.setVisible(false);
+        principal = Principal.getInstance();
+        principal.setVisible(true);
+        principal.setUsuario(usuario);
     }
 
+    public void setUsuario(Usuario u) {
+        this.usuario = u;
+    }
+
+    public void limpiarData() {
+        setUsuario(null);
+        txtUsuario.setText("");
+        txtPassword.setText("");
+        txtUsuario.requestFocus();
+    }
     private void btnEntrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEntrarActionPerformed
-        // TODO add your handling code here:
+        iniciarSesion();
     }//GEN-LAST:event_btnEntrarActionPerformed
+
+    private void txtPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPasswordActionPerformed
+        iniciarSesion();
+    }//GEN-LAST:event_txtPasswordActionPerformed
 
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-
+        /* Create and display the form */
         try {
             UIManager.setLookAndFeel(
                     UIManager.getSystemLookAndFeelClassName());
         } catch (Exception e) {
             System.out.println(e.toString());
         }
-        /* Create and display the form */
+
         java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
             public void run() {
-                new IniciarSesion().setVisible(true);
+                instancia = new IniciarSesion();
+                instancia.setVisible(true);
             }
         });
     }
