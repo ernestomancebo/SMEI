@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Reservas" language="groovy" pageWidth="1008" pageHeight="612" orientation="Landscape" columnWidth="968" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="ad7b86e9-956a-4824-872a-96da2e4574d4">
 	<property name="ireport.zoom" value="1.0"/>
-	<property name="ireport.x" value="20"/>
+	<property name="ireport.x" value="297"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="reporte" class="java.lang.String"/>
 	<parameter name="idEstado1" class="java.lang.String">
@@ -36,7 +36,7 @@ WHERE
         AND e.idespacio = r.idespacio
         AND es.idestado = r.idestado
         AND es.idestado in ($P{idEstado1}, $P{idEstado2}, $P{idEstado3})
-        AND r.fechaInicio >= date_sub(curdate(), interval $P{antiguedad} month)
+        AND r.fechaInicio >= date_sub(curdate(), interval $P{periodo} month)
 order by es.idEstado]]>
 	</queryString>
 	<field name="idreservacion" class="java.lang.Integer">
@@ -74,7 +74,7 @@ order by es.idEstado]]>
 				<textElement textAlignment="Center">
 					<font size="12" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Reservas" + $P{reporte}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Reservas"]]></textFieldExpression>
 			</textField>
 		</band>
 	</title>

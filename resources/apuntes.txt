@@ -1,3 +1,9 @@
+INCONVENIENTES CON REPORTES:
+
+Maestro_Reservas
+Data erronea en tendencia espacios
+Data erronea en tendencia usuario
+
 Pendiente: 
 
 recargar espacios

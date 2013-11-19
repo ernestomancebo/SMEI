@@ -23,35 +23,43 @@ public class ReportGenerator implements Serializable {
     public void printExcelReport(ArrayList<InputStream> rutaJRXML,
             String rutaXLSX, Map<String, Object> parametros, Connection conexion)
             throws JRException {
-
         Thread.currentThread().setContextClassLoader(null);
 
-        ArrayList<JasperPrint> print_list = new ArrayList<JasperPrint>();
+//        ArrayList<JasperPrint> print_list = new ArrayList<JasperPrint>();
         JRXlsxExporter exportador = new JRXlsxExporter();
-
-        for (InputStream ruta : rutaJRXML) {
-            print_list.add(JasperFillManager.fillReport(
-                    JasperCompileManager.compileReport(ruta), parametros,
-                    conexion));
+        JasperPrint print = null;
+        try {
+//            print_list.add(JasperFillManager.fillReport(
+//                    "resources/reports/Maestro_Reservas.jasper",
+//                    parametros,
+//                    conexion));
+            print = JasperFillManager.fillReport(
+                    JasperCompileManager.compileReport(rutaJRXML.get(0)), parametros,
+                    conexion);
+        } catch (JRException e) {
+            e.printStackTrace();
         }
 
-        exportador.setParameter(JRExporterParameter.JASPER_PRINT_LIST,
-                print_list);
+//        for (InputStream ruta : rutaJRXML) {
+//            print_list.add(JasperFillManager.fillReport(
+//                    JasperCompileManager.compileReport(ruta), parametros,
+//                    conexion));
+//        }
+        exportador.setParameter(JRExporterParameter.JASPER_PRINT,
+                print);
         exportador.setParameter(JRExporterParameter.OUTPUT_FILE_NAME, rutaXLSX);
         exportador.setParameter(JRExporterParameter.IGNORE_PAGE_MARGINS, true);
         exportador.setParameter(
                 JRXlsAbstractExporterParameter.IS_WHITE_PAGE_BACKGROUND, false);
         exportador.setParameter(
                 JRXlsAbstractExporterParameter.IS_IGNORE_CELL_BORDER, false);
-        exportador
-                .setParameter(
+        exportador.setParameter(
                 JRXlsAbstractExporterParameter.IS_REMOVE_EMPTY_SPACE_BETWEEN_COLUMNS,
                 true);
         exportador.setParameter(JRXlsExporterParameter.IS_DETECT_CELL_TYPE,
                 true);
         exportador.setParameter(
                 JRXlsAbstractExporterParameter.IS_FONT_SIZE_FIX_ENABLED, true);
-
         exportador.exportReport();
 
         Thread.currentThread().setContextClassLoader(cl);

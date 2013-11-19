@@ -269,11 +269,12 @@ public class MaestroTendencia extends javax.swing.JInternalFrame {
                 }
             }
             mapeoParametros.put("reporte", titulo);
-
+//            mapeoParametros.put("antiguedad", ui);
+            
             reporte = new ReportGenerator();
 
 
-            String[] archivosJasper = {"Maestro_Reservas"};
+            String[] archivosJasper = {"Tendencia_Usuarios"};
 
             ArrayList<InputStream> fis = new ArrayList<InputStream>();
 
