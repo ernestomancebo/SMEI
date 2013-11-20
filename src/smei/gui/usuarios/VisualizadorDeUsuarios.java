@@ -14,6 +14,7 @@ import javax.swing.ListSelectionModel;
 import smei.dao.DAOUsuario;
 import smei.modelos.Usuario;
 import smei.util.GUIUtil;
+import smei.util.Mail;
 
 /**
  *
@@ -27,9 +28,10 @@ public class VisualizadorDeUsuarios extends javax.swing.JInternalFrame {
     private static VisualizadorDeUsuarios instancia = new VisualizadorDeUsuarios();
     private final Object[] columnHeaders = {"", "ID Usuario", "Nombre", "Correo", "Rol", "Esta Habilitado"};
     private final Class[] columnsTypes = {java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class};
-    private boolean esConsulta;
-    private ArrayList<Usuario> modeloUsuario;
     private DAOUsuario daoUsuario = new DAOUsuario();
+    private ArrayList<Usuario> modeloUsuario;
+    private boolean esConsulta;
+    private Usuario usuario;
 
     private VisualizadorDeUsuarios() {
         initComponents();
@@ -74,6 +76,10 @@ public class VisualizadorDeUsuarios extends javax.swing.JInternalFrame {
     private void cargarTabla() {
         GUIUtil.setMultiPuporseModelToTable(tblVisualizarUsuario,
                 daoUsuario.crearTablaUsuario(modeloUsuario = daoUsuario.getAllUsuarios()), columnHeaders, columnsTypes);
+    }
+
+    public void setUsuario(Usuario u) {
+        this.usuario = u;
     }
 
     /**
@@ -155,6 +161,12 @@ public class VisualizadorDeUsuarios extends javax.swing.JInternalFrame {
 
         for (int i : GUIUtil.getIndexOfSelectedRows(tblVisualizarUsuario, 0)) {
             values.add(modeloUsuario.get(i).getIdUsuario());
+
+            ArrayList<String> a = new ArrayList<String>();
+            a.add(modeloUsuario.get(i).getEmails().get(0).getEmail());
+
+            Mail.getInstance().sendAMail(Mail.TipoEmail.ACTUALIZAR_USUARIO, usuario,
+                    modeloUsuario.get(i).getDescripcion(), a);
         }
 
         if (!values.isEmpty()) {
@@ -165,7 +177,8 @@ public class VisualizadorDeUsuarios extends javax.swing.JInternalFrame {
             }
             cargarTabla();
         } else {
-            JOptionPane.showMessageDialog(rootPane, "Favor seleccione al menos un usuario para " + ((chkDeshabilitar.isSelected()) ? "deshabilitar" : "habilitar"),
+            JOptionPane.showMessageDialog(rootPane, "Favor seleccione al menos un usuario para "
+                    + ((chkDeshabilitar.isSelected()) ? "deshabilitar" : "habilitar"),
                     "Informacion", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_btnEliminarActionPerformed

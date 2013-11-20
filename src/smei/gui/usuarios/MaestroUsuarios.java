@@ -15,6 +15,7 @@ import smei.modelos.Rol;
 import smei.modelos.Telefono;
 import smei.modelos.Usuario;
 import smei.util.GUIUtil;
+import smei.util.Mail;
 import smei.util.Util;
 
 /**
@@ -25,8 +26,8 @@ public class MaestroUsuarios extends javax.swing.JInternalFrame {
 
     private static MaestroUsuarios instancia = new MaestroUsuarios();
     private DAOUsuario daoUsuario = new DAOUsuario();
-    private Usuario usuario;
     private ArrayList<Rol> roles;
+    private Usuario usuario, u;
 
     /**
      * Creates new form MaestroUsuarios
@@ -221,6 +222,9 @@ public class MaestroUsuarios extends javax.swing.JInternalFrame {
         return -1;
     }
 
+    public void setUsuario(Usuario u) {
+        this.u = u;
+    }
 //    public static void setUsuarioNull() {
 //        usuario = null;
 //    }
@@ -252,12 +256,26 @@ public class MaestroUsuarios extends javax.swing.JInternalFrame {
         if (llenarUsuario()) {
             if (usuario.getIdUsuario() != null) {
                 daoUsuario.actualizarUsuario(usuario);
+
+                ArrayList<String> a = new ArrayList<String>();
+                a.add(usuario.getEmails().get(0).getEmail());
+
+                Mail.getInstance().sendAMail(Mail.TipoEmail.ACTUALIZAR_USUARIO, u,
+                        usuario.getDescripcion(), a);
+
                 usuario = null;
             } else {
                 usuario.setPassword(Util.generarClaveDeUsuario(usuario));
                 daoUsuario.insertarUsuario(usuario);
 
-                if (JOptionPane.showConfirmDialog(rootPane, "¿Desea ingresar un nuevo usuario?", "", JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION) {
+                ArrayList<String> a = new ArrayList<String>();
+                a.add(usuario.getEmails().get(0).getEmail());
+
+                Mail.getInstance().sendAMail(Mail.TipoEmail.CREAR_USUARIO, u,
+                        usuario.getDescripcion(), a);
+
+                if (JOptionPane.showConfirmDialog(rootPane, "Usuario registrado correctamente\n"
+                        + "¿Desea ingresar un nuevo usuario?", "", JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION) {
                     GUIUtil.limpiarContenido(getInstance());
                     return;
                 }

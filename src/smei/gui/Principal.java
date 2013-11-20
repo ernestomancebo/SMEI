@@ -319,7 +319,7 @@ public class Principal extends javax.swing.JFrame {
         this.usuario = u;
         if (u != null) {
             jLinkUsuario.setText("Bienvenido, " + u.getNombre());
-            manejarContenidoPorRoles(u.getRol());
+//            manejarContenidoPorRoles(u.getRol());
         }
     }
 

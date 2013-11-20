@@ -277,6 +277,6 @@ public class GUIUtil {
     }
 
     public static Object[] crearFilaNotificaciones(Notificacion n) {
-        return new Object[]{n.getNombre().replace("_", " ")};
+        return new Object[]{Util.capitalizeString(n.getNombre().replace("_", " "))};
     }
 }

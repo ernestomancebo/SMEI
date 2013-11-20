@@ -42,8 +42,17 @@ public class Mail {
     public enum TipoEmail {
 
         CREAR_USUARIO("CREAR_USUARIO"),
-        MODIFICACION_USUARIO("MODIFICACION_USUARIO"),
-        ACTUALIZACION_USUARIO("ACTUALIZACION_USUARIO");
+        ACTUALIZAR_USUARIO("ACTUALIZAR_USUARIO"),
+        DESHABILITAR_USUARIO("DESHABILITAR_USUARIO"),
+        NUEVA_CONTRASENA("NUEVA_CONTRASEÑA"),
+        OLVIDE_CONTRASENA("OLVIDE_CONTRASEÑA"),
+        CREAR_RESERVA("CREAR_RESERVA"),
+        ACTUALIZAR_RESERVA("ACTUALIZAR_RESERVA"),
+        CANCELAR_RESERVA("CANCELAR_RESERVA"),
+        CREAR_ESPACIO("CREAR_ESPACIO"),
+        ACTUALIZAR_ESPACIO("ACTUALIZAR_ESPACIO"),
+        DESHABILITAR_ESPACIO("DESHABILITAR_ESPACIO");
+
         private String tipoEmail;
 
         private TipoEmail(String s) {
@@ -73,8 +82,7 @@ public class Mail {
         return instancia;
     }
 
-    public void sendAMail(TipoEmail tipo, Usuario usuario, String descripcion) {
-        ArrayList<String> copia = new ArrayList<String>();
+    public void sendAMail(TipoEmail tipo, Usuario usuario, String descripcion, ArrayList<String> copia) {
         String titulo = new String();
         String contenido = new String();
         Properties props = new Properties();
@@ -89,12 +97,11 @@ public class Mail {
 
         Session session = Session.getDefaultInstance(props,
                 new javax.mail.Authenticator() {
-            @Override
-            protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(smtp_user, smtp_password);
-            }
-        });
-
+                    @Override
+                    protected PasswordAuthentication getPasswordAuthentication() {
+                        return new PasswordAuthentication(smtp_user, smtp_password);
+                    }
+                });
 
         try {
             //Obteniendo el titulo y el contenido del mensaje
@@ -117,13 +124,19 @@ public class Mail {
 
             System.out.println(contenido);
 
-            //Agregando correos de copia
-            pstm = conn.prepareStatement("select u.email from usuario u, rol r where u.idRol = r.idRol "
-                    + "and r.idRol = (select idRol from rol n where upper(n.nombre) = 'ADMINISTRADOR')");
-            rs = pstm.executeQuery();
+            //Agregando correos de copia a Administradores, si no son propios de los usuarios
+            if (!tipo.equals(TipoEmail.OLVIDE_CONTRASENA) && !tipo.equals(TipoEmail.NUEVA_CONTRASENA)) {
+                pstm = conn.prepareStatement("select u.email from usuario u, rol r where u.idRol = r.idRol "
+                        + "and r.idRol = (select idRol from rol n where upper(n.nombre) = 'ADMINISTRADOR')");
+                rs = pstm.executeQuery();
 
-            while (rs.next()) {
-                copia.add(rs.getString("email"));
+                if (copia == null) {
+                    copia = new ArrayList<String>();
+                }
+
+                while (rs.next()) {
+                    copia.add(rs.getString("email"));
+                }
             }
         } catch (SQLException ex) {
             Logger.getLogger(Mail.class.getName()).log(Level.SEVERE, null, ex);
@@ -139,7 +152,7 @@ public class Mail {
             }
 
             message.setRecipients(Message.RecipientType.TO,
-                    InternetAddress.parse("scalator.5@hotmail.com"));
+                    InternetAddress.parse(usuario.getEmails().get(0).getEmail()));
             message.setSubject(titulo);
             message.setText(contenido);
             Transport.send(message);

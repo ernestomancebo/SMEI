@@ -7,7 +7,6 @@ package smei.gui.notificaciones;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
-import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
@@ -117,6 +116,12 @@ public class MaestroNotificaciones extends javax.swing.JInternalFrame {
             }
         ));
         jScrollPane2.setViewportView(jTable1);
+
+        addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                formPropertyChange(evt);
+            }
+        });
 
         tblNotificaciones.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -245,7 +250,7 @@ public class MaestroNotificaciones extends javax.swing.JInternalFrame {
                     .addComponent(btnActualizar)
                     .addComponent(btnRestaurarTodo)
                     .addComponent(btnAceptar))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(15, Short.MAX_VALUE))
         );
 
         pack();
@@ -302,6 +307,7 @@ public class MaestroNotificaciones extends javax.swing.JInternalFrame {
         if (actualizar) {
             if (daoNotificacion.actualiarNotificacion(notificacion)) {
                 JOptionPane.showMessageDialog(rootPane, "Notificación actualizada");
+                
             }
         }
     }//GEN-LAST:event_btnActualizarActionPerformed
@@ -315,6 +321,11 @@ public class MaestroNotificaciones extends javax.swing.JInternalFrame {
         notificacion.setContenidoPersonalizado(null);
         txtContenido.setText(notificacion.getContenidoPorDefecto());
     }//GEN-LAST:event_btnRestaurarContenidoActionPerformed
+
+    private void formPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_formPropertyChange
+        cargarTabla();
+    }//GEN-LAST:event_formPropertyChange
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAceptar;
     private javax.swing.JButton btnActualizar;

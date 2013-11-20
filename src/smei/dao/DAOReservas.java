@@ -150,6 +150,24 @@ public class DAOReservas {
         return reservas;
     }
 
+    public ArrayList<String> getCorreosInvolucradosEnReserva(Reserva r) {
+        ArrayList<String> rv = new ArrayList<String>();
+        try {
+            pstm = conn.prepareStatement("select distinct u.email from usuario u, "
+                    + "reservaciones r where u.idUsuario = r.idUsuario and r.idReservacion = ? ");
+
+            pstm.setInt(1, r.getId());
+            rs = pstm.executeQuery();
+
+            while (rs.next()) {
+                rv.add(rs.getString("email"));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(DAOEspacio.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return rv;
+    }
+
     public Object[][] crearTablaReserva(List<Reserva> reservas) {
         Object[][] rv = new Object[reservas.size()][];
 

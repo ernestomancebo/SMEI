@@ -119,4 +119,17 @@ public class Util {
     public static String getHoraFromDate(Date d) {
         return new SimpleDateFormat("hh:mm a").format(d);
     }
+
+    public static String capitalizeString(String s) {
+        char[] c = s.toLowerCase().toCharArray();
+
+        for (byte b = 0; b < s.length(); b++) {
+            if (b == 0) {
+                c[b] = Character.toUpperCase(c[b]);
+            } else if (c[b - 1] == ' ') {
+                c[b] = Character.toUpperCase(c[b]);
+            }
+        }
+        return new String(c);
+    }
 }

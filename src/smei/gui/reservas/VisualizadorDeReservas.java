@@ -13,7 +13,9 @@ import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import smei.dao.DAOReservas;
 import smei.modelos.Reserva;
+import smei.modelos.Usuario;
 import smei.util.GUIUtil;
+import smei.util.Mail;
 
 /**
  *
@@ -30,6 +32,7 @@ public class VisualizadorDeReservas extends javax.swing.JInternalFrame {
     DAOReservas daoReservas = new DAOReservas();
     ArrayList<Reserva> modeloReserva;
     private boolean esConsulta;
+    private Usuario usuario;
 
     private VisualizadorDeReservas() {
         initComponents();
@@ -80,6 +83,10 @@ public class VisualizadorDeReservas extends javax.swing.JInternalFrame {
 
     public boolean esConsulta() {
         return esConsulta;
+    }
+
+    public void setUsuario(Usuario u) {
+        this.usuario = u;
     }
 
     /**
@@ -194,6 +201,8 @@ public class VisualizadorDeReservas extends javax.swing.JInternalFrame {
         ArrayList<Integer> values = new ArrayList<Integer>();
         for (Integer i : GUIUtil.getIndexOfSelectedRows(tblVisualizarReserva, 0)) {
             values.add(modeloReserva.get(i).getId());
+            Mail.getInstance().sendAMail(Mail.TipoEmail.ACTUALIZAR_RESERVA, usuario,
+                    modeloReserva.get(i).getDescripcion(), new DAOReservas().getCorreosInvolucradosEnReserva(modeloReserva.get(i)));
         }
         return values;
     }

@@ -13,7 +13,9 @@ import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import smei.dao.DAOEspacio;
 import smei.modelos.Espacio;
+import smei.modelos.Usuario;
 import smei.util.GUIUtil;
+import smei.util.Mail;
 
 /**
  *
@@ -27,8 +29,9 @@ public class VisualizadorDeEspacios extends javax.swing.JInternalFrame {
     private static VisualizadorDeEspacios instancia = new VisualizadorDeEspacios();
     private final String[] columnHeaders = {"", "Nombre", "Cant. Personas", "Descripcion", "Habilitado"};
     private final Class[] columnsTypes = {java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class};
-    private ArrayList<Espacio> modeloEspacio;
     private DAOEspacio daoEspacio = new DAOEspacio();
+    private ArrayList<Espacio> modeloEspacio;
+    private Usuario usuario;
 
     private VisualizadorDeEspacios() {
         initComponents();
@@ -155,6 +158,9 @@ public class VisualizadorDeEspacios extends javax.swing.JInternalFrame {
 
         for (Integer i : GUIUtil.getIndexOfSelectedRows(tblVisualizarEspacios, 0)) {
             values.add(modeloEspacio.get(i).getId());
+
+            Mail.getInstance().sendAMail(Mail.TipoEmail.ACTUALIZAR_ESPACIO, usuario,
+                    modeloEspacio.get(i).getDescripcion(), daoEspacio.getCorreosInvolucradosEnReservaDeEspacio(modeloEspacio.get(i)));
         }
 
         if (!values.isEmpty()) {
@@ -170,6 +176,9 @@ public class VisualizadorDeEspacios extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_btnEliminarEspaciosActionPerformed
 
+    public void setUsuario(Usuario u) {
+        this.usuario = u;
+    }
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
         this.setVisible(false);
     }//GEN-LAST:event_btnAceptarActionPerformed

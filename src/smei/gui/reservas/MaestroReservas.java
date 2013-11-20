@@ -20,6 +20,7 @@ import smei.modelos.Espacio;
 import smei.modelos.Reserva;
 import smei.modelos.Usuario;
 import smei.util.GUIUtil;
+import smei.util.Mail;
 import smei.util.Util;
 
 /**
@@ -31,7 +32,9 @@ public final class MaestroReservas extends javax.swing.JInternalFrame {
     private static MaestroReservas instancia = new MaestroReservas();
     private DAOReservas daoReserva = new DAOReservas();
     private ArrayList<Espacio> modeloEspacios;
+    private Mail m = Mail.getInstance();
     private Reserva reserva;
+    private Usuario usuario;
 
     /**
      * Creates new form MaestroReservas
@@ -238,9 +241,13 @@ public final class MaestroReservas extends javax.swing.JInternalFrame {
         return -1;
     }
 
+    public void setUsuario(Usuario u) {
+        this.usuario = u;
+    }
 //    public static void setReservaToNull() {
 //        reserva = null;
 //    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -399,12 +406,14 @@ public final class MaestroReservas extends javax.swing.JInternalFrame {
         if (llenarReserva()) {
             if (reserva.getId() == null) {
                 daoReserva.insertarReserva(reserva);
-                if (JOptionPane.showConfirmDialog(rootPane, "¿Desea ingresar una nueva reserva?", "", JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION) {
+                m.sendAMail(Mail.TipoEmail.CREAR_RESERVA, usuario, reserva.getDescripcion(), null);
+                if (JOptionPane.showConfirmDialog(rootPane, "Reserva creada correctamente\n¿Desea ingresar una nueva reserva?", "", JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION) {
                     GUIUtil.limpiarContenido(getInstance());
                     return;
                 }
             } else {
                 daoReserva.actualizarReserva(reserva);
+                m.sendAMail(Mail.TipoEmail.ACTUALIZAR_RESERVA, usuario, reserva.getDescripcion(), daoReserva.getCorreosInvolucradosEnReserva(reserva));
                 reserva = null;
             }
             GUIUtil.limpiarContenido(getInstance());

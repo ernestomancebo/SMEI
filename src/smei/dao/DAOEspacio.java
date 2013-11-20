@@ -175,6 +175,26 @@ public class DAOEspacio {
         return rv;
     }
 
+    public ArrayList<String> getCorreosInvolucradosEnReservaDeEspacio(Espacio e) {
+        ArrayList<String> rv = new ArrayList<String>();
+        try {
+            pstm = conn.prepareStatement("select distinct u.email from usuario u, "
+                    + "reservaciones r where u.idUsuario = r.idUsuario and r.idEspacio = ? "
+                    + "and fechaInicio >= sysdate() and r.idEstado != (SELECT e.idEstado from "
+                    + "estados_reservaciones e where e.nombre = upper('CANCELADA'))");
+
+            pstm.setInt(1, e.getId());
+            rs = pstm.executeQuery();
+
+            while (rs.next()) {
+                rv.add(rs.getString("email"));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(DAOEspacio.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return rv;
+    }
+
     public static Object[][] crearTablaEspacio(List<Espacio> espacios) {
         Object[][] rv = new Object[espacios.size()][];
 

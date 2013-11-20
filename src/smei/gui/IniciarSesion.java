@@ -28,21 +28,21 @@ public class IniciarSesion extends javax.swing.JFrame {
     private DAOUsuario daoUsuario = new DAOUsuario();
     private Usuario usuario;
     private Principal principal;
-
+    
     private IniciarSesion() {
         initComponents();
         initializeComponents();
     }
-
+    
     public static IniciarSesion getInstance() {
         return instancia;
     }
-
+    
     private void initializeComponents() {
         btnPassword.setBorderPainted(false);
         btnPassword.setOpaque(false);
         btnPassword.setBackground(Color.lightGray);
-
+        
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         this.setLocation(dim.width / 2 - this.getSize().width / 2, dim.height / 2 - this.getSize().height / 2);
     }
@@ -142,23 +142,23 @@ public class IniciarSesion extends javax.swing.JFrame {
 
     private void iniciarSesion() {
         String validar = (txtUsuario.getText().isEmpty() ? txtUsuario.getName() : "");
-
+        
         if (validar.isEmpty()) {
             validar = (new String(txtPassword.getPassword()).isEmpty() ? txtPassword.getName() : "");
         }
-
+        
         if (!validar.isEmpty()) {
             JOptionPane.showMessageDialog(rootPane, "Validar " + validar);
             return;
         }
-
+        
         final String valor = txtUsuario.getText();
         usuario = new Usuario();
         usuario.setPassword(new String(txtPassword.getPassword()));
         if (Util.validarEmail(valor)) {
             ArrayList<Email> email = new ArrayList<Email>();
             email.add(new Email(valor));
-
+            
             usuario.setEmails(email);
             usuario.setIdUsuario(null);
             usuario.setIdentificacionP(null);
@@ -174,23 +174,25 @@ public class IniciarSesion extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(rootPane, "Fallo en combinación usuario/contraseña");
             return;
         }
-
+        
         usuario = daoUsuario.getUsuarioPorLogin(usuario);
+        usuario.setPassword(new String(txtPassword.getPassword()));
+        
         if (usuario.getIdUsuario() == null) {
             JOptionPane.showMessageDialog(rootPane, "Fallo en combinación usuario/contraseña");
             return;
         }
-
+        
         this.setVisible(false);
         principal = Principal.getInstance();
         principal.setVisible(true);
         principal.setUsuario(usuario);
     }
-
+    
     public void setUsuario(Usuario u) {
         this.usuario = u;
     }
-
+    
     public void limpiarData() {
         setUsuario(null);
         txtUsuario.setText("");
@@ -216,7 +218,7 @@ public class IniciarSesion extends javax.swing.JFrame {
         } catch (Exception e) {
             System.out.println(e.toString());
         }
-
+        
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {

@@ -8,7 +8,9 @@ package smei.gui.espacios;
 import javax.swing.JOptionPane;
 import smei.dao.DAOEspacio;
 import smei.modelos.Espacio;
+import smei.modelos.Usuario;
 import smei.util.GUIUtil;
+import smei.util.Mail;
 import smei.util.Util;
 
 /**
@@ -18,8 +20,10 @@ import smei.util.Util;
 public class MaestroEspacios extends javax.swing.JInternalFrame {
 
     private static MaestroEspacios instancia = new MaestroEspacios();
-    private Espacio espacio;
     private DAOEspacio daoEspacio = new DAOEspacio();
+    Mail m = Mail.getInstance();
+    private Espacio espacio;
+    private Usuario usuario;
 
     /**
      * Creates new form MaestroEspacios
@@ -75,6 +79,10 @@ public class MaestroEspacios extends javax.swing.JInternalFrame {
         txtLimiteP.setText(String.valueOf(e.getCapacidadDePersonas()));
         txtDescripcion.setText(e.getDescripcion());
         chkHabilitado.setSelected(e.isHabilitado());
+    }
+
+    public void setUsuario(Usuario u) {
+        this.usuario = u;
     }
 
     /**
@@ -206,10 +214,19 @@ public class MaestroEspacios extends javax.swing.JInternalFrame {
             if (espacio.getId() != null) {
                 daoEspacio.actualizarEspacio(espacio);
                 GUIUtil.limpiarContenido(getInstance());
+                //Enviar mail a Administradores, a los involucrados y a quien lo creo
+                m.sendAMail(Mail.TipoEmail.ACTUALIZAR_ESPACIO, usuario,
+                        espacio.getDescripcion(), daoEspacio.getCorreosInvolucradosEnReservaDeEspacio(espacio));
                 espacio = null;
             } else {
                 daoEspacio.insertarEspacio(espacio);
-                if (JOptionPane.showConfirmDialog(rootPane, "¿Desea ingresar un nuevo espacio?", "", JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION) {
+                //Enviar mail a Administradores y a quien lo creo
+                m.sendAMail(Mail.TipoEmail.CREAR_ESPACIO, usuario, espacio.getDescripcion(), null);
+                espacio = null;
+
+                if (JOptionPane.showConfirmDialog(rootPane, "Espacio creado correctamente\n"
+                        + "¿Desea ingresar un nuevo espacio?", "", JOptionPane.OK_CANCEL_OPTION)
+                        == JOptionPane.OK_OPTION) {
                     GUIUtil.limpiarContenido(getInstance());
                     return;
                 }

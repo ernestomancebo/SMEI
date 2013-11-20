@@ -8,6 +8,7 @@ import javax.swing.JOptionPane;
 import smei.dao.DAOUsuario;
 import smei.modelos.Usuario;
 import smei.util.GUIUtil;
+import smei.util.Mail;
 
 /**
  *
@@ -19,37 +20,37 @@ public class ModificarContrasena extends javax.swing.JInternalFrame {
      * Creates new form ModificarContrasena
      */
     private static ModificarContrasena instancia = new ModificarContrasena();
-    private Usuario usuario = new Usuario();
-
+    private Usuario usuario;
+    
     private ModificarContrasena() {
         initComponents();
     }
-
+    
     public static ModificarContrasena getInstance() {
         return instancia;
     }
-
+    
     public void initializeValues() {
         this.setSize(248, 214);
     }
-
+    
     public void setUsuario(Usuario u) {
         this.usuario = u;
     }
-
+    
     public String validarCambio() {
         if (!usuario.getIdentificacionP().equals(txtIdentificacion.getText())) {
             txtIdentificacion.selectAll();
             txtIdentificacion.requestFocus();
             return "La identificacion no corresponde.";
         }
-
+        
         if (!usuario.getPassword().equals(txtContrasena.getText())) {
             txtContrasena.selectAll();
             txtContrasena.requestFocus();
             return "La antigua contraseña no corresponde.";
         }
-
+        
         if (!txtNuevaContrasena.getText().isEmpty() && !txtNuevaContrasena.getText()
                 .equals(txtNuevaContrasenaConf.getText())) {
             txtNuevaContrasenaConf.setText("");
@@ -57,7 +58,11 @@ public class ModificarContrasena extends javax.swing.JInternalFrame {
             txtNuevaContrasena.requestFocus();
             return "Nueva contraseña no coincide.";
         }
+        
         usuario.setPassword(txtNuevaContrasena.getText());
+        
+        DAOUsuario daoUsuario = new DAOUsuario();
+        daoUsuario.cambiarContrasena(usuario);
         return "";
     }
 
@@ -187,7 +192,8 @@ public class ModificarContrasena extends javax.swing.JInternalFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         String msg = validarCambio();
         if (msg.isEmpty()) {
-            System.out.println(new DAOUsuario().cambiarContrasena(usuario));
+            JOptionPane.showMessageDialog(rootPane, "Contraseña cambiada");
+            Mail.getInstance().sendAMail(Mail.TipoEmail.NUEVA_CONTRASENA, usuario, "Su nueva contraseña es: " + usuario.getPassword(), null);
             GUIUtil.limpiarContenido(getInstance());
         } else {
             JOptionPane.showMessageDialog(rootPane, msg);

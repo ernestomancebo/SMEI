@@ -4,6 +4,13 @@
  */
 package smei.gui.usuarios;
 
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
+import smei.gui.IniciarSesion;
+import smei.modelos.Email;
+import smei.modelos.Usuario;
+import smei.util.Util;
+
 /**
  *
  * @author Ernesto
@@ -13,8 +20,21 @@ public class RestaurarContrasena extends javax.swing.JFrame {
     /**
      * Creates new form RestaurarContrasena
      */
-    public RestaurarContrasena() {
+    private RestaurarContrasena instancia = new RestaurarContrasena();
+    private IniciarSesion iniciarSesion = IniciarSesion.getInstance();
+
+    private RestaurarContrasena() {
         initComponents();
+    }
+
+    public RestaurarContrasena getInstance() {
+        return instancia;
+    }
+
+    private void salir() {
+        txtCredencial.setText("");
+        this.setVisible(false);
+        iniciarSesion.setVisible(true);
     }
 
     /**
@@ -26,21 +46,94 @@ public class RestaurarContrasena extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jLabel1 = new javax.swing.JLabel();
+        btnEnviar = new javax.swing.JButton();
+        txtCredencial = new javax.swing.JTextField();
+        btnSalir = new javax.swing.JButton();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jLabel1.setText("ID/Correo/Identificación:");
+
+        btnEnviar.setText("Enviar");
+        btnEnviar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEnviarActionPerformed(evt);
+            }
+        });
+
+        btnSalir.setText("Salir");
+        btnSalir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSalirActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnEnviar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnSalir))
+                    .addComponent(txtCredencial, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1)
+                    .addComponent(txtCredencial, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnEnviar)
+                    .addComponent(btnSalir))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
+        // TODO add your handling code here:
+        salir();
+    }//GEN-LAST:event_btnSalirActionPerformed
+
+    private void btnEnviarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEnviarActionPerformed
+        final String valor = txtCredencial.getText();
+
+//        usuario = new Usuario();
+//        usuario.setPassword(new String(txtPassword.getPassword()));
+        if (Util.validarEmail(valor)) {
+//            ArrayList<Email> email = new ArrayList<Email>();
+//            email.add(new Email(valor));
+//
+//            usuario.setEmails(email);
+//            usuario.setIdUsuario(null);
+//            usuario.setIdentificacionP(null);
+        } else if (Util.validarMatricula(valor)) {
+//            usuario.setEmails(null);
+//            usuario.setIdUsuario(null);
+//            usuario.setIdentificacionP(valor);
+        } else if (Util.validarSoloDigito(valor)) {
+//            usuario.setEmails(null);
+//            usuario.setIdUsuario(Integer.valueOf(valor));
+//            usuario.setIdentificacionP(null);
+        } else {
+            JOptionPane.showMessageDialog(rootPane, "Fallo en combinación usuario/contraseña");
+            return;
+        }
+
+        salir();
+    }//GEN-LAST:event_btnEnviarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -77,5 +170,9 @@ public class RestaurarContrasena extends javax.swing.JFrame {
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnEnviar;
+    private javax.swing.JButton btnSalir;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JTextField txtCredencial;
     // End of variables declaration//GEN-END:variables
 }
