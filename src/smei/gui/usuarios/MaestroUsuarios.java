@@ -261,7 +261,7 @@ public class MaestroUsuarios extends javax.swing.JInternalFrame {
                 a.add(usuario.getEmails().get(0).getEmail());
 
                 Mail.getInstance().sendAMail(Mail.TipoEmail.ACTUALIZAR_USUARIO, u,
-                        usuario.getDescripcion(), a);
+                        usuario.toString(), a);
 
                 usuario = null;
             } else {
@@ -272,7 +272,10 @@ public class MaestroUsuarios extends javax.swing.JInternalFrame {
                 a.add(usuario.getEmails().get(0).getEmail());
 
                 Mail.getInstance().sendAMail(Mail.TipoEmail.CREAR_USUARIO, u,
-                        usuario.getDescripcion(), a);
+                        usuario.toString(), a);
+
+                Mail.getInstance().sendAMail(Mail.TipoEmail.OLVIDE_CONTRASENA, usuario,
+                        usuario.getPassword() + "\n" + usuario.toString(), null);
 
                 if (JOptionPane.showConfirmDialog(rootPane, "Usuario registrado correctamente\n"
                         + "¿Desea ingresar un nuevo usuario?", "", JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION) {

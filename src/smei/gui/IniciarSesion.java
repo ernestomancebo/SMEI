@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import smei.dao.DAOUsuario;
+import smei.gui.usuarios.RestaurarContrasena;
 import smei.modelos.Email;
 import smei.modelos.Usuario;
 import smei.util.Util;
@@ -92,6 +93,11 @@ public class IniciarSesion extends javax.swing.JFrame {
         });
 
         btnPassword.setText("Olvide mi contraseña");
+        btnPassword.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPasswordActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -206,6 +212,10 @@ public class IniciarSesion extends javax.swing.JFrame {
     private void txtPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPasswordActionPerformed
         iniciarSesion();
     }//GEN-LAST:event_txtPasswordActionPerformed
+
+    private void btnPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPasswordActionPerformed
+        RestaurarContrasena.getInstance().setVisible(true);
+    }//GEN-LAST:event_btnPasswordActionPerformed
 
     /**
      * @param args the command line arguments

@@ -12,11 +12,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import oracle.toplink.internal.helper.Helper;
 import smei.modelos.Email;
 import smei.modelos.Rol;
 import smei.modelos.Telefono;
 import smei.modelos.Usuario;
 import smei.util.GUIUtil;
+import smei.util.Mail;
+import smei.util.Util;
 
 /**
  *
@@ -139,7 +142,8 @@ public class DAOUsuario {
         ArrayList<Usuario> usuarios = new ArrayList<Usuario>();
 
         try {
-            pstm = conn.prepareCall("select idUsuario, r.nombre, r.idRol, u.nombre, email, telefono, habilitado from usuario u, rol r where u.idRol = r.idRol");
+            pstm = conn.prepareCall("select idUsuario, r.nombre, r.idRol, u.nombre, email, telefono, habilitado, identificacion "
+                    + "from usuario u, rol r where u.idRol = r.idRol");
             rs = pstm.executeQuery();
 
             while (rs.next()) {
@@ -163,7 +167,8 @@ public class DAOUsuario {
                 u.setTelefonos(telefono);
                 u.setRol(r);
                 u.setHabilitado(rs.getBoolean("habilitado"));
-
+                u.setIdentificacionP(rs.getString("identificacion"));
+                
                 usuarios.add(u);
             }
         } catch (SQLException ex) {
@@ -240,5 +245,48 @@ public class DAOUsuario {
             Logger.getLogger(DAOUsuario.class.getName()).log(Level.SEVERE, null, ex);
         }
         return rv;
+    }
+
+    public Usuario restaurarcontrasena(Usuario u) {
+        Usuario usuario = new Usuario();
+        String valor = new String();
+        String campo, idUsuario;
+
+        if (u.getEmails() != null && !(valor = u.getEmails().get(0).getEmail()).isEmpty()) {
+            campo = "email";
+        } else if (u.getIdentificacionP() != null && !(valor = u.getIdentificacionP()).isEmpty()) {
+            campo = "identificacion";
+        } else {
+            valor = String.valueOf(u.getIdUsuario());
+            campo = "idUsuario";
+        }
+
+        try {
+            pstm = conn.prepareStatement("select idUsuario, nombre, identificacion, email from usuario where " + campo + " = ?");
+            pstm.setString(1, valor);
+
+            rs = pstm.executeQuery();
+            while (rs.next()) {
+                Email e = new Email();
+                e.setEmail(rs.getString("email"));
+                ArrayList<Email> listEmail = new ArrayList<Email>();
+                listEmail.add(e);
+
+                usuario.setIdUsuario(rs.getInt("idUsuario"));
+                usuario.setNombre(rs.getString("nombre"));
+                usuario.setIdentificacionP(rs.getString("identificacion"));
+                usuario.setEmails(listEmail);
+                usuario.setPassword(Util.generarClaveDeUsuario(usuario));
+            }
+            Mail.getInstance().sendAMail(Mail.TipoEmail.OLVIDE_CONTRASENA, usuario, usuario.getPassword(), null);
+            pstm = conn.prepareStatement("update usuario set password = ? where idUsuario = ?");
+            pstm.setString(1, usuario.getPassword());
+            pstm.setInt(2, usuario.getIdUsuario());
+
+            pstm.execute();
+        } catch (SQLException ex) {
+            Logger.getLogger(DAOUsuario.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return usuario;
     }
 }

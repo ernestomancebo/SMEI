@@ -54,6 +54,7 @@ public class VisualizadorDeEspacios extends javax.swing.JInternalFrame {
                         MaestroEspacios activeFrame = MaestroEspacios.getInstance();
 
                         activeFrame.limpiarData();
+                        activeFrame.setUsuario(usuario);
 
                         activeFrame.cargarDataFromID(daoEspacio.getEspacioByID(modeloEspacio.get(target.getSelectedRow()).getId()));
                         GUIUtil.addFrameToDesktopPanel(getInstance().getDesktopPane(), activeFrame);
@@ -160,7 +161,7 @@ public class VisualizadorDeEspacios extends javax.swing.JInternalFrame {
             values.add(modeloEspacio.get(i).getId());
 
             Mail.getInstance().sendAMail(Mail.TipoEmail.ACTUALIZAR_ESPACIO, usuario,
-                    modeloEspacio.get(i).getDescripcion(), daoEspacio.getCorreosInvolucradosEnReservaDeEspacio(modeloEspacio.get(i)));
+                    modeloEspacio.get(i).toString(), daoEspacio.getCorreosInvolucradosEnReservaDeEspacio(modeloEspacio.get(i)));
         }
 
         if (!values.isEmpty()) {

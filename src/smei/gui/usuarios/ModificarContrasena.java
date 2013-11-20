@@ -193,8 +193,9 @@ public class ModificarContrasena extends javax.swing.JInternalFrame {
         String msg = validarCambio();
         if (msg.isEmpty()) {
             JOptionPane.showMessageDialog(rootPane, "Contraseña cambiada");
-            Mail.getInstance().sendAMail(Mail.TipoEmail.NUEVA_CONTRASENA, usuario, "Su nueva contraseña es: " + usuario.getPassword(), null);
+            Mail.getInstance().sendAMail(Mail.TipoEmail.NUEVA_CONTRASENA, usuario, usuario.getPassword(), null);
             GUIUtil.limpiarContenido(getInstance());
+            this.setVisible(false);
         } else {
             JOptionPane.showMessageDialog(rootPane, msg);
         }

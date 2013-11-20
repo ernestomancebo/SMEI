@@ -106,7 +106,7 @@ public class Reserva {
 
     @Override
     public String toString() {
-        return ("Reservación: " + getId()
+        return ("Reservación: " + (getId() == null ? "N/A" : getId())
                 + "\nUsuario: " + getUsuario().getNombre()
                 + "\nLugar: " + getEspacio().getNombre()
                 + "\nCantidad de Personas: " + getCantPersonas()

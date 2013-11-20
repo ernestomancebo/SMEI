@@ -216,12 +216,12 @@ public class MaestroEspacios extends javax.swing.JInternalFrame {
                 GUIUtil.limpiarContenido(getInstance());
                 //Enviar mail a Administradores, a los involucrados y a quien lo creo
                 m.sendAMail(Mail.TipoEmail.ACTUALIZAR_ESPACIO, usuario,
-                        espacio.getDescripcion(), daoEspacio.getCorreosInvolucradosEnReservaDeEspacio(espacio));
+                        espacio.toString(), daoEspacio.getCorreosInvolucradosEnReservaDeEspacio(espacio));
                 espacio = null;
             } else {
                 daoEspacio.insertarEspacio(espacio);
                 //Enviar mail a Administradores y a quien lo creo
-                m.sendAMail(Mail.TipoEmail.CREAR_ESPACIO, usuario, espacio.getDescripcion(), null);
+                m.sendAMail(Mail.TipoEmail.CREAR_ESPACIO, usuario, espacio.toString(), null);
                 espacio = null;
 
                 if (JOptionPane.showConfirmDialog(rootPane, "Espacio creado correctamente\n"

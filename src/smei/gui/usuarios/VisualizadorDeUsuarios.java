@@ -55,6 +55,7 @@ public class VisualizadorDeUsuarios extends javax.swing.JInternalFrame {
                     if (target.getSelectedColumn() != 0) {
                         MaestroUsuarios activeFrame = MaestroUsuarios.getInstance();
                         activeFrame.limpiarData();
+                        activeFrame.setUsuario(usuario);
                         activeFrame.cargarDataFromUsuario(daoUsuario.getUsuarioByID(
                                 modeloUsuario.get(target.getSelectedRow()).getIdUsuario()));
                         GUIUtil.addFrameToDesktopPanel(getInstance().getDesktopPane(), activeFrame);
@@ -166,7 +167,7 @@ public class VisualizadorDeUsuarios extends javax.swing.JInternalFrame {
             a.add(modeloUsuario.get(i).getEmails().get(0).getEmail());
 
             Mail.getInstance().sendAMail(Mail.TipoEmail.ACTUALIZAR_USUARIO, usuario,
-                    modeloUsuario.get(i).getDescripcion(), a);
+                    modeloUsuario.get(i).toString(), a);
         }
 
         if (!values.isEmpty()) {

@@ -103,6 +103,10 @@ public class Mail {
                     }
                 });
 
+        if (copia == null) {
+            copia = new ArrayList<String>();
+        }
+
         try {
             //Obteniendo el titulo y el contenido del mensaje
             pstm = conn.prepareCall("select coalesce(titulo_personalizado, titulo_por_defecto) as titulo, "
@@ -122,17 +126,11 @@ public class Mail {
             contenido = contenido.replaceAll(Pattern.quote("@@usuario"), usuario.getDescripcion());
             contenido = contenido.replaceAll(Pattern.quote("@@detalle"), descripcion);
 
-            System.out.println(contenido);
-
             //Agregando correos de copia a Administradores, si no son propios de los usuarios
             if (!tipo.equals(TipoEmail.OLVIDE_CONTRASENA) && !tipo.equals(TipoEmail.NUEVA_CONTRASENA)) {
                 pstm = conn.prepareStatement("select u.email from usuario u, rol r where u.idRol = r.idRol "
                         + "and r.idRol = (select idRol from rol n where upper(n.nombre) = 'ADMINISTRADOR')");
                 rs = pstm.executeQuery();
-
-                if (copia == null) {
-                    copia = new ArrayList<String>();
-                }
 
                 while (rs.next()) {
                     copia.add(rs.getString("email"));

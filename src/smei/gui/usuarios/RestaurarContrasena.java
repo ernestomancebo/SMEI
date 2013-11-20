@@ -4,8 +4,13 @@
  */
 package smei.gui.usuarios;
 
+import java.awt.Dialog;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.util.ArrayList;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import smei.dao.DAOUsuario;
 import smei.gui.IniciarSesion;
 import smei.modelos.Email;
 import smei.modelos.Usuario;
@@ -20,21 +25,31 @@ public class RestaurarContrasena extends javax.swing.JFrame {
     /**
      * Creates new form RestaurarContrasena
      */
-    private RestaurarContrasena instancia = new RestaurarContrasena();
+    private static RestaurarContrasena instancia = new RestaurarContrasena();
     private IniciarSesion iniciarSesion = IniciarSesion.getInstance();
-
+    
     private RestaurarContrasena() {
         initComponents();
+        initialize();
     }
-
-    public RestaurarContrasena getInstance() {
+    
+    public static RestaurarContrasena getInstance() {
         return instancia;
     }
-
+    
     private void salir() {
         txtCredencial.setText("");
         this.setVisible(false);
         iniciarSesion.setVisible(true);
+    }
+    
+    private void initialize() {
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+        this.setLocation(dim.width / 2 - this.getSize().width / 2, dim.height / 2 - this.getSize().height / 2);
+        
+        this.setResizable(false);
+        this.setModalExclusionType(Dialog.ModalExclusionType.APPLICATION_EXCLUDE);
+        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
 
     /**
@@ -109,29 +124,30 @@ public class RestaurarContrasena extends javax.swing.JFrame {
 
     private void btnEnviarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEnviarActionPerformed
         final String valor = txtCredencial.getText();
-
-//        usuario = new Usuario();
-//        usuario.setPassword(new String(txtPassword.getPassword()));
+        Usuario usuario = new Usuario();
+        
         if (Util.validarEmail(valor)) {
-//            ArrayList<Email> email = new ArrayList<Email>();
-//            email.add(new Email(valor));
-//
-//            usuario.setEmails(email);
-//            usuario.setIdUsuario(null);
-//            usuario.setIdentificacionP(null);
+            ArrayList<Email> email = new ArrayList<Email>();
+            email.add(new Email(valor));
+            
+            usuario.setEmails(email);
+            usuario.setIdUsuario(null);
+            usuario.setIdentificacionP(null);
         } else if (Util.validarMatricula(valor)) {
-//            usuario.setEmails(null);
-//            usuario.setIdUsuario(null);
-//            usuario.setIdentificacionP(valor);
+            usuario.setEmails(null);
+            usuario.setIdUsuario(null);
+            usuario.setIdentificacionP(valor);
         } else if (Util.validarSoloDigito(valor)) {
-//            usuario.setEmails(null);
-//            usuario.setIdUsuario(Integer.valueOf(valor));
-//            usuario.setIdentificacionP(null);
+            usuario.setEmails(null);
+            usuario.setIdUsuario(Integer.valueOf(valor));
+            usuario.setIdentificacionP(null);
         } else {
             JOptionPane.showMessageDialog(rootPane, "Fallo en combinación usuario/contraseña");
             return;
         }
-
+        
+        new DAOUsuario().restaurarcontrasena(usuario);
+        
         salir();
     }//GEN-LAST:event_btnEnviarActionPerformed
 

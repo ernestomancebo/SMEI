@@ -54,6 +54,7 @@ public class VisualizadorDeReservas extends javax.swing.JInternalFrame {
                     if (target.getSelectedColumn() != 0) {
                         MaestroReservas activeFrame = MaestroReservas.getInstance();
                         activeFrame.limpiarData();
+                        activeFrame.setUsuario(usuario);
                         activeFrame.cargarData(modeloReserva.get(target.getSelectedRow()));
                         GUIUtil.addFrameToDesktopPanel(getInstance().getDesktopPane(), activeFrame);
                         GUIUtil.deshabilitarEdicion(activeFrame);
@@ -202,7 +203,7 @@ public class VisualizadorDeReservas extends javax.swing.JInternalFrame {
         for (Integer i : GUIUtil.getIndexOfSelectedRows(tblVisualizarReserva, 0)) {
             values.add(modeloReserva.get(i).getId());
             Mail.getInstance().sendAMail(Mail.TipoEmail.ACTUALIZAR_RESERVA, usuario,
-                    modeloReserva.get(i).getDescripcion(), new DAOReservas().getCorreosInvolucradosEnReserva(modeloReserva.get(i)));
+                    modeloReserva.get(i).toString(), new DAOReservas().getCorreosInvolucradosEnReserva(modeloReserva.get(i)));
         }
         return values;
     }

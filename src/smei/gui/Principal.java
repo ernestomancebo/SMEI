@@ -6,11 +6,15 @@ package smei.gui;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JDesktopPane;
 import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import smei.dao.DAOUsuario;
+import smei.dao.DBConnection;
 import smei.gui.espacios.MaestroEspacios;
 import smei.gui.espacios.VisualizadorDeEspacios;
 import smei.gui.historico.MaestroTendencia;
@@ -76,6 +80,7 @@ public class Principal extends javax.swing.JFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         mnArchivo = new javax.swing.JMenu();
         mnCerrarSesion = new javax.swing.JMenuItem();
+        mnSalir = new javax.swing.JMenu();
         mnAyuda = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -275,6 +280,14 @@ public class Principal extends javax.swing.JFrame {
         });
         mnArchivo.add(mnCerrarSesion);
 
+        mnSalir.setText("Salir");
+        mnSalir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnSalirActionPerformed(evt);
+            }
+        });
+        mnArchivo.add(mnSalir);
+
         jMenuBar1.add(mnArchivo);
 
         mnAyuda.setText("Ayuda");
@@ -379,6 +392,8 @@ public class Principal extends javax.swing.JFrame {
     private void jLinkBtnRegReservaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jLinkBtnRegReservaActionPerformed
         activeFrame = MaestroReservas.getInstance();
         ((MaestroReservas) activeFrame).limpiarData();
+        // Asignando usuario
+        ((MaestroReservas) activeFrame).setUsuario(usuario);
         GUIUtil.limpiarContenido(activeFrame);
         agregarMaestroInternalFrame("Registrar Reservacion");
     }//GEN-LAST:event_jLinkBtnRegReservaActionPerformed
@@ -386,30 +401,40 @@ public class Principal extends javax.swing.JFrame {
     private void jLinkBtnRegEspacioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jLinkBtnRegEspacioActionPerformed
         activeFrame = MaestroEspacios.getInstance();
         ((MaestroEspacios) activeFrame).limpiarData();
+        // Asignando usuario
+        ((MaestroEspacios) activeFrame).setUsuario(usuario);
         GUIUtil.limpiarContenido(activeFrame);
         agregarMaestroInternalFrame("Registrar Espacio");
     }//GEN-LAST:event_jLinkBtnRegEspacioActionPerformed
 
     private void jLinkBtnBuscarReservaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jLinkBtnBuscarReservaActionPerformed
         activeFrame = VisualizadorDeReservas.getInstance();
+        // Asignando usuario
+        ((VisualizadorDeReservas) activeFrame).setUsuario(usuario);
         agregarVisualizadorInternalFrame("Buscar Reserva");
 
     }//GEN-LAST:event_jLinkBtnBuscarReservaActionPerformed
 
     private void jLinkBtnBuscarEspacioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jLinkBtnBuscarEspacioActionPerformed
         activeFrame = VisualizadorDeEspacios.getInstance();
+        // Asignando usuario
+        ((VisualizadorDeEspacios) activeFrame).setUsuario(usuario);
         agregarVisualizadorInternalFrame("Buscar Espacio");
     }//GEN-LAST:event_jLinkBtnBuscarEspacioActionPerformed
 
     private void jLinkBtnRegUsuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jLinkBtnRegUsuActionPerformed
         activeFrame = MaestroUsuarios.getInstance();
         ((MaestroUsuarios) activeFrame).limpiarData();
+        // Asignando usuario
+        ((MaestroUsuarios) activeFrame).setUsuario(usuario);
         GUIUtil.limpiarContenido(activeFrame);
         agregarMaestroInternalFrame("Registrar Usuario");
     }//GEN-LAST:event_jLinkBtnRegUsuActionPerformed
 
     private void jLinkBtnBuscarUsuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jLinkBtnBuscarUsuActionPerformed
         activeFrame = VisualizadorDeUsuarios.getInstance();
+        // Asignando usuario
+        ((VisualizadorDeUsuarios) activeFrame).setUsuario(usuario);
         agregarMaestroInternalFrame("Buscar Usuario");
     }//GEN-LAST:event_jLinkBtnBuscarUsuActionPerformed
 
@@ -417,7 +442,8 @@ public class Principal extends javax.swing.JFrame {
         setUsuario(new DAOUsuario().getUsuarioByID(1));
 
         activeFrame = ModificarContrasena.getInstance();
-        ModificarContrasena.getInstance().setUsuario(usuario);
+        // Asignando usuario
+        ((ModificarContrasena) activeFrame).setUsuario(usuario);
         agregarMaestroInternalFrame("Modificar Contraseña");
     }//GEN-LAST:event_jLinkBtnModContrActionPerformed
 
@@ -433,6 +459,14 @@ public class Principal extends javax.swing.JFrame {
         iniciarSesion.setVisible(true);
         iniciarSesion.limpiarData();
     }//GEN-LAST:event_mnCerrarSesionActionPerformed
+
+    private void mnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnSalirActionPerformed
+        try {
+            DBConnection.getConnection().close();
+        } catch (SQLException ex) {
+            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_mnSalirActionPerformed
 
     private void agregarMaestroInternalFrame(String titulo) {
         GUIUtil.addFrameToDesktopPanel(PrincipalDesktopPane, activeFrame);
@@ -482,6 +516,7 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JMenu mnArchivo;
     private javax.swing.JMenu mnAyuda;
     private javax.swing.JMenuItem mnCerrarSesion;
+    private javax.swing.JMenu mnSalir;
     private com.l2fprod.common.swing.JTaskPaneGroup taskPaneEspacio;
     private com.l2fprod.common.swing.JTaskPaneGroup taskPaneNotificaciones;
     private com.l2fprod.common.swing.JTaskPane taskPaneReporte;
