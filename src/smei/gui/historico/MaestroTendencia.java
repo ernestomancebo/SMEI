@@ -130,6 +130,7 @@ public class MaestroTendencia extends javax.swing.JInternalFrame {
 
         grpEntidades = new javax.swing.ButtonGroup();
         grpTipo = new javax.swing.ButtonGroup();
+        fileChooser = new javax.swing.JFileChooser();
         rbtnReserva = new javax.swing.JRadioButton();
         rbtnEspacio = new javax.swing.JRadioButton();
         rbtnUsuario = new javax.swing.JRadioButton();
@@ -238,22 +239,27 @@ public class MaestroTendencia extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_rbtnReservaStateChanged
 
     private void generarReporteReservaciones() {
+        final String reporteSeleccionado = "Maestro_Reservas";
+        ArrayList<InputStream> fis = new ArrayList<InputStream>();
         ArrayList<String> estados = new ArrayList<String>();
-
-        estados.add((chkCompletada.isSelected()) ? chkCompletada.getText() : null);
-        estados.add((chkPendiente.isSelected()) ? chkPendiente.getText() : null);
-        estados.add((chkCancelada.isSelected()) ? chkCancelada.getText() : null);
-
-        estados.removeAll(Collections.singleton(null));
-
-        mapeoParametros = new HashMap<String, Object>();
-        mapeoParametros.put("periodo", String.valueOf(spnTiempo.getValue()));
-        mapeoParametros.put("idEstado1", new String());
-        mapeoParametros.put("idEstado2", new String());
-        mapeoParametros.put("idEstado3", new String());
-
         String titulo = new String();
+        mapeoParametros = new HashMap<String, Object>();
+        reporte = new ReportGenerator();
+
         try {
+            estados.add((chkCompletada.isSelected()) ? chkCompletada.getText() : null);
+            estados.add((chkPendiente.isSelected()) ? chkPendiente.getText() : null);
+            estados.add((chkCancelada.isSelected()) ? chkCancelada.getText() : null);
+            estados.removeAll(Collections.singleton(null));
+
+            mapeoParametros.put("periodo", String.valueOf(spnTiempo.getValue()));
+            mapeoParametros.put("idEstado1", new String());
+            mapeoParametros.put("idEstado2", new String());
+            mapeoParametros.put("idEstado3", new String());
+
+            fis.add(new FileInputStream(new File("resources/reports/"
+                    + reporteSeleccionado + ".jrxml")));
+
             pstm = conn.prepareCall("select idEstado from estados_reservaciones where nombre = ?");
             for (byte i = 1; i < (estados.size() + 1); i++) {
                 pstm.setString(1, estados.get(i - 1));
@@ -269,21 +275,8 @@ public class MaestroTendencia extends javax.swing.JInternalFrame {
                 }
             }
             mapeoParametros.put("reporte", titulo);
-//            mapeoParametros.put("antiguedad", ui);
-            
-            reporte = new ReportGenerator();
 
-
-            String[] archivosJasper = {"Tendencia_Usuarios"};
-
-            ArrayList<InputStream> fis = new ArrayList<InputStream>();
-
-            for (String archivo : archivosJasper) {
-                fis.add(new FileInputStream(new File("resources/reports/"
-                        + archivo + ".jrxml")));
-            }
-
-            reporte.printExcelReport(fis, "resources/reporte.xlsx", mapeoParametros, conn);            
+            reporte.printExcelReport(fis, "resources/" + reporteSeleccionado + ".xlsx", mapeoParametros, conn);
         } catch (SQLException ex) {
             Logger.getLogger(MaestroTendencia.class.getName()).log(Level.SEVERE, null, ex);
         } catch (JRException ex) {
@@ -293,7 +286,23 @@ public class MaestroTendencia extends javax.swing.JInternalFrame {
         }
     }
 
-    private void generarReporteEspacios() {
+    private void generarReporteEntidades(String reporteSeleccionado) {
+        try {
+            ArrayList<InputStream> fis = new ArrayList<InputStream>();
+            mapeoParametros = new HashMap<String, Object>();
+            mapeoParametros.put("periodo", String.valueOf(spnTiempo.getValue()));
+            reporte = new ReportGenerator();
+
+            fis.add(new FileInputStream(new File("resources/reports/"
+                    + reporteSeleccionado + ".jrxml")));
+
+            reporte.printExcelReport(fis, "resources/" + reporteSeleccionado + ".xlsx", mapeoParametros, conn);
+
+        } catch (JRException ex) {
+            Logger.getLogger(MaestroTendencia.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(MaestroTendencia.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
@@ -305,10 +314,18 @@ public class MaestroTendencia extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_rbtnTendenciaStateChanged
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        generarReporteReservaciones();
+        final String[] archivosJasper = {"Tendencia_Espacios", "Maestro_Espacios",
+            "Tendencia_Usuarios", "Maestro_Usuarios"};
+
+//        fileChooser.setVisible(true);
+        
+//        String path = fileChooser.getdi
         if (rbtnReserva.isSelected()) {
+            generarReporteReservaciones();
         } else if (rbtnEspacio.isSelected()) {
+            generarReporteEntidades((rbtnTendencia.isSelected() ? archivosJasper[0] : archivosJasper[1]));
         } else {
+            generarReporteEntidades((rbtnTendencia.isSelected() ? archivosJasper[2] : archivosJasper[3]));
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -323,6 +340,7 @@ public class MaestroTendencia extends javax.swing.JInternalFrame {
     private javax.swing.JCheckBox chkCancelada;
     private javax.swing.JCheckBox chkCompletada;
     private javax.swing.JCheckBox chkPendiente;
+    private javax.swing.JFileChooser fileChooser;
     private javax.swing.ButtonGroup grpEntidades;
     private javax.swing.ButtonGroup grpTipo;
     private javax.swing.JButton jButton1;

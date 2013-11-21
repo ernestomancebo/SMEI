@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Reservas" language="groovy" pageWidth="1008" pageHeight="612" orientation="Landscape" columnWidth="968" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="ad7b86e9-956a-4824-872a-96da2e4574d4">
 	<property name="ireport.zoom" value="1.0"/>
-	<property name="ireport.x" value="297"/>
+	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="reporte" class="java.lang.String"/>
 	<parameter name="idEstado1" class="java.lang.String">
@@ -54,7 +54,7 @@ order by es.idEstado]]>
 	</field>
 	<field name="estado" class="java.lang.String"/>
 	<title>
-		<band height="60" splitType="Stretch">
+		<band height="40" splitType="Stretch">
 			<staticText>
 				<reportElement uuid="85cd1465-96a7-4a89-a469-610aaea41eb1" x="317" y="0" width="202" height="20" forecolor="#404040"/>
 				<textElement textAlignment="Center">
@@ -63,18 +63,11 @@ order by es.idEstado]]>
 				<text><![CDATA[SMEI]]></text>
 			</staticText>
 			<textField pattern="dd/MM/yyyy">
-				<reportElement uuid="c31699a2-b284-47aa-862d-a38361bf5ec6" x="317" y="40" width="202" height="20" forecolor="#404040"/>
+				<reportElement uuid="c31699a2-b284-47aa-862d-a38361bf5ec6" x="317" y="20" width="202" height="20" forecolor="#404040"/>
 				<textElement textAlignment="Center">
 					<font size="12" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement uuid="680ec20f-dd27-42e3-8b59-ec9823750016" x="317" y="20" width="202" height="20" forecolor="#404040"/>
-				<textElement textAlignment="Center">
-					<font size="12" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA["Reservas"]]></textFieldExpression>
 			</textField>
 		</band>
 	</title>

@@ -3,11 +3,11 @@
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
-	<parameter name="antiguedad" class="java.lang.String"/>
+	<parameter name="periodo" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[select u.Nombre, (select  count(r.idReservacion) from reservaciones r where r.idUsuario = u.idUsuario
-        and r.fechaInicio >= date_sub(curdate(), interval $P{antiguedad} month)) as `Catidad de Reservaciones`,
-        (select count(r.idReservacion) from reservaciones r where r.fechaInicio >= date_sub(curdate(), interval $P{antiguedad} month)) as `Total de Reservaciones`
+        and r.fechaInicio >= date_sub(curdate(), interval $P{periodo} month)) as `Catidad de Reservaciones`,
+        (select count(r.idReservacion) from reservaciones r where r.fechaInicio >= date_sub(curdate(), interval $P{periodo} month)) as `Total de Reservaciones`
 		from usuario u order by 2 desc]]>
 	</queryString>
 	<field name="Nombre" class="java.lang.String">

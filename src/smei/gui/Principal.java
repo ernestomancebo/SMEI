@@ -80,7 +80,7 @@ public class Principal extends javax.swing.JFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         mnArchivo = new javax.swing.JMenu();
         mnCerrarSesion = new javax.swing.JMenuItem();
-        mnSalir = new javax.swing.JMenu();
+        mnSalir = new javax.swing.JMenuItem();
         mnAyuda = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -465,6 +465,8 @@ public class Principal extends javax.swing.JFrame {
             DBConnection.getConnection().close();
         } catch (SQLException ex) {
             Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            System.exit(0);
         }
     }//GEN-LAST:event_mnSalirActionPerformed
 
@@ -516,7 +518,7 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JMenu mnArchivo;
     private javax.swing.JMenu mnAyuda;
     private javax.swing.JMenuItem mnCerrarSesion;
-    private javax.swing.JMenu mnSalir;
+    private javax.swing.JMenuItem mnSalir;
     private com.l2fprod.common.swing.JTaskPaneGroup taskPaneEspacio;
     private com.l2fprod.common.swing.JTaskPaneGroup taskPaneNotificaciones;
     private com.l2fprod.common.swing.JTaskPane taskPaneReporte;
