@@ -259,7 +259,7 @@ public class MaestroTendencia extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_rbtnReservaStateChanged
 
     private void generarReporteReservaciones(String ruta) {
-        final String reporteSeleccionado = "Registro_Reservas";
+        final String reporteSeleccionado = "Reservaciones";
         ArrayList<InputStream> fis = new ArrayList<InputStream>();
         ArrayList<String> estados = new ArrayList<String>();
         String titulo = new String();
@@ -272,10 +272,16 @@ public class MaestroTendencia extends javax.swing.JInternalFrame {
             estados.add((chkCancelada.isSelected()) ? chkCancelada.getText() : null);
             estados.removeAll(Collections.singleton(null));
 
+            if (estados.isEmpty()) {
+                JOptionPane.showMessageDialog(rootPane, "Debe de seleccionar al "
+                        + "menos un estado para generar reporte.");
+                return;
+            }
+
             mapeoParametros.put("periodo", String.valueOf(spnTiempo.getValue()));
-            mapeoParametros.put("idEstado1", new String());
-            mapeoParametros.put("idEstado2", new String());
-            mapeoParametros.put("idEstado3", new String());
+            mapeoParametros.put("idEstado1", new Integer(0));
+            mapeoParametros.put("idEstado2", new Integer(0));
+            mapeoParametros.put("idEstado3", new Integer(0));
 
             fis.add(new FileInputStream(new File("resources/reports/"
                     + reporteSeleccionado + ".jrxml")));
@@ -285,7 +291,7 @@ public class MaestroTendencia extends javax.swing.JInternalFrame {
                 pstm.setString(1, estados.get(i - 1));
                 rs = pstm.executeQuery();
                 while (rs.next()) {
-                    mapeoParametros.put("idEstado" + i, rs.getString("idEstado"));
+                    mapeoParametros.put("idEstado" + i, rs.getInt("idEstado"));
                 }
                 titulo = titulo + estados.get(i - 1);
                 if ((estados.size() - i) > 1) {
@@ -294,7 +300,7 @@ public class MaestroTendencia extends javax.swing.JInternalFrame {
                     titulo = titulo + " y ";
                 }
             }
-            mapeoParametros.put("reporte", titulo);
+//            mapeoParametros.put("reporte", titulo);
 
             reporte.printExcelReport(fis, ruta, mapeoParametros, conn);
         } catch (SQLException ex) {

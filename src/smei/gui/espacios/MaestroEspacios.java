@@ -83,6 +83,13 @@ public class MaestroEspacios extends javax.swing.JInternalFrame {
 
     public void setUsuario(Usuario u) {
         this.usuario = u;
+
+        //Si no es administrador
+        if (usuario.getRol().getIdRol() != 1) {
+            btnModificar.setVisible(false);
+        } else {
+            btnModificar.setVisible(true);
+        }
     }
 
     /**

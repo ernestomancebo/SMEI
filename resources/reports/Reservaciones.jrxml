@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Reservaciones" language="groovy" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="752" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="89ef9283-01de-4b90-990d-5a7073973ddd">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="idEstado1" class="java.lang.Integer"/>
+	<parameter name="idEstado2" class="java.lang.Integer"/>
+	<parameter name="idEstado3" class="java.lang.Integer"/>
+	<parameter name="periodo" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT
+    r.idreservacion,
+    u.nombre as usuario,
+    e.nombre as lugar,
+    r.cantidaddepersonas,
+    r.descripcion,
+    es.nombre as estado
+FROM
+    reservaciones r,
+    espacios e,
+    usuario u,
+    estados_reservaciones es
+WHERE
+    u.idusuario = r.idusuario
+        AND e.idespacio = r.idespacio
+        AND es.idestado = r.idestado
+        AND (es.idestado = $P{idEstado1} OR
+	es.idestado = $P{idEstado2} OR
+	es.idestado = $P{idEstado3})
+        AND r.fechaInicio >= date_sub(curdate(), interval $P{periodo} month)
+order by es.idEstado]]>
+	</queryString>
+	<field name="idreservacion" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="usuario" class="java.lang.String"/>
+	<field name="lugar" class="java.lang.String"/>
+	<field name="cantidaddepersonas" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="descripcion" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="estado" class="java.lang.String"/>
+	<title>
+		<band height="60" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="15fd053f-7cf5-4e74-9524-9eb79bc571c5" x="326" y="0" width="202" height="20" forecolor="#404040"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[SMEI]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement uuid="e9794425-3371-4e78-a7d5-6f431494135c" x="326" y="40" width="202" height="20" forecolor="#404040"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="704d7f66-e36b-4492-a0a0-efbe0cf6cf9d" x="326" y="20" width="202" height="20" forecolor="#404040"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Reporte]]></text>
+			</staticText>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="22" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="a2e2c1ec-9d41-406d-b30d-6daae1bcc22b" x="6" y="2" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[idreservacion]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="97c4f7de-fbad-46a8-8c4a-9ce3334ede71" x="106" y="2" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[usuario]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="72dc97ea-da58-4d09-88e8-49c4f7df74e1" x="206" y="2" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[fecha]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="e589b4da-ca2d-41d3-a15d-03e089e10d5a" x="306" y="2" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[horario]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d27d65e3-2765-471c-93ec-2eaadb917103" x="406" y="2" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[lugar]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="f90e3865-eaa3-4547-ab95-63dce1f367ba" x="506" y="2" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[cantidaddepersonas]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="9dd462bc-50f5-4055-b373-dad91eff5f95" x="606" y="2" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[descripcion]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch"/>
+	</detail>
+</jasperReport>

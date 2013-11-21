@@ -106,13 +106,13 @@ public class Reserva {
 
     @Override
     public String toString() {
-        return ("Reservación: " + (getId() == null ? "N/A" : getId())
+        return ("Reservación: " + (this.getId() == null ? "N/A" : getId())
                 + "\nUsuario: " + getUsuario().getNombre()
                 + "\nLugar: " + getEspacio().getNombre()
                 + "\nCantidad de Personas: " + getCantPersonas()
                 + "\nDescripción: " + getDescripcion()
                 + "\nFecha: " + Util.getFechaFromDate(fechaInicio)
                 + "\nHora: " + Util.getHoraFromDate(fechaInicio) + " - " + Util.getHoraFromDate(fechaFin)
-                + "\nEstado de la reserva: " + getEstado().getNombre());
+                + "\nEstado de la reserva: " + (getEstado() == null ? "N/A" : getEstado().getNombre()));
     }
 }

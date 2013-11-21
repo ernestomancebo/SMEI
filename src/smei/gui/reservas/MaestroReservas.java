@@ -234,6 +234,13 @@ public final class MaestroReservas extends javax.swing.JInternalFrame {
 
     public void setUsuario(Usuario u) {
         this.usuario = u;
+
+        //Si no es administrador o dueño de la reserva
+        if (usuario.getRol().getIdRol() == 1 || (reserva.getUsuario().getIdUsuario().equals(usuario.getIdUsuario()))) {
+            btnModificar.setVisible(true);
+        } else {
+            btnModificar.setVisible(false);
+        }
     }
 //    public static void setReservaToNull() {
 //        reserva = null;

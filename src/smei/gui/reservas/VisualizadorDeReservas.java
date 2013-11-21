@@ -54,7 +54,6 @@ public class VisualizadorDeReservas extends javax.swing.JInternalFrame {
                     if (target.getSelectedColumn() != 0) {
                         MaestroReservas activeFrame = MaestroReservas.getInstance();
                         activeFrame.limpiarData();
-                        activeFrame.setUsuario(usuario);
                         activeFrame.cargarData(modeloReserva.get(target.getSelectedRow()));
                         GUIUtil.addFrameToDesktopPanel(getInstance().getDesktopPane(), activeFrame);
                         GUIUtil.deshabilitarEdicion(activeFrame);
@@ -64,6 +63,7 @@ public class VisualizadorDeReservas extends javax.swing.JInternalFrame {
                             GUIUtil.habilitarBtnModificar(activeFrame);
                         }
                         activeFrame.deshabilitarModReservasNoPendientes();
+                        activeFrame.setUsuario(usuario);
                     }
                 }
             }
@@ -88,6 +88,13 @@ public class VisualizadorDeReservas extends javax.swing.JInternalFrame {
 
     public void setUsuario(Usuario u) {
         this.usuario = u;
+
+        //Si no es administrador
+        if (usuario.getIdUsuario() != 1) {
+            btnCancelarReserva.setVisible(false);
+        } else {
+            btnCancelarReserva.setVisible(true);
+        }
     }
 
     /**

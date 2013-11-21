@@ -54,18 +54,23 @@ public class VisualizadorDeEspacios extends javax.swing.JInternalFrame {
                         MaestroEspacios activeFrame = MaestroEspacios.getInstance();
 
                         activeFrame.limpiarData();
-                        activeFrame.setUsuario(usuario);
 
                         activeFrame.cargarDataFromID(daoEspacio.getEspacioByID(modeloEspacio.get(target.getSelectedRow()).getId()));
                         GUIUtil.addFrameToDesktopPanel(getInstance().getDesktopPane(), activeFrame);
                         GUIUtil.deshabilitarEdicion(activeFrame);
                         GUIUtil.habilitarBtnModificar(activeFrame);
                         GUIUtil.habilitarBtnSalir(activeFrame);
+
+                        activeFrame.setUsuario(usuario);
                     }
                 }
             }
         });
 
+        /*
+         jLinkBtnBuscarReserva.setEnabled(true);
+         jLinkBtnBuscarEspacio.setEnabled(true);
+         */
         //Add table Model
         cargarTabla();
     }
@@ -179,6 +184,15 @@ public class VisualizadorDeEspacios extends javax.swing.JInternalFrame {
 
     public void setUsuario(Usuario u) {
         this.usuario = u;
+
+        //Si no es administrador
+        if (usuario.getRol().getIdRol() != 1) {
+            btnEliminarEspacios.setVisible(false);
+            chkDeshabilitar.setVisible(false);
+        } else {
+            btnEliminarEspacios.setVisible(true);
+            chkDeshabilitar.setVisible(true);
+        }
     }
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
         this.setVisible(false);
