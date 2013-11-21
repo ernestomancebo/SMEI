@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import oracle.toplink.internal.helper.Helper;
 import smei.modelos.Email;
 import smei.modelos.Rol;
 import smei.modelos.Telefono;
@@ -168,7 +167,7 @@ public class DAOUsuario {
                 u.setRol(r);
                 u.setHabilitado(rs.getBoolean("habilitado"));
                 u.setIdentificacionP(rs.getString("identificacion"));
-                
+
                 usuarios.add(u);
             }
         } catch (SQLException ex) {
@@ -288,5 +287,38 @@ public class DAOUsuario {
             Logger.getLogger(DAOUsuario.class.getName()).log(Level.SEVERE, null, ex);
         }
         return usuario;
+    }
+
+    public boolean existeEsteMail(String mail) {
+        try {
+            pstm = conn.prepareStatement("SELECT COUNT(email) FROM usuario WHERE email = ?");
+            pstm.setString(1, mail);
+            rs = pstm.executeQuery();
+
+            rs.first();
+
+            if (rs.getInt(1) > 0) {
+                return true;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(DAOUsuario.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
+
+    public boolean existeEstaIdentificacion(String identificacion) {
+        try {
+            pstm = conn.prepareStatement("SELECT COUNT(identificacion) FROM usuario WHERE identificacion = ?");
+            pstm.setString(1, identificacion);
+            rs = pstm.executeQuery();
+
+            rs.first();
+            if (rs.getInt(1) > 0) {
+                return true;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(DAOUsuario.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
     }
 }
