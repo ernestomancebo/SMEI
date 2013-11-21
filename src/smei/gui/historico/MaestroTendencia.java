@@ -18,6 +18,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileFilter;
 import net.sf.jasperreports.engine.JRException;
 import smei.dao.DBConnection;
 import smei.util.ReportGenerator;
@@ -68,6 +71,23 @@ public class MaestroTendencia extends javax.swing.JInternalFrame {
         mapeoReservaciones.put("Completadas", "COMPLETADA");
         mapeoReservaciones.put("Pendientes", "PENDIENTE");
 
+        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        fileChooser.setFileFilter(new FileFilter() {
+
+            @Override
+            public String getDescription() {
+                return "Archivos Excel (*.xlsx)";
+            }
+
+            @Override
+            public boolean accept(File f) {
+                if (f.isDirectory()) {
+                    return true;
+                } else {
+                    return f.getName().toLowerCase().endsWith(".xlsx");
+                }
+            }
+        });
         this.setSize(297, 193);
 
     }
@@ -238,8 +258,8 @@ public class MaestroTendencia extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_rbtnReservaStateChanged
 
-    private void generarReporteReservaciones() {
-        final String reporteSeleccionado = "Maestro_Reservas";
+    private void generarReporteReservaciones(String ruta) {
+        final String reporteSeleccionado = "Registro_Reservas";
         ArrayList<InputStream> fis = new ArrayList<InputStream>();
         ArrayList<String> estados = new ArrayList<String>();
         String titulo = new String();
@@ -276,7 +296,7 @@ public class MaestroTendencia extends javax.swing.JInternalFrame {
             }
             mapeoParametros.put("reporte", titulo);
 
-            reporte.printExcelReport(fis, "resources/" + reporteSeleccionado + ".xlsx", mapeoParametros, conn);
+            reporte.printExcelReport(fis, ruta, mapeoParametros, conn);
         } catch (SQLException ex) {
             Logger.getLogger(MaestroTendencia.class.getName()).log(Level.SEVERE, null, ex);
         } catch (JRException ex) {
@@ -286,7 +306,7 @@ public class MaestroTendencia extends javax.swing.JInternalFrame {
         }
     }
 
-    private void generarReporteEntidades(String reporteSeleccionado) {
+    private void generarReporteEntidades(String reporteSeleccionado, String ruta) {
         try {
             ArrayList<InputStream> fis = new ArrayList<InputStream>();
             mapeoParametros = new HashMap<String, Object>();
@@ -296,7 +316,7 @@ public class MaestroTendencia extends javax.swing.JInternalFrame {
             fis.add(new FileInputStream(new File("resources/reports/"
                     + reporteSeleccionado + ".jrxml")));
 
-            reporte.printExcelReport(fis, "resources/" + reporteSeleccionado + ".xlsx", mapeoParametros, conn);
+            reporte.printExcelReport(fis, ruta, mapeoParametros, conn);
 
         } catch (JRException ex) {
             Logger.getLogger(MaestroTendencia.class.getName()).log(Level.SEVERE, null, ex);
@@ -314,18 +334,40 @@ public class MaestroTendencia extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_rbtnTendenciaStateChanged
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        final String[] archivosJasper = {"Tendencia_Espacios", "Maestro_Espacios",
-            "Tendencia_Usuarios", "Maestro_Usuarios"};
+        final String[] archivosJasper = {"Tendencia_Espacios", "Registro_Espacios",
+            "Tendencia_Usuarios", "Registro_Usuarios"};
+        String archivo;
 
-//        fileChooser.setVisible(true);
-        
-//        String path = fileChooser.getdi
         if (rbtnReserva.isSelected()) {
-            generarReporteReservaciones();
+            archivo = "Historico Reserva";
         } else if (rbtnEspacio.isSelected()) {
-            generarReporteEntidades((rbtnTendencia.isSelected() ? archivosJasper[0] : archivosJasper[1]));
+            archivo = (rbtnTendencia.isSelected() ? archivosJasper[0] : archivosJasper[1]);
         } else {
-            generarReporteEntidades((rbtnTendencia.isSelected() ? archivosJasper[2] : archivosJasper[3]));
+            archivo = (rbtnTendencia.isSelected() ? archivosJasper[2] : archivosJasper[3]);
+        }
+
+        fileChooser.setSelectedFile(new File(archivo.replace("_", " ")));
+        if (fileChooser.showSaveDialog(getInstance()) == JFileChooser.APPROVE_OPTION) {
+            String ruta = fileChooser.getSelectedFile().getAbsolutePath();
+
+            if (!ruta.endsWith(".xlsx")) {
+                ruta += ".xlsx";
+            }
+
+            if (new File(ruta).exists()) {
+                if (JOptionPane.showConfirmDialog(rootPane, "El archivo " + new File(ruta).getName() + " ya existe\n"
+                        + "¿Desea sobreescribirlo?", "Aviso", JOptionPane.OK_CANCEL_OPTION) == JOptionPane.CANCEL_OPTION) {
+                    return;
+                }
+            }
+
+            if (rbtnReserva.isSelected()) {
+                generarReporteReservaciones(ruta);
+            } else if (rbtnEspacio.isSelected()) {
+                generarReporteEntidades(archivo, ruta);
+            } else {
+                generarReporteEntidades(archivo, ruta);
+            }
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
