@@ -196,6 +196,7 @@ public class VisualizadorDeReservas extends javax.swing.JInternalFrame {
         ArrayList<Integer> values = getIdReservasSeleccionadas();
         if (!values.isEmpty()) {
             daoReservas.deshabilitarReservas(values);
+            cargarTablaReservas();
         } else {
             JOptionPane.showMessageDialog(rootPane, "Favor seleccione al menos una reservacion para cancelar", "Informacion", JOptionPane.INFORMATION_MESSAGE);
         }

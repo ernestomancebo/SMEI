@@ -64,22 +64,6 @@ public class MaestroUsuarios extends javax.swing.JInternalFrame {
             return false;
         }
 
-        if (daoUsuario.existeEstaIdentificacion(txtIdentificacion.getText())) {
-            validar = "La identificación " + txtIdentificacion.getText();
-        }
-
-        if (validar.isEmpty()) {
-            if (daoUsuario.existeEsteMail(txtCorreo.getText())) {
-                validar = "El correo " + txtCorreo.getText();
-            }
-        }
-
-        if (!validar.isEmpty()) {
-            JOptionPane.showMessageDialog(rootPane, validar + " ya existe.\n"
-                    + "Favor intentar otro.");
-            return false;
-        }
-
         ArrayList<Email> correos = new ArrayList<Email>();
         correos.add(new Email(txtCorreo.getText()));
 
@@ -281,6 +265,23 @@ public class MaestroUsuarios extends javax.swing.JInternalFrame {
 
                 usuario = null;
             } else {
+                String validar = new String();
+                if (daoUsuario.existeEstaIdentificacion(txtIdentificacion.getText())) {
+                    validar = "La identificación " + txtIdentificacion.getText();
+                }
+
+                if (validar.isEmpty()) {
+                    if (daoUsuario.existeEsteMail(txtCorreo.getText())) {
+                        validar = "El correo " + txtCorreo.getText();
+                    }
+                }
+
+                if (!validar.isEmpty()) {
+                    JOptionPane.showMessageDialog(rootPane, validar + " ya existe.\n"
+                            + "Favor intentar otro.");
+                    return;
+                }
+
                 usuario.setPassword(Util.generarClaveDeUsuario(usuario));
                 daoUsuario.insertarUsuario(usuario);
 

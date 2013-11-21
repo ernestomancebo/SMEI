@@ -388,10 +388,9 @@ public final class MaestroReservas extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnModificarActionPerformed
 
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
-        if (reserva == null) {
-            GUIUtil.limpiarContenido(getInstance());
-        } else {
-            GUIUtil.limpiarContenido(getInstance());
+        GUIUtil.limpiarContenido(getInstance());
+        cbbLugar.setModel(new DefaultComboBoxModel());
+        if (reserva != null) {
             llenarCamposFromReserva(reserva);
         }
     }//GEN-LAST:event_btnLimpiarActionPerformed
@@ -415,12 +414,14 @@ public final class MaestroReservas extends javax.swing.JInternalFrame {
                 reserva = null;
             }
             GUIUtil.limpiarContenido(getInstance());
+            cbbLugar.setModel(new DefaultComboBoxModel());
             this.setVisible(false);
         }
     }//GEN-LAST:event_btnAceptarActionPerformed
 
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
         GUIUtil.limpiarContenido(getInstance());
+        cbbLugar.setModel(new DefaultComboBoxModel());
         reserva = null;
         this.setVisible(false);
     }//GEN-LAST:event_btnSalirActionPerformed
