@@ -189,8 +189,10 @@ public final class MaestroReservas extends javax.swing.JInternalFrame {
 
         for (int i = 0; i < modeloEspacios.size(); i++) {
             values[i] = modeloEspacios.get(i).getNombre();
+            System.out.println(modeloEspacios.get(i).getNombre());
         }
 
+        cbbLugar.removeAllItems();
         cbbLugar.setModel(new DefaultComboBoxModel(values));
     }
 
@@ -208,10 +210,7 @@ public final class MaestroReservas extends javax.swing.JInternalFrame {
             return;
         }
 
-        Usuario u = new Usuario();
-        u.setIdUsuario(1);
-
-        r.setUsuario(u);
+        r.setUsuario(usuario);
         r.setFechaInicio(Util.crearDateConHora(fecha, Util.buildHoraFromStrings(
                 String.valueOf(spnHoraI.getValue()), String.valueOf(spnMinutoI.getValue()), (String) spnTandaI.getValue())));
         r.setFechaFin(Util.crearDateConHora(fecha, Util.buildHoraFromStrings(
@@ -236,7 +235,8 @@ public final class MaestroReservas extends javax.swing.JInternalFrame {
         this.usuario = u;
 
         //Si no es administrador o dueño de la reserva
-        if (usuario.getRol().getIdRol() == 1 || (reserva.getUsuario().getIdUsuario().equals(usuario.getIdUsuario()))) {
+        if (usuario.getRol().getIdRol() == 1 || (reserva != null
+                && (reserva.getUsuario().getIdUsuario().equals(usuario.getIdUsuario())))) {
             btnModificar.setVisible(true);
         } else {
             btnModificar.setVisible(false);

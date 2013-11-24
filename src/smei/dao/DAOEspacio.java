@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -149,15 +150,19 @@ public class DAOEspacio {
         try {
             pstm = conn.prepareStatement("select e.idEspacio, e.nombre from espacios e "
                     + "where e.habilitado = ? and e.capacidadDePersonas >= ? and e.idEspacio not in ("
-                    + "select r.idEspacio from reservaciones r where r.fechaInicio = ? and r.fechaFin = ? "
+                    + "select r.idEspacio from reservaciones r where r.fechaInicio < ? and r.fechaFin > ? "
                     + "and idUsuario != ?)");
 
             pstm.setBoolean(1, true);
             pstm.setInt(2, r.getCantPersonas());
-            pstm.setDate(3, new java.sql.Date(r.getFechaInicio().getTime()));
-            pstm.setDate(4, new java.sql.Date(r.getFechaFin().getTime()));
+            pstm.setTimestamp(3, new Timestamp(r.getFechaInicio().getTime()));
+            pstm.setTimestamp(4, new Timestamp(r.getFechaFin().getTime()));
             pstm.setInt(5, r.getUsuario().getIdUsuario());
 
+            System.out.println(r.getCantPersonas() + " - "
+                    + new Timestamp(r.getFechaInicio().getTime())
+                    + " " + new Timestamp(r.getFechaFin().getTime())
+                    + " " + r.getUsuario().getIdUsuario());
             rs = pstm.executeQuery();
 
             while (rs.next()) {

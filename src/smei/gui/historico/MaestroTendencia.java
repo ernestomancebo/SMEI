@@ -259,7 +259,7 @@ public class MaestroTendencia extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_rbtnReservaStateChanged
 
     private void generarReporteReservaciones(String ruta) {
-        final String reporteSeleccionado = "Reservaciones";
+        final String reporteSeleccionado = "Registro_Reservas";
         ArrayList<InputStream> fis = new ArrayList<InputStream>();
         ArrayList<String> estados = new ArrayList<String>();
         String titulo = new String();

@@ -18,10 +18,8 @@
 		<![CDATA[SELECT
     r.idreservacion,
     u.nombre as usuario,
-    date_format(r.fechainicio, '%e-%m-%Y') as fecha,
-    concat_ws(' - ',
-            date_format(r.fechainicio, '%h:%i %p'),
-            date_format(r.fechafin, '%h:%i %p')) as horario,
+    r.fechainicio as fecha,
+    r.fechafin as horario,
     e.nombre as lugar,
     r.cantidaddepersonas,
     r.descripcion,
@@ -43,8 +41,8 @@ order by es.idEstado]]>
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="usuario" class="java.lang.String"/>
-	<field name="fecha" class="java.lang.String"/>
-	<field name="horario" class="java.lang.String"/>
+	<field name="fecha" class="java.sql.Timestamp"/>
+	<field name="horario" class="java.sql.Timestamp"/>
 	<field name="lugar" class="java.lang.String"/>
 	<field name="cantidaddepersonas" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
@@ -106,7 +104,7 @@ order by es.idEstado]]>
 				<text><![CDATA[Usuario]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="28334341-ee77-4fb7-b61e-f03ad2e39cfb" mode="Opaque" x="200" y="0" width="100" height="20" backcolor="#3399FF">
+				<reportElement uuid="28334341-ee77-4fb7-b61e-f03ad2e39cfb" mode="Opaque" x="200" y="0" width="117" height="20" backcolor="#3399FF">
 					<property name="net.sf.jasperreports.export.xls.freeze.row.edge" value="Bottom"/>
 				</reportElement>
 				<box>
@@ -119,10 +117,10 @@ order by es.idEstado]]>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="11" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Fecha]]></text>
+				<text><![CDATA[Inicio]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="39bfbff0-e0b3-4da2-80cd-ed3c17784bd1" mode="Opaque" x="300" y="0" width="149" height="20" backcolor="#3399FF">
+				<reportElement uuid="39bfbff0-e0b3-4da2-80cd-ed3c17784bd1" mode="Opaque" x="317" y="0" width="132" height="20" backcolor="#3399FF">
 					<property name="net.sf.jasperreports.export.xls.freeze.row.edge" value="Bottom"/>
 				</reportElement>
 				<box>
@@ -135,7 +133,7 @@ order by es.idEstado]]>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="11" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Horario]]></text>
+				<text><![CDATA[Fin]]></text>
 			</staticText>
 			<staticText>
 				<reportElement uuid="a4265562-f763-483c-8e05-e03533a202ad" mode="Opaque" x="449" y="0" width="139" height="20" backcolor="#3399FF">
@@ -234,7 +232,7 @@ order by es.idEstado]]>
 				<textFieldExpression><![CDATA[$F{usuario}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="a7921394-e6d0-48b9-a671-cc669a490cc1" x="200" y="0" width="100" height="20"/>
+				<reportElement uuid="a7921394-e6d0-48b9-a671-cc669a490cc1" x="200" y="0" width="117" height="20"/>
 				<box>
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -246,7 +244,7 @@ order by es.idEstado]]>
 				<textFieldExpression><![CDATA[$F{fecha}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="10fc1426-7e59-4700-bfbc-c810eaa719f5" x="300" y="0" width="149" height="20"/>
+				<reportElement uuid="10fc1426-7e59-4700-bfbc-c810eaa719f5" x="317" y="0" width="132" height="20"/>
 				<box>
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
