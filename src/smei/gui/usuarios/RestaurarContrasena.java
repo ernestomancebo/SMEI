@@ -27,29 +27,30 @@ public class RestaurarContrasena extends javax.swing.JFrame {
      */
     private static RestaurarContrasena instancia = new RestaurarContrasena();
     private IniciarSesion iniciarSesion = IniciarSesion.getInstance();
-    
+
     private RestaurarContrasena() {
         initComponents();
         initialize();
     }
-    
+
     public static RestaurarContrasena getInstance() {
         return instancia;
     }
-    
+
     private void salir() {
         txtCredencial.setText("");
         this.setVisible(false);
         iniciarSesion.setVisible(true);
     }
-    
+
     private void initialize() {
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         this.setLocation(dim.width / 2 - this.getSize().width / 2, dim.height / 2 - this.getSize().height / 2);
-        
+
         this.setResizable(false);
         this.setModalExclusionType(Dialog.ModalExclusionType.APPLICATION_EXCLUDE);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setTitle("SMEI");
     }
 
     /**
@@ -124,12 +125,18 @@ public class RestaurarContrasena extends javax.swing.JFrame {
 
     private void btnEnviarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEnviarActionPerformed
         final String valor = txtCredencial.getText();
+
+        if (valor.isEmpty()) {
+            JOptionPane.showMessageDialog(rootPane, "Favor proveer una credencial");
+            return;
+        }
+
         Usuario usuario = new Usuario();
-        
+
         if (Util.validarEmail(valor)) {
             ArrayList<Email> email = new ArrayList<Email>();
             email.add(new Email(valor));
-            
+
             usuario.setEmails(email);
             usuario.setIdUsuario(null);
             usuario.setIdentificacionP(null);
@@ -145,9 +152,9 @@ public class RestaurarContrasena extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(rootPane, "Fallo en combinación usuario/contraseña");
             return;
         }
-        
+
         new DAOUsuario().restaurarcontrasena(usuario);
-        
+
         salir();
     }//GEN-LAST:event_btnEnviarActionPerformed
 

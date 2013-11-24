@@ -81,6 +81,7 @@ public class Principal extends javax.swing.JFrame {
         mnCerrarSesion = new javax.swing.JMenuItem();
         mnSalir = new javax.swing.JMenuItem();
         mnAyuda = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -264,6 +265,7 @@ public class Principal extends javax.swing.JFrame {
         );
 
         jLinkUsuario.setText("USUARIO");
+        jLinkUsuario.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 
         javax.swing.GroupLayout taskPaneReporteLayout = new javax.swing.GroupLayout(taskPaneReporte);
         taskPaneReporte.setLayout(taskPaneReporteLayout);
@@ -289,12 +291,13 @@ public class Principal extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(taskPaneUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(taskPaneNotificaciones, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(taskPaneNotificaciones, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(27, Short.MAX_VALUE))
         );
 
         PrincipalDesktopPane.setBackground(getBackground());
 
-        mnArchivo.setText("Archivo");
+        mnArchivo.setText("Sesión");
 
         mnCerrarSesion.setText("Cerrar sesion");
         mnCerrarSesion.addActionListener(new java.awt.event.ActionListener() {
@@ -315,6 +318,15 @@ public class Principal extends javax.swing.JFrame {
         jMenuBar1.add(mnArchivo);
 
         mnAyuda.setText("Ayuda");
+
+        jMenuItem1.setText("Acerca de SMEI");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        mnAyuda.add(jMenuItem1);
+
         jMenuBar1.add(mnAyuda);
 
         setJMenuBar(jMenuBar1);
@@ -332,10 +344,10 @@ public class Principal extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGap(0, 0, 0)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(PrincipalDesktopPane)
-                    .addComponent(taskPaneReporte, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+                    .addComponent(taskPaneReporte, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
 
         pack();
@@ -349,6 +361,7 @@ public class Principal extends javax.swing.JFrame {
         Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
         setSize(dimension.width * 9 / 10, dimension.height * 9 / 10);
         setLocation(dimension.width * 1 / 20, dimension.height * 1 / 20);
+        setTitle("Sistema de Manejo de Espacios Individuales");
 //        getInstance().setIconImage(new ImageIcon(getClass().getResource("/resources/icons/schedule-48.png")));
     }
 
@@ -501,6 +514,15 @@ public class Principal extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_mnSalirActionPerformed
 
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        JOptionPane.showMessageDialog(rootPane, "El Sistema de Manejo de Espacios Individuales (SMEI)\n"
+                + "tiene por objetivo es proveer soporte para administrar\n"
+                + "eficientemente las áreas y/o espacios destinados\n"
+                + "a uso de manera privada por un período de tiempo\n"
+                + "relativamente corto."
+                + "\n\nCreado por: Ernesto Mancebo 2010-1823 y Wilkys Rodriguez 1997-1095", "Acerca de SMEI", WIDTH);
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
     private void agregarMaestroInternalFrame(String titulo) {
         GUIUtil.addFrameToDesktopPanel(PrincipalDesktopPane, activeFrame);
         GUIUtil.asignarTitulo(activeFrame, titulo);
@@ -545,6 +567,7 @@ public class Principal extends javax.swing.JFrame {
     private com.l2fprod.common.swing.JLinkButton jLinkBtnTendReser;
     private com.l2fprod.common.swing.JLinkButton jLinkUsuario;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
     private com.l2fprod.common.swing.JTaskPaneGroup jTaskPaneGroup3;
     private javax.swing.JMenu mnArchivo;
     private javax.swing.JMenu mnAyuda;
