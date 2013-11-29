@@ -39,7 +39,7 @@ public class DAOUsuario {
 
             pstm.setString(1, usuario.getNombre());
             pstm.setString(2, usuario.getPassword());
-            pstm.setInt(3, 2);
+            pstm.setInt(3, usuario.getRol().getIdRol());
             pstm.setString(4, usuario.getIdentificacionP());
             pstm.setString(5, usuario.getEmails().get(0).getEmail());
             pstm.setString(6, usuario.getTelefonos().get(0).getTelefono());
